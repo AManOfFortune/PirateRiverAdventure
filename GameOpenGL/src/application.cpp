@@ -42,6 +42,18 @@ void Application::OnEvent(Event& event)
     LOG_DEBUG("{0}", event);
 }
 
+void Application::PushLayer(Layer* layer)
+{
+    layer_stack_.PushLayer(layer);
+    layer->OnAttach();
+}
+
+void Application::PushOverlay(Layer* overlay)
+{
+    layer_stack_.PushOverlay(overlay);
+    overlay->OnAttach();
+}
+
 bool Application::OnWindowClose(WindowCloseEvent& event)
 {
     is_running_ = false;

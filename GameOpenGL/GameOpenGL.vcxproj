@@ -159,6 +159,8 @@
   <ItemGroup>
     <ClCompile Include="src\application.cpp" />
     <ClCompile Include="src\glad.c" />
+    <ClCompile Include="src\layer.cpp" />
+    <ClCompile Include="src\layer_stack.cpp" />
     <ClCompile Include="src\log.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\stb_image.cpp" />
@@ -171,6 +173,8 @@
     <ClInclude Include="src\events\event.h" />
     <ClInclude Include="src\events\key_event.h" />
     <ClInclude Include="src\events\mouse_event.h" />
+    <ClInclude Include="src\layer.h" />
+    <ClInclude Include="src\layer_stack.h" />
     <ClInclude Include="src\log.h" />
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\window.h" />

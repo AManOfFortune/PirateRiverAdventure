@@ -47,6 +47,7 @@ void Window::Initialize(const WindowProperties& properties)
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwSetErrorCallback(OnGlfwError);
 
         isGlfwInitialized = true;
     }
@@ -60,7 +61,7 @@ void Window::Initialize(const WindowProperties& properties)
 
 void Window::SetGlfwCallbacks()
 {
-    glfwSetErrorCallback(OnGlfwError);
+
 }
 
 void Window::Shutdown()

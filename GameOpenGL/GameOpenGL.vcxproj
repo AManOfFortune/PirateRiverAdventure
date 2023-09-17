@@ -130,7 +130,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);ENABLE_ASSERT</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameOpenGL\vendor\spdlog\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameOpenGL\vendor\spdlog\include\;src\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -167,6 +167,10 @@
   <ItemGroup>
     <ClInclude Include="src\application.h" />
     <ClInclude Include="src\core.h" />
+    <ClInclude Include="src\events\application_event.h" />
+    <ClInclude Include="src\events\event.h" />
+    <ClInclude Include="src\events\key_event.h" />
+    <ClInclude Include="src\events\mouse_event.h" />
     <ClInclude Include="src\log.h" />
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\window.h" />

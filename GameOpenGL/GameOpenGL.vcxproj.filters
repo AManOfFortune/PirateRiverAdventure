@@ -50,5 +50,17 @@
     <ClInclude Include="src\window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\events\event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\events\application_event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\events\key_event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\events\mouse_event.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

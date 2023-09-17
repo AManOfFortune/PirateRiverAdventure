@@ -1,7 +1,8 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
+#include "events/event.h"
 
+#include <GLFW/glfw3.h>
 #include <string>
 
 struct WindowProperties
@@ -17,12 +18,15 @@ struct WindowProperties
 class Window
 {
 public:
+    using EventCallbackFn = std::function<void(Event&)>;
+
     Window(const WindowProperties& properties);
     virtual ~Window();
 
     static Window* Create(const WindowProperties& properties = WindowProperties());
 
     void OnUpdate();
+    void SetEventCallback(const EventCallbackFn& callback);
 
     inline unsigned int width() const { return data_.width; }
     inline unsigned int height() const { return data_.height; }
@@ -39,6 +43,7 @@ private:
         std::string title;
         unsigned int width;
         unsigned int height;
+        EventCallbackFn callback;
     };
 
     WindowData data_;

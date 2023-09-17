@@ -5,3 +5,5 @@
 #else
     #define ASSERT(x, ...)
 #endif  // ENABLE_ASSERT
+
+#define BIT(x) (1 << x)

@@ -2,8 +2,8 @@
 
 #include "events/application_event.h"
 #include "events/event.h"
-#include "layer_stack.h"
-#include "window.h"
+#include "layers/layer_stack.h"
+#include "window/window.h"
 
 #include <memory>
 
@@ -39,8 +39,10 @@ public:
     /// however an overlay will always be pushed on top of normal layers. This way overlays
     /// could be used to create an UI layer.
     /// </summary>
-    /// <param name="overlay"></param>
     void PushOverlay(Layer* overlay);
+
+    // Getter for the window.
+    inline Window& window() const { return *window_; }
 
 private:
     /// <summary>

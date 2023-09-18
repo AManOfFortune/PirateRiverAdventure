@@ -4,7 +4,7 @@
 #include "events/application_event.h"
 #include "events/key_event.h"
 #include "events/mouse_event.h"
-#include "log.h"
+#include "log/log.h"
 
 static bool isGlfwInitialized = false;
 
@@ -115,6 +115,13 @@ void Window::SetGlfwCallbacks()
                 break;
             }
         }
+    });
+
+    glfwSetCharCallback(window_, [](GLFWwindow* window, unsigned int key)
+    {
+        WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+        KeyTypedEvent event(key);
+        data.callback(event);
     });
 
     glfwSetMouseButtonCallback(window_, [](GLFWwindow* window, int button, int action, int mods) 

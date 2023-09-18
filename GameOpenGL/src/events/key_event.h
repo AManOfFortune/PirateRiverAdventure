@@ -63,3 +63,22 @@ public:
     // Instead of manual implementation of method overrides.
     EVENT_CLASS_TYPE(kKeyReleased)
 };
+
+/// <summary>
+/// This class represents an event that is triggered when a character is typed.
+/// </summary>
+class KeyTypedEvent : public KeyEvent
+{
+public:
+  KeyTypedEvent(int code) : KeyEvent(code) {}
+
+  std::string ToString() const override
+  {
+    std::stringstream ss;
+    ss << "KeyTypedEvent: " << key_code_;
+    return ss.str();
+  }
+
+  // Instead of manual implementation of method overrides.
+  EVENT_CLASS_TYPE(kKeyTyped)
+};

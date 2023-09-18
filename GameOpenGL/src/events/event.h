@@ -34,7 +34,8 @@ class Event
 {
     friend class EventDispatcher;
 public:
-    inline bool IsInCategory(EventCategory category) { return category_flags() & category; }
+    inline bool IsInCategory(EventCategory category) const { return category_flags() & category; }
+    inline bool IsHandled() const { return is_handled_; }
     virtual std::string ToString() const { return name(); }
 
     virtual int category_flags() const = 0;

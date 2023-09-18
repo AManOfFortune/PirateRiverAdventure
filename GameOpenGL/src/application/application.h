@@ -41,6 +41,9 @@ public:
     /// </summary>
     void PushOverlay(Layer* overlay);
 
+    // Getter for the window.
+    inline Window& window() const { return *window_; }
+
 private:
     /// <summary>
     /// Is invoked when a WindowCloseEvent is triggered.

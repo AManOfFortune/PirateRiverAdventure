@@ -39,6 +39,9 @@
     <ClCompile Include="src\layers\layer_stack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\input\input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\log\log.h">
@@ -72,6 +75,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\layers\layer_stack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\input\input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

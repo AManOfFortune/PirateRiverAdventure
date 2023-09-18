@@ -45,6 +45,8 @@ public:
     /// </summary>
     void SetEventCallback(const EventCallbackFn& callback);
 
+    // Getter for the glfw window.
+    inline GLFWwindow* glfw_window() const { return window_; }
     // Getters for width & height.
     inline unsigned int width() const { return data_.width; }
     inline unsigned int height() const { return data_.height; }

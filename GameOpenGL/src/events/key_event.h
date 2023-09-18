@@ -4,11 +4,15 @@
 
 #include <sstream>
 
+/// <summary>
+/// This is the parent class of all key events.
+/// </summary>
 class KeyEvent : public Event 
 {
 public:
     inline int key_code() const { return key_code_; }
 
+    // Instead of manual implementation of method overrides.
     EVENT_CLASS_CATEGORY(kEventCategoryKeyboard | kEventCategoryInput)
 
 protected:
@@ -17,6 +21,9 @@ protected:
     int key_code_;
 };
 
+/// <summary>
+/// This class represents an event when a key is pressed or held.
+/// </summary>
 class KeyPressedEvent : public KeyEvent 
 {
 public:
@@ -31,12 +38,16 @@ public:
 
     inline int repeat_count() const { return repeat_count_; }
 
+    // Instead of manual implementation of method overrides.
     EVENT_CLASS_TYPE(kKeyPressed)
 
 private:
     int repeat_count_;
 };
 
+/// <summary>
+/// This class represents an event that is triggered when a key is released.
+/// </summary>
 class KeyReleasedEvent : public KeyEvent 
 {
 public:
@@ -49,5 +60,6 @@ public:
         return ss.str();
     }
 
+    // Instead of manual implementation of method overrides.
     EVENT_CLASS_TYPE(kKeyReleased)
 };

@@ -7,6 +7,7 @@ LayerStack::LayerStack()
 
 LayerStack::~LayerStack() 
 {
+    // Layers are only deleted at the end of the applications lifetime.
     for (Layer* layer : layers_) 
     { 
         delete layer; 
@@ -15,6 +16,8 @@ LayerStack::~LayerStack()
 
 void LayerStack::PushLayer(Layer* layer) 
 {
+    // A new layer is always inserted at the position of the layer_insert_ iterator.
+    // The layer_insert_ iterator position is updated with the insertion.
     layer_insert_ = layers_.emplace(layer_insert_, layer);
 }
 
@@ -24,12 +27,14 @@ void LayerStack::PopLayer(Layer* layer)
     if (iterator != layers_.end()) 
     {
         layers_.erase(iterator);
+        // Update the layer_insert_ iterator position.
         layer_insert_--;
     }
 }
 
 void LayerStack::PushOverlay(Layer* overlay) 
 {
+    // Overlays are always pushed at the back of the layer stack.
     layers_.emplace_back(overlay);
 }
 

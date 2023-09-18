@@ -52,9 +52,11 @@ void Window::Initialize(const WindowProperties& properties)
         int success = glfwInit();
         ASSERT(success, "GLFW could not be initialized!");
 
+        // Specifies the OpenGL version and profile (3.3 Core).
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
         glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
         glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        // Sets the callback function in case of a GLFW error.
         glfwSetErrorCallback(OnGlfwError);
 
         isGlfwInitialized = true;
@@ -62,11 +64,13 @@ void Window::Initialize(const WindowProperties& properties)
 
     window_ = glfwCreateWindow((int)data_.width, (int)data_.height, data_.title.c_str(), nullptr, nullptr);
     glfwMakeContextCurrent(window_);
+    // Set the user pointer (data_) which is stored until the window is destroyed.
     glfwSetWindowUserPointer(window_, &data_);
 
     SetGlfwCallbacks();
 }
 
+// This method sets GLFW callback functions creates our own event objects and invokes the method Application::OnEvent(Event&).
 void Window::SetGlfwCallbacks()
 {
     glfwSetWindowSizeCallback(window_, [](GLFWwindow* window, int width, int height) 

@@ -4,6 +4,7 @@
 
 std::shared_ptr<spdlog::logger> Log::logger_;
 
+// TODO: Implement check that the logger is only initialized once.
 void Log::Initialize()
 {
     spdlog::set_pattern("%^[%T]: %v%$");

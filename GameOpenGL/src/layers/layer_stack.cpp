@@ -20,6 +20,7 @@ void LayerStack::PushLayer(Layer* layer)
     // The layer_insert_index_ position is updated with the insertion.
     layers_.emplace(layers_.begin() + layer_insert_index_, layer);
     layer_insert_index_++;
+    layer->OnAttach();
 }
 
 void LayerStack::PopLayer(Layer* layer) 
@@ -30,6 +31,7 @@ void LayerStack::PopLayer(Layer* layer)
         layers_.erase(iterator);
         // Update the layer_insert_index_.
         layer_insert_index_--;
+        layer->OnDetach();
     }
 }
 
@@ -37,6 +39,7 @@ void LayerStack::PushOverlay(Layer* overlay)
 {
     // Overlays are always pushed at the back of the layer stack.
     layers_.emplace_back(overlay);
+    overlay->OnAttach();
 }
 
 void LayerStack::PopOverlay(Layer* overlay) 
@@ -45,5 +48,6 @@ void LayerStack::PopOverlay(Layer* overlay)
     if (iterator != layers_.end())
     {
         layers_.erase(iterator);
+        overlay->OnDetach();
     }
 }

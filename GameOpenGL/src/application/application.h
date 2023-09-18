@@ -39,7 +39,6 @@ public:
     /// however an overlay will always be pushed on top of normal layers. This way overlays
     /// could be used to create an UI layer.
     /// </summary>
-    /// <param name="overlay"></param>
     void PushOverlay(Layer* overlay);
 
 private:

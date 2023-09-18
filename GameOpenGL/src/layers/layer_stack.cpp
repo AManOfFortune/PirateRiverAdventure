@@ -2,7 +2,7 @@
 
 LayerStack::LayerStack() 
 {
-    layer_insert_ = layers_.begin();
+
 }
 
 LayerStack::~LayerStack() 
@@ -16,9 +16,10 @@ LayerStack::~LayerStack()
 
 void LayerStack::PushLayer(Layer* layer) 
 {
-    // A new layer is always inserted at the position of the layer_insert_ iterator.
-    // The layer_insert_ iterator position is updated with the insertion.
-    layer_insert_ = layers_.emplace(layer_insert_, layer);
+    // A new layer is always inserted at the position of the layer_insert_index_.
+    // The layer_insert_index_ position is updated with the insertion.
+    layers_.emplace(layers_.begin() + layer_insert_index_, layer);
+    layer_insert_index_++;
 }
 
 void LayerStack::PopLayer(Layer* layer) 
@@ -27,8 +28,8 @@ void LayerStack::PopLayer(Layer* layer)
     if (iterator != layers_.end()) 
     {
         layers_.erase(iterator);
-        // Update the layer_insert_ iterator position.
-        layer_insert_--;
+        // Update the layer_insert_index_.
+        layer_insert_index_--;
     }
 }
 

@@ -42,7 +42,7 @@ public:
 
 private:
     std::vector<Layer*> layers_;
-    // This iterator tracks the position that layers are inserted in.
+    // This unsigned int tracks the position that layers are inserted in.
     // This way the layers are always inserted before any overlays.
-    std::vector<Layer*>::iterator layer_insert_;
+    unsigned int layer_insert_index_ = 0;
 };

@@ -2,8 +2,8 @@
 
 #include "events/application_event.h"
 #include "events/event.h"
-#include "layer_stack.h"
-#include "window.h"
+#include "layers/layer_stack.h"
+#include "window/window.h"
 
 #include <memory>
 

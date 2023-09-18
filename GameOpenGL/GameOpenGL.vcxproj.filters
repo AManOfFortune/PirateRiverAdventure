@@ -21,39 +21,39 @@
     <ClCompile Include="src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\log.cpp">
+    <ClCompile Include="src\log\log.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\stb_image.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\application.cpp">
+    <ClCompile Include="src\application\application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\window.cpp">
+    <ClCompile Include="src\window\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\layer.cpp">
+    <ClCompile Include="src\layers\layer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\layer_stack.cpp">
+    <ClCompile Include="src\layers\layer_stack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\log.h">
+    <ClInclude Include="src\log\log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\application.h">
+    <ClInclude Include="src\application\application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\window.h">
+    <ClInclude Include="src\window\window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\events\event.h">
@@ -68,10 +68,10 @@
     <ClInclude Include="src\events\mouse_event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\layer.h">
+    <ClInclude Include="src\layers\layer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\layer_stack.h">
+    <ClInclude Include="src\layers\layer_stack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,6 +1,6 @@
 #include "application.h"
 
-#include "log.h"
+#include "log/log.h"
 
 #include <functional>
 #include <GLFW/glfw3.h>

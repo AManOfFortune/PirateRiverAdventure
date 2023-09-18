@@ -4,7 +4,7 @@
 #include "events/application_event.h"
 #include "events/key_event.h"
 #include "events/mouse_event.h"
-#include "log.h"
+#include "log/log.h"
 
 static bool isGlfwInitialized = false;
 

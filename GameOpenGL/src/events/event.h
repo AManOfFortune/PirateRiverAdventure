@@ -13,7 +13,7 @@ enum class EventType
     kNone = 0,
     kWindowClose, kWindowResize, kWindowFocus, kWindowLostFocus, kWindowMoved,
     kAppTick, kAppUpdate, kAppRender,
-    kKeyPressed, kKeyReleased,
+    kKeyPressed, kKeyReleased, kKeyTyped,
     kMouseButtonPressed, kMouseButtonReleased, kMouseMoved, kMouseScrolled
 };
 

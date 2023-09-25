@@ -93,11 +93,6 @@ Application::Application()
     shader_.reset(new Shader(vertexSource, fragmentSource));
 }
 
-Application::~Application()
-{
-
-}
-
 void Application::Run()
 {
     while (is_running_)

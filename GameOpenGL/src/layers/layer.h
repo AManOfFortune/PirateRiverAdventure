@@ -11,7 +11,7 @@ class Layer
 {
 public:
     Layer(const std::string& name = "Layer");
-    virtual ~Layer();
+    virtual ~Layer() = default;
 
     /// <summary>
     /// This callback method is invoked when the layer is pushed onto the application layer stack.

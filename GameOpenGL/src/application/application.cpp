@@ -1,10 +1,9 @@
 #include "application.h"
 
 #include "log/log.h"
+#include "renderer/renderer.h"
 
 #include <functional>
-
-#include <glad/glad.h>
 
 /// <summary>
 /// A temporary example layer to test the layer stack functionality.
@@ -41,45 +40,81 @@ Application::Application()
     // Push an example layer onto the layer stack.
     PushLayer(new ExampleLayer());
 
-    float vertices[3 * 3] = {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
+    float vertices[7 * 3] = {
+        -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+         0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+         0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
     };
 
     unsigned int indices[3] = {
         0, 1, 2
     };
 
-    // Generate and bind a vertex array.
-    glGenVertexArrays(1, &vertex_array_);
-    glBindVertexArray(vertex_array_);
+    // Create a vertex array.
+    vertex_array_.reset(new VertexArray());
 
-    // Generate and bind a vertex buffer.
-    glGenBuffers(1, &vertex_buffer_);
-    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
-    // Set the vertex buffer data.
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    // Create a vertex buffer.
+    std::shared_ptr<VertexBuffer> vertexBuffer;
+    vertexBuffer.reset(new VertexBuffer(vertices, sizeof(vertices)));
 
-    // Specify the vertex attributes at location 0.
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-    // Enable the vertex attributes at location 0.
-    glEnableVertexAttribArray(0);
+    // Create and set a layout for the vertex buffer.
+    VertexBufferLayout layout = {
+        { VertexBufferAttributeType::Float3, "a_Position" },
+        { VertexBufferAttributeType::Float4, "a_Color" }
+    };
+    vertexBuffer->set_layout(layout);
+    
+    // Add the vertex buffer after (!) the layout is set.
+    vertex_array_->add_vertex_buffer(vertexBuffer);
 
-    // Generate and bind an element (index) buffer.
-    glGenBuffers(1, &element_buffer_);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer_);
-    // Set the element (index) buffer data.
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    // Create an index buffer.
+    std::shared_ptr<IndexBuffer> indexBuffer;
+    indexBuffer.reset(new IndexBuffer(indices, sizeof(indices) / sizeof(uint32_t)));
+
+    // Set the index buffer.
+    vertex_array_->set_index_buffer(indexBuffer);
+
+    float rectangleVertices[4 * 3] = {
+    -0.75f, -0.75f, 0.0f,
+     0.75f, -0.75f, 0.0f,
+     0.75f,  0.75f, 0.0f,
+    -0.75f,  0.75f, 0.0f
+    };
+
+    unsigned int rectangleIndices[6] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+
+    rectangle_vertex_array_.reset(new VertexArray());
+
+    std::shared_ptr<VertexBuffer> rectangleVertexBuffer;
+    rectangleVertexBuffer.reset(new VertexBuffer(rectangleVertices, sizeof(rectangleVertices)));
+
+    rectangleVertexBuffer->set_layout({
+        { VertexBufferAttributeType::Float3, "a_Position" }
+    });
+
+    rectangle_vertex_array_->add_vertex_buffer(rectangleVertexBuffer);
+
+    std::shared_ptr<IndexBuffer> rectangleIndexBuffer;
+    rectangleIndexBuffer.reset(new IndexBuffer(rectangleIndices, sizeof(rectangleIndices) / sizeof(uint32_t)));
+    
+    rectangle_vertex_array_->set_index_buffer(rectangleIndexBuffer);
 
     std::string vertexSource = R"(
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
+            layout(location = 1) in vec4 a_Color;
+
 			out vec3 v_Position;
+            out vec4 v_Color;
+
 			void main()
 			{
 				v_Position = a_Position;
+                v_Color = a_Color;
 				gl_Position = vec4(a_Position, 1.0);	
 			}
 		)";
@@ -88,35 +123,69 @@ Application::Application()
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
+
 			in vec3 v_Position;
+            in vec4 v_Color;
+
 			void main()
 			{
 				color = vec4(v_Position * 0.5 + 0.5, 1.0);
+                color = v_Color;
 			}
 		)";
 
     // Create a shader with hardcoded vertex and fragment source code.
     shader_.reset(new Shader(vertexSource, fragmentSource));
-}
 
-Application::~Application()
-{
+    std::string blueVertexSource = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
 
+			out vec3 v_Position;
+
+			void main()
+			{
+				v_Position = a_Position;
+				gl_Position = vec4(a_Position, 1.0);	
+			}
+		)";
+
+    std::string blueFragmentSource = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+
+			in vec3 v_Position;
+
+			void main()
+			{
+				color = vec4(0.2f, 0.3f, 0.8f, 1.0f);
+			}
+		)";
+
+    // Create a shader with hardcoded vertex and fragment source code.
+    solid_blue_shader_.reset(new Shader(blueVertexSource, blueFragmentSource));
 }
 
 void Application::Run()
 {
     while (is_running_)
     {
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+        RenderCommand::Clear();
 
-        // Bind the shader before the draw call.
+        // Does nothing for now.
+        Renderer::BeginScene();
+
+        solid_blue_shader_->Bind();
+        Renderer::Submit(rectangle_vertex_array_);
+
         shader_->Bind();
-        // Bind the vertex array before the draw call.
-        glBindVertexArray(vertex_array_);
-        // Draw the triangle.
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+        Renderer::Submit(vertex_array_);
+
+        // Does nothing for now.
+        Renderer::EndScene();
 
         // Iterate through the layer stack from the first to the last layer
         // and call its OnUpdate method. Rendering should happen in this order

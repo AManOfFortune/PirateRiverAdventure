@@ -4,6 +4,9 @@
 #include "events/event.h"
 #include "layers/layer_stack.h"
 #include "window/window.h"
+#include "renderer/vertex_array.h"
+#include "renderer/vertex_buffer.h"
+#include "renderer/index_buffer.h"
 #include "renderer/shader.h"
 
 #include <memory>
@@ -15,7 +18,7 @@ class Application
 {
 public:
     Application();
-    virtual ~Application();
+    virtual ~Application() = default;
 
     /// <summary>
     /// Getter for the static application singleton.
@@ -57,8 +60,11 @@ private:
     std::unique_ptr<Window> window_;
     bool is_running_ = true;
     LayerStack layer_stack_;
-    unsigned int vertex_array_, vertex_buffer_, element_buffer_;
-    std::unique_ptr<Shader> shader_;
+
+    std::shared_ptr<VertexArray> vertex_array_;
+    std::shared_ptr<Shader> shader_;
+    std::shared_ptr<VertexArray> rectangle_vertex_array_;
+    std::shared_ptr<Shader> solid_blue_shader_;
 };
 
 Application* CreateApplication();

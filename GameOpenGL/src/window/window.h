@@ -2,7 +2,7 @@
 
 #include "events/event.h"
 
-#include "renderer/opengl_context.h"
+#include "renderer/context.h"
 
 #include <string>
 
@@ -61,7 +61,7 @@ private:
     void Shutdown();
 
     GLFWwindow* window_;
-    OpenGLContext* context_;
+    Context* context_;
 
     struct WindowData
     {

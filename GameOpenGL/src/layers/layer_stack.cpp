@@ -28,10 +28,10 @@ void LayerStack::PopLayer(Layer* layer)
     auto iterator = std::find(layers_.begin(), layers_.end(), layer);
     if (iterator != layers_.end()) 
     {
+        layer->OnDetach();
         layers_.erase(iterator);
         // Update the layer_insert_index_.
         layer_insert_index_--;
-        layer->OnDetach();
     }
 }
 
@@ -47,7 +47,7 @@ void LayerStack::PopOverlay(Layer* overlay)
     auto iterator = std::find(layers_.begin(), layers_.end(), overlay);
     if (iterator != layers_.end())
     {
-        layers_.erase(iterator);
         overlay->OnDetach();
+        layers_.erase(iterator);
     }
 }

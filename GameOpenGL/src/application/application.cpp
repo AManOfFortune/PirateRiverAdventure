@@ -3,7 +3,8 @@
 #include "log/log.h"
 
 #include <functional>
-#include <GLFW/glfw3.h>
+
+#include <glad/glad.h>
 
 /// <summary>
 /// A temporary example layer to test the layer stack functionality.
@@ -15,12 +16,12 @@ public:
 
     void OnUpdate() override
     {
-        LOG_TRACE("ExampleLayer::OnUpdate");
+
     }
 
     void OnEvent(Event& event) override
     {
-        LOG_DEBUG("ExampleLayer::OnEvent {0}", event);
+
     }
 };
 
@@ -50,7 +51,7 @@ void Application::Run()
 {
     while (is_running_)
     {
-        glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         // Iterate through the layer stack from the first to the last layer

@@ -6,6 +6,8 @@
 #include "events/mouse_event.h"
 #include "log/log.h"
 
+#include <GLFW/glfw3.h>
+
 static bool isGlfwInitialized = false;
 
 static void OnGlfwError(int error, const char* description)
@@ -31,7 +33,7 @@ Window::~Window()
 void Window::OnUpdate()
 {
     glfwPollEvents();
-    glfwSwapBuffers(window_);
+    context_->SwapBuffers();
 }
 
 void Window::SetEventCallback(const EventCallbackFn& callback)
@@ -63,7 +65,10 @@ void Window::Initialize(const WindowProperties& properties)
     }
 
     window_ = glfwCreateWindow((int)data_.width, (int)data_.height, data_.title.c_str(), nullptr, nullptr);
-    glfwMakeContextCurrent(window_);
+    
+    context_ = new OpenGLContext(window_);
+    context_->Initialize();
+    
     // Set the user pointer (data_) which is stored until the window is destroyed.
     glfwSetWindowUserPointer(window_, &data_);
 

@@ -2,6 +2,8 @@
 
 #include "application/application.h"
 
+#include <GLFW/glfw3.h>
+
 Input* Input::instance_ = new Input();
 
 bool Input::IsKeyPressed(int key)

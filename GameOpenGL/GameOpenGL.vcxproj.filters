@@ -42,7 +42,7 @@
     <ClCompile Include="src\input\input.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\logger\log.cpp">
+    <ClCompile Include="src\renderer\opengl_context.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,7 +89,7 @@
     <ClInclude Include="src\input\mouse_button_codes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\logger\log.h">
+    <ClInclude Include="src\renderer\opengl_context.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

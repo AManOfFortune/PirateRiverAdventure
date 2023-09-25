@@ -56,6 +56,7 @@ private:
     std::unique_ptr<Window> window_;
     bool is_running_ = true;
     LayerStack layer_stack_;
+    unsigned int vertex_array_, vertex_buffer_, element_buffer_;
 };
 
 Application* CreateApplication();

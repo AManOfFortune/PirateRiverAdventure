@@ -4,6 +4,7 @@
 #include "events/event.h"
 #include "layers/layer_stack.h"
 #include "window/window.h"
+#include "renderer/buffer.h"
 #include "renderer/shader.h"
 
 #include <memory>
@@ -57,7 +58,9 @@ private:
     std::unique_ptr<Window> window_;
     bool is_running_ = true;
     LayerStack layer_stack_;
-    unsigned int vertex_array_, vertex_buffer_, element_buffer_;
+    unsigned int vertex_array_;
+    std::unique_ptr<VertexBuffer> vertex_buffer_;
+    std::unique_ptr<IndexBuffer> index_buffer_;
     std::unique_ptr<Shader> shader_;
 };
 

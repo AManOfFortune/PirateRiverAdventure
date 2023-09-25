@@ -158,6 +158,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\application\application.cpp" />
+    <ClCompile Include="src\renderer\buffer.cpp" />
+    <ClCompile Include="src\renderer\opengl_buffer.cpp" />
     <ClCompile Include="src\renderer\opengl_context.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\input\input.cpp" />
@@ -165,12 +167,15 @@
     <ClCompile Include="src\layers\layer_stack.cpp" />
     <ClCompile Include="src\log\log.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\renderer\renderer.cpp" />
     <ClCompile Include="src\renderer\shader.cpp" />
     <ClCompile Include="src\stb_image.cpp" />
     <ClCompile Include="src\window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application\application.h" />
+    <ClInclude Include="src\renderer\buffer.h" />
+    <ClInclude Include="src\renderer\opengl_buffer.h" />
     <ClInclude Include="src\renderer\opengl_context.h" />
     <ClInclude Include="src\core.h" />
     <ClInclude Include="src\events\application_event.h" />
@@ -183,6 +188,7 @@
     <ClInclude Include="src\layers\layer.h" />
     <ClInclude Include="src\layers\layer_stack.h" />
     <ClInclude Include="src\log\log.h" />
+    <ClInclude Include="src\renderer\renderer.h" />
     <ClInclude Include="src\renderer\shader.h" />
     <ClInclude Include="src\stb_image.h" />
     <ClInclude Include="src\window\window.h" />

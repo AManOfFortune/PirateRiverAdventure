@@ -61,16 +61,42 @@ Application::Application()
     // Set the vertex buffer data.
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+    // Specify the vertex attributes at location 0.
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+    // Enable the vertex attributes at location 0.
+    glEnableVertexAttribArray(0);
+
     // Generate and bind an element (index) buffer.
     glGenBuffers(1, &element_buffer_);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer_);
     // Set the element (index) buffer data.
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    // Specify the vertex attributes at location 0.
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-    // Enable the vertex attributes at location 0.
-    glEnableVertexAttribArray(0);
+    std::string vertexSource = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec3 a_Position;
+			out vec3 v_Position;
+			void main()
+			{
+				v_Position = a_Position;
+				gl_Position = vec4(a_Position, 1.0);	
+			}
+		)";
+
+    std::string fragmentSource = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 color;
+			in vec3 v_Position;
+			void main()
+			{
+				color = vec4(v_Position * 0.5 + 0.5, 1.0);
+			}
+		)";
+
+    // Create a shader with hardcoded vertex and fragment source code.
+    shader_.reset(new Shader(vertexSource, fragmentSource));
 }
 
 Application::~Application()
@@ -85,6 +111,8 @@ void Application::Run()
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // Bind the shader before the draw call.
+        shader_->Bind();
         // Bind the vertex array before the draw call.
         glBindVertexArray(vertex_array_);
         // Draw the triangle.

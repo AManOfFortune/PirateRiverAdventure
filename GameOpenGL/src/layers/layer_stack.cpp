@@ -25,7 +25,7 @@ void LayerStack::PushLayer(Layer* layer)
 
 void LayerStack::PopLayer(Layer* layer) 
 {
-    auto iterator = std::find(layers_.begin(), layers_.end(), layer);
+    auto iterator = std::find(layers_.begin(), layers_.begin() + layer_insert_index_, layer);
     if (iterator != layers_.end()) 
     {
         layer->OnDetach();
@@ -44,7 +44,7 @@ void LayerStack::PushOverlay(Layer* overlay)
 
 void LayerStack::PopOverlay(Layer* overlay) 
 {
-    auto iterator = std::find(layers_.begin(), layers_.end(), overlay);
+    auto iterator = std::find(layers_.begin() + layer_insert_index_, layers_.end(), overlay);
     if (iterator != layers_.end())
     {
         overlay->OnDetach();

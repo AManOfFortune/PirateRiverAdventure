@@ -167,12 +167,14 @@
     <ClCompile Include="src\log\log.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\renderer\shader.cpp" />
+    <ClCompile Include="src\renderer\vertex_array.cpp" />
     <ClCompile Include="src\renderer\vertex_buffer.cpp" />
     <ClCompile Include="src\stb_image.cpp" />
     <ClCompile Include="src\window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application\application.h" />
+    <ClInclude Include="src\renderer\vertex_array.h" />
     <ClInclude Include="src\renderer\vertex_buffer_layout.h" />
     <ClInclude Include="src\renderer\index_buffer.h" />
     <ClInclude Include="src\renderer\context.h" />

@@ -25,6 +25,26 @@ public:
     }
 };
 
+// Temporary
+static GLenum VertexBufferAttributeTypeToGL(VertexBufferAttributeType type)
+{
+    switch (type)
+    {
+        case VertexBufferAttributeType::Float:   return GL_FLOAT;
+        case VertexBufferAttributeType::Float2:  return GL_FLOAT;
+        case VertexBufferAttributeType::Float3:  return GL_FLOAT;
+        case VertexBufferAttributeType::Float4:  return GL_FLOAT;
+        case VertexBufferAttributeType::Mat3:    return GL_FLOAT;
+        case VertexBufferAttributeType::Mat4:    return GL_FLOAT;
+        case VertexBufferAttributeType::Int:     return GL_INT;
+        case VertexBufferAttributeType::Int2:    return GL_INT;
+        case VertexBufferAttributeType::Int3:    return GL_INT;
+        case VertexBufferAttributeType::Int4:    return GL_INT;
+        case VertexBufferAttributeType::Bool:    return GL_BOOL;
+        default: ASSERT(false, "Unknown vertex buffer attribute type!"); return 0;
+    }
+}
+
 Application* Application::instance_ = nullptr;
 
 Application::Application()
@@ -41,10 +61,10 @@ Application::Application()
     // Push an example layer onto the layer stack.
     PushLayer(new ExampleLayer());
 
-    float vertices[3 * 3] = {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
+    float vertices[7 * 3] = {
+        -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
+         0.5f, -0.5f, 0.0f, 0.2f, 0.3f, 0.8f, 1.0f,
+         0.0f,  0.5f, 0.0f, 0.8f, 0.8f, 0.2f, 1.0f
     };
 
     unsigned int indices[3] = {
@@ -58,10 +78,32 @@ Application::Application()
     // Create a vertex buffer.
     vertex_buffer_.reset(new VertexBuffer(vertices, sizeof(vertices)));
 
-    // Specify the vertex attributes at location 0.
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
-    // Enable the vertex attributes at location 0.
-    glEnableVertexAttribArray(0);
+    {
+        VertexBufferLayout layout = {
+            { VertexBufferAttributeType::Float3, "a_Position" },
+            { VertexBufferAttributeType::Float4, "a_Color" }
+        };
+
+        vertex_buffer_->set_layout(layout);
+    }
+
+    uint32_t index = 0;
+    const VertexBufferLayout& layout = vertex_buffer_->layout();
+    for (const auto& attribute : layout)
+    {
+        // Specify the vertex attribute.
+        glVertexAttribPointer(index, 
+            attribute.count(), 
+            VertexBufferAttributeTypeToGL(attribute.type), 
+            attribute.normalized ? GL_TRUE : GL_FALSE, 
+            layout.stride(),
+            (const void*)attribute.offset);
+        // Enable the vertex attribute.
+        glEnableVertexAttribArray(index);
+
+        // Update the index.
+        index++;
+    }
 
     // Create an index buffer.
     index_buffer_.reset(new IndexBuffer(indices, sizeof(indices) / sizeof(uint32_t)));
@@ -70,10 +112,15 @@ Application::Application()
 			#version 330 core
 			
 			layout(location = 0) in vec3 a_Position;
+            layout(location = 1) in vec4 a_Color;
+
 			out vec3 v_Position;
+            out vec4 v_Color;
+
 			void main()
 			{
 				v_Position = a_Position;
+                v_Color = a_Color;
 				gl_Position = vec4(a_Position, 1.0);	
 			}
 		)";
@@ -82,10 +129,14 @@ Application::Application()
 			#version 330 core
 			
 			layout(location = 0) out vec4 color;
+
 			in vec3 v_Position;
+            in vec4 v_Color;
+
 			void main()
 			{
 				color = vec4(v_Position * 0.5 + 0.5, 1.0);
+                color = v_Color;
 			}
 		)";
 

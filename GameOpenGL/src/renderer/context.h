@@ -3,14 +3,12 @@
 struct GLFWwindow;
 
 /// <summary>
-/// A class that holds the OpenGL context. While not necessary for our purpose a general
-/// context class could be created that is inherited by different subclasses (e.g. DirectXContext)
-/// in order to abstract the GLFW window should we decide to replace it later. 
+/// A class that represents the OpenGL context.
 /// </summary>
-class OpenGLContext
+class Context
 {
 public:
-    OpenGLContext(GLFWwindow* window);
+    Context(GLFWwindow* window);
 
     /// <summary>
     /// Initializes the context and glad.

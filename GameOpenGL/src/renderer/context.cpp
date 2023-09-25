@@ -1,16 +1,16 @@
-#include "opengl_context.h"
+#include "context.h"
 #include "core.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-OpenGLContext::OpenGLContext(GLFWwindow* window)
+Context::Context(GLFWwindow* window)
     : window_(window)
 {
     ASSERT(window, "GLFW window is null!");
 }
 
-void OpenGLContext::Initialize()
+void Context::Initialize()
 {
     glfwMakeContextCurrent(window_);
     int success = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
@@ -18,7 +18,7 @@ void OpenGLContext::Initialize()
     LOG_DEBUG("Loading GLAD: {0}", success);
 }
 
-void OpenGLContext::SwapBuffers()
+void Context::SwapBuffers()
 {
     glfwSwapBuffers(window_);
 }

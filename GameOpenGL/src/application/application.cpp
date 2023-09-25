@@ -56,7 +56,7 @@ Application::Application()
     glBindVertexArray(vertex_array_);
 
     // Create a vertex buffer.
-    vertex_buffer_.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+    vertex_buffer_.reset(new VertexBuffer(vertices, sizeof(vertices)));
 
     // Specify the vertex attributes at location 0.
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
@@ -64,7 +64,7 @@ Application::Application()
     glEnableVertexAttribArray(0);
 
     // Create an index buffer.
-    index_buffer_.reset(IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+    index_buffer_.reset(new IndexBuffer(indices, sizeof(indices) / sizeof(uint32_t)));
 
     std::string vertexSource = R"(
 			#version 330 core

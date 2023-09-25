@@ -66,7 +66,7 @@ void Window::Initialize(const WindowProperties& properties)
 
     window_ = glfwCreateWindow((int)data_.width, (int)data_.height, data_.title.c_str(), nullptr, nullptr);
     
-    context_ = new OpenGLContext(window_);
+    context_ = new Context(window_);
     context_->Initialize();
     
     // Set the user pointer (data_) which is stored until the window is destroyed.

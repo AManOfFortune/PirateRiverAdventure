@@ -4,7 +4,8 @@
 #include "events/event.h"
 #include "layers/layer_stack.h"
 #include "window/window.h"
-#include "renderer/buffer.h"
+#include "renderer/vertex_buffer.h"
+#include "renderer/index_buffer.h"
 #include "renderer/shader.h"
 
 #include <memory>

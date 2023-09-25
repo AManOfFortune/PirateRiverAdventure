@@ -40,6 +40,37 @@ Application::Application()
 
     // Push an example layer onto the layer stack.
     PushLayer(new ExampleLayer());
+
+    float vertices[3 * 3] = {
+        -0.5f, -0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+         0.0f,  0.5f, 0.0f
+    };
+
+    unsigned int indices[3] = {
+        0, 1, 2
+    };
+
+    // Generate and bind a vertex array.
+    glGenVertexArrays(1, &vertex_array_);
+    glBindVertexArray(vertex_array_);
+
+    // Generate and bind a vertex buffer.
+    glGenBuffers(1, &vertex_buffer_);
+    glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer_);
+    // Set the vertex buffer data.
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // Generate and bind an element (index) buffer.
+    glGenBuffers(1, &element_buffer_);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_buffer_);
+    // Set the element (index) buffer data.
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    // Specify the vertex attributes at location 0.
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+    // Enable the vertex attributes at location 0.
+    glEnableVertexAttribArray(0);
 }
 
 Application::~Application()
@@ -53,6 +84,11 @@ void Application::Run()
     {
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        // Bind the vertex array before the draw call.
+        glBindVertexArray(vertex_array_);
+        // Draw the triangle.
+        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
         // Iterate through the layer stack from the first to the last layer
         // and call its OnUpdate method. Rendering should happen in this order

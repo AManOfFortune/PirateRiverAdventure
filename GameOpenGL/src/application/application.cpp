@@ -1,10 +1,9 @@
 #include "application.h"
 
 #include "log/log.h"
+#include "renderer/renderer.h"
 
 #include <functional>
-
-#include <glad/glad.h>
 
 /// <summary>
 /// A temporary example layer to test the layer stack functionality.
@@ -54,7 +53,6 @@ Application::Application()
     // Create a vertex array.
     vertex_array_.reset(new VertexArray());
 
-
     // Create a vertex buffer.
     std::shared_ptr<VertexBuffer> vertexBuffer;
     vertexBuffer.reset(new VertexBuffer(vertices, sizeof(vertices)));
@@ -76,19 +74,19 @@ Application::Application()
     // Set the index buffer.
     vertex_array_->set_index_buffer(indexBuffer);
 
-    rectangle_vertex_array_.reset(new VertexArray());
-
     float rectangleVertices[4 * 3] = {
-        -0.75f, -0.75f, 0.0f,
-         0.75f, -0.75f, 0.0f,
-         0.75f,  0.75f, 0.0f,
-        -0.75f,  0.75f, 0.0f
+    -0.75f, -0.75f, 0.0f,
+     0.75f, -0.75f, 0.0f,
+     0.75f,  0.75f, 0.0f,
+    -0.75f,  0.75f, 0.0f
     };
 
     unsigned int rectangleIndices[6] = {
         0, 1, 2,
         2, 3, 0
     };
+
+    rectangle_vertex_array_.reset(new VertexArray());
 
     std::shared_ptr<VertexBuffer> rectangleVertexBuffer;
     rectangleVertexBuffer.reset(new VertexBuffer(rectangleVertices, sizeof(rectangleVertices)));
@@ -101,6 +99,7 @@ Application::Application()
 
     std::shared_ptr<IndexBuffer> rectangleIndexBuffer;
     rectangleIndexBuffer.reset(new IndexBuffer(rectangleIndices, sizeof(rectangleIndices) / sizeof(uint32_t)));
+    
     rectangle_vertex_array_->set_index_buffer(rectangleIndexBuffer);
 
     std::string vertexSource = R"(
@@ -173,19 +172,20 @@ void Application::Run()
 {
     while (is_running_)
     {
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+        RenderCommand::Clear();
+
+        // Does nothing for now.
+        Renderer::BeginScene();
 
         solid_blue_shader_->Bind();
-        rectangle_vertex_array_->Bind();
-        glDrawElements(GL_TRIANGLES, rectangle_vertex_array_->index_buffer()->count(), GL_UNSIGNED_INT, nullptr);
+        Renderer::Submit(rectangle_vertex_array_);
 
-        // Bind the shader before the draw call.
         shader_->Bind();
-        // Bind the vertex array before the draw call.
-        vertex_array_->Bind();
-        // Draw the triangle.
-        glDrawElements(GL_TRIANGLES, vertex_array_->index_buffer()->count(), GL_UNSIGNED_INT, nullptr);
+        Renderer::Submit(vertex_array_);
+
+        // Does nothing for now.
+        Renderer::EndScene();
 
         // Iterate through the layer stack from the first to the last layer
         // and call its OnUpdate method. Rendering should happen in this order

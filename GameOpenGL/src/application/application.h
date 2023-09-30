@@ -56,6 +56,9 @@ private:
     std::unique_ptr<Window> window_;
     bool is_running_ = true;
     LayerStack layer_stack_;
+
+    // Time that it took to render the last frame [s].
+    float last_frame_time_ = 0.0f;
 };
 
 Application* CreateApplication();

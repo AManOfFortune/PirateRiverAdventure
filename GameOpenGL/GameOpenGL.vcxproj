@@ -179,6 +179,7 @@
   <ItemGroup>
     <ClInclude Include="src\application\application.h" />
     <ClInclude Include="src\core.h" />
+    <ClInclude Include="src\delta_time.h" />
     <ClInclude Include="src\renderer\orthographic_camera.h" />
     <ClInclude Include="src\renderer\renderer.h" />
     <ClInclude Include="src\renderer\renderer_api.h" />

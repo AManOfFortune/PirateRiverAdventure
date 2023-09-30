@@ -4,6 +4,9 @@
 #include "utils.h"
 
 #include <functional>
+#include <GLFW/glfw3.h>
+
+#include "delta_time.h"
 
 Application* Application::instance_ = nullptr;
 
@@ -23,12 +26,18 @@ void Application::Run()
 {
     while (is_running_)
     {
+        // Calculate the delta time between this and last frame.
+        float time = static_cast<float>(glfwGetTime());
+        DeltaTime deltaTime = time - last_frame_time_;
+        // Update the value of last_frame_time.
+        last_frame_time_ = time;
+
         // Iterate through the layer stack from the first to the last layer
         // and call its OnUpdate method. Rendering should happen in this order
         // so that the layers further on top are rendered after the ones at the bottom.
         for (auto it = layer_stack_.begin(); it != layer_stack_.end(); it++)
         {
-            (*it)->OnUpdate();
+            (*it)->OnUpdate(deltaTime);
         }
         window_->OnUpdate();
     }

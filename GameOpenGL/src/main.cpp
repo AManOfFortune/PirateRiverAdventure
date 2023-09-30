@@ -139,22 +139,22 @@ public:
         solid_blue_shader_.reset(new Shader(blueVertexSource, blueFragmentSource));
     }
 
-    void OnUpdate() override
+    void OnUpdate(DeltaTime deltaTime) override
     {
         if (Input::IsKeyPressed(CG_KEY_LEFT))
-            camera_pos_.x -= camera_speed_;
+            camera_pos_.x -= camera_speed_ * deltaTime;
         else if (Input::IsKeyPressed(CG_KEY_RIGHT))
-            camera_pos_.x += camera_speed_;
+            camera_pos_.x += camera_speed_ * deltaTime;
 
         if (Input::IsKeyPressed(CG_KEY_DOWN))
-            camera_pos_.y -= camera_speed_;
+            camera_pos_.y -= camera_speed_ * deltaTime;
         else if (Input::IsKeyPressed(CG_KEY_UP))
-            camera_pos_.y += camera_speed_;
+            camera_pos_.y += camera_speed_ * deltaTime;
 
         if (Input::IsKeyPressed(CG_KEY_A))
-            camera_rot_ += camera_rot_speed_;
+            camera_rot_ += camera_rot_speed_ * deltaTime;
         else if (Input::IsKeyPressed(CG_KEY_D))
-            camera_rot_ -= camera_rot_speed_;
+            camera_rot_ -= camera_rot_speed_ * deltaTime;
 
         RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
         RenderCommand::Clear();
@@ -187,10 +187,10 @@ private:
     OrthographicCamera camera_;
 
     glm::vec3 camera_pos_ = { 0.0f, 0.0f, 0.0f };
-    float camera_speed_ = 0.01f;
-
     float camera_rot_ = 0.0f;
-    float camera_rot_speed_ = 0.1f;
+
+    float camera_speed_ = 1.0f;  // in units per second
+    float camera_rot_speed_ = 45.0f;  // in degrees per second
 };
 
 class Sandbox : public Application

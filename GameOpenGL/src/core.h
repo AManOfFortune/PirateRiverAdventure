@@ -4,6 +4,8 @@
 #include "layers/layer.h"
 #include "log/log.h"
 
+#include "delta_time.h"
+
 #include "input/input.h"
 #include "input/key_codes.h"
 #include "input/mouse_button_codes.h"

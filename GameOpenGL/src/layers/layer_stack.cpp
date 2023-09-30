@@ -26,7 +26,7 @@ void LayerStack::PushLayer(Layer* layer)
 void LayerStack::PopLayer(Layer* layer) 
 {
     auto iterator = std::find(layers_.begin(), layers_.begin() + layer_insert_index_, layer);
-    if (iterator != layers_.end()) 
+    if (iterator != layers_.begin() + layer_insert_index_) 
     {
         layer->OnDetach();
         layers_.erase(iterator);

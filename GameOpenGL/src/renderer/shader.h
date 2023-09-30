@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glm/glm.hpp>
 #include <string>
 
 /// <summary>
@@ -13,6 +14,11 @@ public:
 
     void Bind() const;
     void Unbind() const;
+
+    /// <summary>
+    /// Sets a uniform of type mat4 with given name and value.
+    /// </summary>
+    void UploadUniformMat4(const std::string& name, const glm::mat4& value);
 
 private:
     /// <summary>

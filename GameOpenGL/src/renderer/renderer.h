@@ -1,6 +1,8 @@
 #pragma once
 
+#include "orthographic_camera.h"
 #include "render_command.h"
+#include "shader.h"
 
 /// <summary>
 /// The renderer holds higher level rendering functionality which is independent of the rendering API
@@ -15,7 +17,7 @@ public:
     /// This includes environmental information such as the camera and lights. By doing it this
     /// way the environment of a scene is independent from the geometry/meshes inside.
     /// </summary>
-    static void BeginScene();
+    static void BeginScene(OrthographicCamera& camera);
     /// <summary>
     /// Specifies the end of the scene. Needs to be called after BeginScene.
     /// </summary>
@@ -26,5 +28,13 @@ public:
     /// get rendered immediately but will instead be submitted to a render command queue that 
     /// could even be processed in other threads.
     /// </summary>
-    static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
+    static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray);
+
+private:
+    struct SceneData
+    {
+        glm::mat4 projectionViewMatrix;
+    };
+
+    static SceneData* sceneData;
 };

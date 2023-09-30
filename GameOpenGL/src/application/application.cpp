@@ -27,6 +27,7 @@ public:
 Application* Application::instance_ = nullptr;
 
 Application::Application()
+    : camera_(-1.6f, 1.6f, -0.9f, 0.9f)
 {
     // The application singleton should only be created once.
     ASSERT(!instance_, "Application singleton already exists!");
@@ -108,6 +109,8 @@ Application::Application()
 			layout(location = 0) in vec3 a_Position;
             layout(location = 1) in vec4 a_Color;
 
+            uniform mat4 u_projectionViewMatrix;
+
 			out vec3 v_Position;
             out vec4 v_Color;
 
@@ -115,7 +118,7 @@ Application::Application()
 			{
 				v_Position = a_Position;
                 v_Color = a_Color;
-				gl_Position = vec4(a_Position, 1.0);	
+				gl_Position = u_projectionViewMatrix * vec4(a_Position, 1.0);	
 			}
 		)";
 
@@ -142,12 +145,14 @@ Application::Application()
 			
 			layout(location = 0) in vec3 a_Position;
 
+            uniform mat4 u_projectionViewMatrix;
+
 			out vec3 v_Position;
 
 			void main()
 			{
 				v_Position = a_Position;
-				gl_Position = vec4(a_Position, 1.0);	
+				gl_Position = u_projectionViewMatrix * vec4(a_Position, 1.0);	
 			}
 		)";
 
@@ -175,14 +180,15 @@ void Application::Run()
         RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
         RenderCommand::Clear();
 
+        // Test setting the camera position and rotation.
+        camera_.set_position({ 0.25f, 0.25f, 0.0f });
+        camera_.set_rotation(45.0f);
+
         // Does nothing for now.
-        Renderer::BeginScene();
+        Renderer::BeginScene(camera_);
 
-        solid_blue_shader_->Bind();
-        Renderer::Submit(rectangle_vertex_array_);
-
-        shader_->Bind();
-        Renderer::Submit(vertex_array_);
+        Renderer::Submit(solid_blue_shader_, rectangle_vertex_array_);
+        Renderer::Submit(shader_, vertex_array_);
 
         // Does nothing for now.
         Renderer::EndScene();

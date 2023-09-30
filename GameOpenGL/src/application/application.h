@@ -5,9 +5,8 @@
 #include "layers/layer_stack.h"
 #include "window/window.h"
 #include "renderer/vertex_array.h"
-#include "renderer/vertex_buffer.h"
-#include "renderer/index_buffer.h"
 #include "renderer/shader.h"
+#include "renderer/orthographic_camera.h"
 
 #include <memory>
 
@@ -65,6 +64,8 @@ private:
     std::shared_ptr<Shader> shader_;
     std::shared_ptr<VertexArray> rectangle_vertex_array_;
     std::shared_ptr<Shader> solid_blue_shader_;
+
+    OrthographicCamera camera_;
 };
 
 Application* CreateApplication();

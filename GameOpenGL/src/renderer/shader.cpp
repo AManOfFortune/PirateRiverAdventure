@@ -1,8 +1,11 @@
 #include "shader.h"
-#include "core.h"
+
+#include "log/log.h"
+#include "utils.h"
 
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 
 Shader::Shader(const std::string& vertexSource, const std::string& fragmentSource) 
 {

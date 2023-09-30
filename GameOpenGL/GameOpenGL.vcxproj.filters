@@ -80,7 +80,7 @@
     <ClInclude Include="src\application\application.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\core.h">
+    <ClInclude Include="src\utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\window\window.h">
@@ -141,6 +141,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\renderer\orthographic_camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\core.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

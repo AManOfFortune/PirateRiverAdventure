@@ -178,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\application\application.h" />
+    <ClInclude Include="src\core.h" />
     <ClInclude Include="src\renderer\orthographic_camera.h" />
     <ClInclude Include="src\renderer\renderer.h" />
     <ClInclude Include="src\renderer\renderer_api.h" />
@@ -186,7 +187,7 @@
     <ClInclude Include="src\renderer\vertex_buffer_layout.h" />
     <ClInclude Include="src\renderer\index_buffer.h" />
     <ClInclude Include="src\renderer\context.h" />
-    <ClInclude Include="src\core.h" />
+    <ClInclude Include="src\utils.h" />
     <ClInclude Include="src\events\application_event.h" />
     <ClInclude Include="src\events\event.h" />
     <ClInclude Include="src\events\key_event.h" />

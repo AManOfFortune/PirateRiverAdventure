@@ -28,7 +28,8 @@ public:
     /// get rendered immediately but will instead be submitted to a render command queue that 
     /// could even be processed in other threads.
     /// </summary>
-    static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray);
+    static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, 
+        const glm::mat4& transform = glm::mat4(1.0f));  // Future: shader -> material, vertexArray -> mesh
 
 private:
     struct SceneData

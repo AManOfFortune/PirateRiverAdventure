@@ -1,6 +1,8 @@
 #include "core.h"
 #include "events/key_event.h"
 
+#include <glm/gtc/matrix_transform.hpp>
+
 class ExampleLayer : public Layer
 {
 public:
@@ -42,10 +44,10 @@ public:
         vertex_array_->set_index_buffer(indexBuffer);
 
         float rectangleVertices[4 * 3] = {
-        -0.75f, -0.75f, 0.0f,
-         0.75f, -0.75f, 0.0f,
-         0.75f,  0.75f, 0.0f,
-        -0.75f,  0.75f, 0.0f
+        -0.5f, -0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+         0.5f,  0.5f, 0.0f,
+        -0.5f,  0.5f, 0.0f
         };
 
         unsigned int rectangleIndices[6] = {
@@ -76,6 +78,7 @@ public:
                 layout(location = 1) in vec4 a_Color;
 
                 uniform mat4 u_projectionViewMatrix;
+                uniform mat4 u_modelMatrix;
 
 			    out vec3 v_Position;
                 out vec4 v_Color;
@@ -84,7 +87,7 @@ public:
 			    {
 				    v_Position = a_Position;
                     v_Color = a_Color;
-				    gl_Position = u_projectionViewMatrix * vec4(a_Position, 1.0);	
+				    gl_Position = u_projectionViewMatrix * u_modelMatrix * vec4(a_Position, 1.0);	
 			    }
 		    )";
 
@@ -112,13 +115,14 @@ public:
 			    layout(location = 0) in vec3 a_Position;
 
                 uniform mat4 u_projectionViewMatrix;
+                uniform mat4 u_modelMatrix;
 
 			    out vec3 v_Position;
 
 			    void main()
 			    {
 				    v_Position = a_Position;
-				    gl_Position = u_projectionViewMatrix * vec4(a_Position, 1.0);	
+				    gl_Position = u_projectionViewMatrix * u_modelMatrix * vec4(a_Position, 1.0);	
 			    }
 		    )";
 
@@ -141,6 +145,7 @@ public:
 
     void OnUpdate(DeltaTime deltaTime) override
     {
+        // Camera movement
         if (Input::IsKeyPressed(CG_KEY_LEFT))
             camera_pos_.x -= camera_speed_ * deltaTime;
         else if (Input::IsKeyPressed(CG_KEY_RIGHT))
@@ -151,9 +156,10 @@ public:
         else if (Input::IsKeyPressed(CG_KEY_UP))
             camera_pos_.y += camera_speed_ * deltaTime;
 
-        if (Input::IsKeyPressed(CG_KEY_A))
+        // Camera rotation
+        if (Input::IsKeyPressed(CG_KEY_Q))
             camera_rot_ += camera_rot_speed_ * deltaTime;
-        else if (Input::IsKeyPressed(CG_KEY_D))
+        else if (Input::IsKeyPressed(CG_KEY_E))
             camera_rot_ -= camera_rot_speed_ * deltaTime;
 
         RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
@@ -163,10 +169,25 @@ public:
         camera_.set_position(camera_pos_);
         camera_.set_rotation(camera_rot_);
 
-        // Does nothing for now.
+        // Takes in the camera object which calculates the projection view matrix (P * V) for the whole scene.
         Renderer::BeginScene(camera_);
 
-        Renderer::Submit(solid_blue_shader_, rectangle_vertex_array_);
+        glm::mat4 rotation(1.0f);
+        glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
+
+        // Render grid.
+        for (int y = 0; y < 20; y++)
+        {
+            for (int x = 0; x < 20; x++)
+            {
+                glm::vec3 pos(x * 0.11f, y * 0.11f, 0.0f);
+                glm::mat4 translation = glm::translate(glm::mat4(1.0f), pos);
+                // Calculate model matrix (M = T * R * S).
+                glm::mat4 modelMatrix = translation * rotation * scale;
+                Renderer::Submit(solid_blue_shader_, rectangle_vertex_array_, modelMatrix);
+            }
+        }
+
         Renderer::Submit(shader_, vertex_array_);
 
         // Does nothing for now.

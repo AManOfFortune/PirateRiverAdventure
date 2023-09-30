@@ -175,16 +175,7 @@ public:
 
     void OnEvent(Event& event) override
     {
-        EventDispatcher dispatcher(event);
 
-        dispatcher.Dispatch<KeyPressedEvent>(std::bind(&ExampleLayer::OnKeyPressedEvent, this, std::placeholders::_1));
-    }
-
-    bool OnKeyPressedEvent(KeyPressedEvent& event)
-    {
-
-
-        return false;
     }
 
 private:

@@ -29,16 +29,60 @@ void Shader::Unbind() const
     glUseProgram(0);
 }
 
-void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+void Shader::UploadUniformInt(const std::string& name, int value)
 {
+    // TODO: Implement cache for the location using a hash map so look up is not performed every time.
+
     GLint location = glGetUniformLocation(renderer_id_, name.c_str());
-    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+    glUniform1i(location, value);
+}
+
+void Shader::UploadUniformFloat(const std::string& name, float value)
+{
+    // TODO: Implement cache for the location using a hash map so look up is not performed every time.
+
+    GLint location = glGetUniformLocation(renderer_id_, name.c_str());
+    glUniform1f(location, value);
+}
+
+void Shader::UploadUniformFloat2(const std::string& name, const glm::vec2& vec)
+{
+    // TODO: Implement cache for the location using a hash map so look up is not performed every time.
+
+    GLint location = glGetUniformLocation(renderer_id_, name.c_str());
+    glUniform2f(location, vec.x, vec.y);
+}
+
+void Shader::UploadUniformFloat3(const std::string& name, const glm::vec3& vec)
+{
+    // TODO: Implement cache for the location using a hash map so look up is not performed every time.
+
+    GLint location = glGetUniformLocation(renderer_id_, name.c_str());
+    glUniform3f(location, vec.x, vec.y, vec.z);
 }
 
 void Shader::UploadUniformFloat4(const std::string& name, const glm::vec4& vec)
 {
+    // TODO: Implement cache for the location using a hash map so look up is not performed every time.
+
     GLint location = glGetUniformLocation(renderer_id_, name.c_str());
     glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
+}
+
+void Shader::UploadUniformMat3(const std::string& name, const glm::mat3& matrix)
+{
+    // TODO: Implement cache for the location using a hash map so look up is not performed every time.
+
+    GLint location = glGetUniformLocation(renderer_id_, name.c_str());
+    glUniformMatrix3fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
+void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+{
+    // TODO: Implement cache for the location using a hash map so look up is not performed every time.
+
+    GLint location = glGetUniformLocation(renderer_id_, name.c_str());
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 void Shader::CreateShader(const std::string& vertexSource, const std::string& fragmentSource) 

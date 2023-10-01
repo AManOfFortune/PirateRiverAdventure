@@ -18,7 +18,8 @@ public:
     /// <summary>
     /// Sets a uniform of type mat4 with given name and value.
     /// </summary>
-    void UploadUniformMat4(const std::string& name, const glm::mat4& value);
+    void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
+    void UploadUniformFloat4(const std::string& name, const glm::vec4& vec);
 
 private:
     /// <summary>

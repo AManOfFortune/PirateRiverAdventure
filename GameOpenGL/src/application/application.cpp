@@ -1,6 +1,5 @@
 #include "application.h"
 
-#include "log/log.h"
 #include "utils.h"
 
 #include <functional>
@@ -51,8 +50,6 @@ void Application::OnEvent(Event& event)
     EventDispatcher dispatcher(event);
     // Here, only events of type WindowCloseEvent are propagated to the OnWindowClose method.
     dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
-
-    LOG_DEBUG("{0}", event);
 
     // Iterate through the layer stack in reverse order from the last to the first layer
     // and call its OnEvent method. If the event was handled this way by any layer stop

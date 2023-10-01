@@ -109,7 +109,7 @@ public:
         // Create a shader with hardcoded vertex and fragment source code.
         shader_.reset(new Shader(vertexSource, fragmentSource));
 
-        std::string blueVertexSource = R"(
+        std::string flatColorVertexSource = R"(
 			    #version 330 core
 			    
 			    layout(location = 0) in vec3 a_Position;
@@ -126,21 +126,23 @@ public:
 			    }
 		    )";
 
-        std::string blueFragmentSource = R"(
+        std::string flatColorFragmentSource = R"(
 			    #version 330 core
 			    
 			    layout(location = 0) out vec4 color;
 
 			    in vec3 v_Position;
 
+                uniform vec4 u_color;
+
 			    void main()
 			    {
-				    color = vec4(0.2f, 0.3f, 0.8f, 1.0f);
+				    color = u_color;
 			    }
 		    )";
 
         // Create a shader with hardcoded vertex and fragment source code.
-        solid_blue_shader_.reset(new Shader(blueVertexSource, blueFragmentSource));
+        flat_color_shader_.reset(new Shader(flatColorVertexSource, flatColorFragmentSource));
     }
 
     void OnUpdate(DeltaTime deltaTime) override
@@ -175,6 +177,9 @@ public:
         glm::mat4 rotation(1.0f);
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
 
+        glm::vec4 redColor(0.8f, 0.2f, 0.3f, 1.0f);
+        glm::vec4 blueColor(0.2f, 0.3f, 0.8f, 1.0f);
+
         // Render grid.
         for (int y = 0; y < 20; y++)
         {
@@ -184,7 +189,17 @@ public:
                 glm::mat4 translation = glm::translate(glm::mat4(1.0f), pos);
                 // Calculate model matrix (M = T * R * S).
                 glm::mat4 modelMatrix = translation * rotation * scale;
-                Renderer::Submit(solid_blue_shader_, rectangle_vertex_array_, modelMatrix);
+
+                if (x % 2 == 0)
+                {
+                    flat_color_shader_->UploadUniformFloat4("u_color", redColor);
+                }
+                else
+                {
+                    flat_color_shader_->UploadUniformFloat4("u_color", blueColor);
+                }
+
+                Renderer::Submit(flat_color_shader_, rectangle_vertex_array_, modelMatrix);
             }
         }
 
@@ -203,7 +218,7 @@ private:
     std::shared_ptr<VertexArray> vertex_array_;
     std::shared_ptr<Shader> shader_;
     std::shared_ptr<VertexArray> rectangle_vertex_array_;
-    std::shared_ptr<Shader> solid_blue_shader_;
+    std::shared_ptr<Shader> flat_color_shader_;
 
     OrthographicCamera camera_;
 

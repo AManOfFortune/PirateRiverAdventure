@@ -29,10 +29,16 @@ void Shader::Unbind() const
     glUseProgram(0);
 }
 
-void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& value)
+void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
 {
     GLint location = glGetUniformLocation(renderer_id_, name.c_str());
-    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+}
+
+void Shader::UploadUniformFloat4(const std::string& name, const glm::vec4& vec)
+{
+    GLint location = glGetUniformLocation(renderer_id_, name.c_str());
+    glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
 }
 
 void Shader::CreateShader(const std::string& vertexSource, const std::string& fragmentSource) 

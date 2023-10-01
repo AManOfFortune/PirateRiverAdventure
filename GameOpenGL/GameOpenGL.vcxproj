@@ -160,7 +160,7 @@
     <ClCompile Include="src\application\application.cpp" />
     <ClCompile Include="src\renderer\index_buffer.cpp" />
     <ClCompile Include="src\renderer\context.cpp" />
-    <ClCompile Include="src\glad.c" />
+    <ClCompile Include="vendor\glad\glad.c" />
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\layers\layer.cpp" />
     <ClCompile Include="src\layers\layer_stack.cpp" />
@@ -173,7 +173,7 @@
     <ClCompile Include="src\renderer\shader.cpp" />
     <ClCompile Include="src\renderer\vertex_array.cpp" />
     <ClCompile Include="src\renderer\vertex_buffer.cpp" />
-    <ClCompile Include="src\stb_image.cpp" />
+    <ClCompile Include="vendor\stb_image\stb_image.cpp" />
     <ClCompile Include="src\window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -201,7 +201,7 @@
     <ClInclude Include="src\log\log.h" />
     <ClInclude Include="src\renderer\shader.h" />
     <ClInclude Include="src\renderer\vertex_buffer.h" />
-    <ClInclude Include="src\stb_image.h" />
+    <ClInclude Include="vendor\stb_image\stb_image.h" />
     <ClInclude Include="src\window\window.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

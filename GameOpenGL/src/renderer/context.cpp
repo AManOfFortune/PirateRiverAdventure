@@ -1,8 +1,9 @@
 #include "context.h"
-#include "core.h"
+#include "utils.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
 
 Context::Context(GLFWwindow* window)
     : window_(window)

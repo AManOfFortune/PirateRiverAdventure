@@ -1,15 +1,26 @@
 #pragma once
 
+#include "application/application.h"
+#include "layers/layer.h"
 #include "log/log.h"
 
-// This preprocessor definition is only defined in the Debug configuration.
-#ifdef ENABLE_ASSERT
-    // The ASSERT macro checks whether an expression is true or not 
-    // and logs an error message should the assertion fail.
-    #define ASSERT(x, ...) { if (!(x)) {  LOG_ERROR("Assertion failed: {0}", __VA_ARGS__); __debugbreak(); } }
-#else
-    #define ASSERT(x, ...)
-#endif  // ENABLE_ASSERT
+#include "delta_time.h"
 
-// This is a helper macro to create bitfields.
-#define BIT(x) (1 << x)
+#include "input/input.h"
+#include "input/key_codes.h"
+#include "input/mouse_button_codes.h"
+
+// -- Renderer -----------------------------
+#include "renderer/renderer.h"
+#include "renderer/render_command.h"
+
+#include "renderer/shader.h"
+#include "renderer/texture.h"
+
+#include "renderer/index_buffer.h"
+#include "renderer/vertex_buffer.h"
+#include "renderer/vertex_buffer_layout.h"
+#include "renderer/vertex_array.h"
+
+#include "renderer/orthographic_camera.h"
+// -----------------------------------------

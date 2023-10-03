@@ -1,5 +1,6 @@
 #pragma once
 
+#include "delta_time.h"
 #include "events/event.h"
 
 #include <string>
@@ -24,7 +25,7 @@ public:
     /// <summary>
     /// This callback method is invoked during the applications OnUpdate method.
     /// </summary>
-    virtual void OnUpdate() {}
+    virtual void OnUpdate(DeltaTime deltaTime) {}
     /// <summary>
     /// This method is called when an event is propagated from the layer stack to this layer.
     /// </summary>

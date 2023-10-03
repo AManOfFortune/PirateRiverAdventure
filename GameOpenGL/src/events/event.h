@@ -1,9 +1,11 @@
 #pragma once
 
-#include "core.h"
+#include "utils.h"
+
 
 #include <functional>
-#include <iostream>
+#include <sstream>
+#include <string>
 
 /// <summary>
 /// Holds all possible event types that are triggered in our application.

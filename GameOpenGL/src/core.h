@@ -14,6 +14,9 @@
 #include "renderer/renderer.h"
 #include "renderer/render_command.h"
 
+#include "renderer/shader.h"
+#include "renderer/texture.h"
+
 #include "renderer/index_buffer.h"
 #include "renderer/vertex_buffer.h"
 #include "renderer/vertex_buffer_layout.h"

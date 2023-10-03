@@ -128,9 +128,9 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);ENABLE_ASSERTGLFW_INCLUDE_NONE;</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);ENABLE_ASSERTGLFW_INCLUDE_NONE;;ENABLE_ASSERT</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameOpenGL\vendor\spdlog\include\;src\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameOpenGL\vendor\stb_image\;$(SolutionDir)GameOpenGL\vendor\spdlog\include\;src\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,9 +144,9 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)GLFW_INCLUDE_NONE;</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)GLFW_INCLUDE_NONE;;ENABLE_ASSERT</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameOpenGL\vendor\spdlog\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameOpenGL\vendor\stb_image\;$(SolutionDir)GameOpenGL\vendor\spdlog\include\;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -160,6 +160,7 @@
     <ClCompile Include="src\application\application.cpp" />
     <ClCompile Include="src\renderer\index_buffer.cpp" />
     <ClCompile Include="src\renderer\context.cpp" />
+    <ClCompile Include="src\renderer\texture.cpp" />
     <ClCompile Include="vendor\glad\glad.c" />
     <ClCompile Include="src\input\input.cpp" />
     <ClCompile Include="src\layers\layer.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="src\renderer\renderer.h" />
     <ClInclude Include="src\renderer\renderer_api.h" />
     <ClInclude Include="src\renderer\render_command.h" />
+    <ClInclude Include="src\renderer\texture.h" />
     <ClInclude Include="src\renderer\vertex_array.h" />
     <ClInclude Include="src\renderer\vertex_buffer_layout.h" />
     <ClInclude Include="src\renderer\index_buffer.h" />

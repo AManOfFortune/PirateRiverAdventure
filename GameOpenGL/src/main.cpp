@@ -43,11 +43,15 @@ public:
         // Set the index buffer.
         vertex_array_->set_index_buffer(indexBuffer);
 
-        float rectangleVertices[4 * 3] = {
-        -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.5f,  0.5f, 0.0f,
-        -0.5f,  0.5f, 0.0f
+        const unsigned int kVertices = 4;
+        const unsigned int kPositions = 3;
+        const unsigned int kTextureCoords = 2;
+
+        float rectangleVertices[kVertices * (kPositions + kTextureCoords)] = {
+            -0.5f, -0.5f, 0.0f, 0.0f, 0.0f,
+             0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+             0.5f,  0.5f, 0.0f, 1.0f, 1.0f,
+            -0.5f,  0.5f, 0.0f, 0.0f, 1.0f
         };
 
         unsigned int rectangleIndices[6] = {
@@ -61,7 +65,8 @@ public:
         rectangleVertexBuffer.reset(new VertexBuffer(rectangleVertices, sizeof(rectangleVertices)));
 
         rectangleVertexBuffer->set_layout({
-            { VertexBufferAttributeType::Float3, "a_Position" }
+            { VertexBufferAttributeType::Float3, "a_Position" },
+            { VertexBufferAttributeType::Float2, "a_TexCoord" }
         });
 
         rectangle_vertex_array_->add_vertex_buffer(rectangleVertexBuffer);
@@ -143,6 +148,49 @@ public:
 
         // Create a shader with hardcoded vertex and fragment source code.
         flat_color_shader_.reset(new Shader(flatColorVertexSource, flatColorFragmentSource));
+
+        std::string textureVertexSource = R"(
+			    #version 330 core
+			    
+			    layout(location = 0) in vec3 a_Position;
+                layout(location = 1) in vec2 a_TexCoord;
+
+                uniform mat4 u_projectionViewMatrix;
+                uniform mat4 u_modelMatrix;
+
+                out vec2 v_TexCoord;
+
+			    void main()
+			    {
+				    v_TexCoord = a_TexCoord;
+				    gl_Position = u_projectionViewMatrix * u_modelMatrix * vec4(a_Position, 1.0);	
+			    }
+		    )";
+
+        std::string textureFragmentSource = R"(
+			    #version 330 core
+			    
+			    layout(location = 0) out vec4 color;
+
+			    in vec2 v_TexCoord;
+
+                uniform sampler2D u_Texture;
+
+			    void main()
+			    {
+				    color = texture(u_Texture, v_TexCoord);
+			    }
+		    )";
+
+        // Create a shader with hardcoded vertex and fragment source code.
+        texture_shader_.reset(new Shader(textureVertexSource, textureFragmentSource));
+
+        // Create the checkerboard texture.
+        checkerboard_texture_ = std::make_shared<Texture2D>("assets/textures/Checkerboard.png");
+
+        texture_shader_->Bind();
+        // Set the sampler2D uniform by supplying the bound texture slot (in our case 0).
+        texture_shader_->UploadUniformInt("u_Texture", 0);
     }
 
     void OnUpdate(DeltaTime deltaTime) override
@@ -203,7 +251,13 @@ public:
             }
         }
 
-        Renderer::Submit(shader_, vertex_array_);
+        // Bind the texture before submitting to renderer.
+        checkerboard_texture_->Bind();
+        // Render a textured square.
+        Renderer::Submit(texture_shader_, rectangle_vertex_array_, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+
+        // Render a triangle.
+        // Renderer::Submit(shader_, vertex_array_);
 
         // Does nothing for now.
         Renderer::EndScene();
@@ -215,10 +269,9 @@ public:
     }
 
 private:
-    std::shared_ptr<VertexArray> vertex_array_;
-    std::shared_ptr<Shader> shader_;
-    std::shared_ptr<VertexArray> rectangle_vertex_array_;
-    std::shared_ptr<Shader> flat_color_shader_;
+    std::shared_ptr<VertexArray> vertex_array_, rectangle_vertex_array_;
+    std::shared_ptr<Shader> shader_, flat_color_shader_, texture_shader_;
+    std::shared_ptr<Texture2D> checkerboard_texture_;
 
     OrthographicCamera camera_;
 
@@ -238,6 +291,8 @@ public:
     }
 };
 
+// -- ENTRY POINT -------------------------------
+
 int main(int argc, char** argv)
 {
     Log::Initialize();
@@ -248,3 +303,5 @@ int main(int argc, char** argv)
     app->Run();
     delete app;
 }
+
+// ----------------------------------------------

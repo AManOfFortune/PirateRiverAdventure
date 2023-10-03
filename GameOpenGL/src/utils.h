@@ -1,5 +1,7 @@
 #pragma once
 
+#include "log/log.h"
+
 // This preprocessor definition is only defined in the Debug configuration.
 #ifdef ENABLE_ASSERT
     // The ASSERT macro checks whether an expression is true or not 

@@ -14,6 +14,7 @@
 class RendererAPI
 {
 public:
+    void Init();
     void SetClearColor(const glm::vec4& color) const;
     void Clear() const ;
     /// <summary>

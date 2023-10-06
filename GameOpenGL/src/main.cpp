@@ -187,6 +187,7 @@ public:
 
         // Create the checkerboard texture.
         checkerboard_texture_ = std::make_shared<Texture2D>("assets/textures/Checkerboard.png");
+        logo_texture_ = std::make_shared<Texture2D>("assets/textures/Mario-Logo.png");
 
         texture_shader_->Bind();
         // Set the sampler2D uniform by supplying the bound texture slot (in our case 0).
@@ -255,6 +256,9 @@ public:
         checkerboard_texture_->Bind();
         // Render a textured square.
         Renderer::Submit(texture_shader_, rectangle_vertex_array_, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+        
+        logo_texture_->Bind();
+        Renderer::Submit(texture_shader_, rectangle_vertex_array_, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
         // Render a triangle.
         // Renderer::Submit(shader_, vertex_array_);
@@ -271,7 +275,7 @@ public:
 private:
     std::shared_ptr<VertexArray> vertex_array_, rectangle_vertex_array_;
     std::shared_ptr<Shader> shader_, flat_color_shader_, texture_shader_;
-    std::shared_ptr<Texture2D> checkerboard_texture_;
+    std::shared_ptr<Texture2D> checkerboard_texture_, logo_texture_;
 
     OrthographicCamera camera_;
 

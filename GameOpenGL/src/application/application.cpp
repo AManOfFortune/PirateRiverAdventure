@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 
 #include "delta_time.h"
+#include "renderer/renderer.h"
 
 Application* Application::instance_ = nullptr;
 
@@ -19,6 +20,8 @@ Application::Application()
     // Sets the OnEvent method of this instance to be the event callback of the window class.
     // An event triggered in the window class will be handled by the OnEvent method.
     window_->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+
+    Renderer::Init();
 }
 
 void Application::Run()

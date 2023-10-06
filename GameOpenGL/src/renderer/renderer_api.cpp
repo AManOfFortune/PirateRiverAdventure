@@ -2,6 +2,15 @@
 
 #include <glad/glad.h>
 
+void RendererAPI::Init()
+{
+    // Enable blending.
+    glEnable(GL_BLEND);
+    // Set up the blend function.
+    // TODO - Add explanation for blend function maths.
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
 void RendererAPI::SetClearColor(const glm::vec4& color) const
 {
     glClearColor(color.r, color.g, color.b, color.a);

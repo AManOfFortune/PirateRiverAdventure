@@ -13,6 +13,10 @@ class Renderer
 {
 public:
     /// <summary>
+    /// Initializes the renderer.
+    /// </summary>
+    static void Init();
+    /// <summary>
     /// Specifies the start of a new scene. Here all model independent data should be submitted.
     /// This includes environmental information such as the camera and lights. By doing it this
     /// way the environment of a scene is independent from the geometry/meshes inside.

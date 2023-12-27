@@ -3,11 +3,41 @@
 #include "log/log.h"
 #include "utils.h"
 
+#include <fstream>
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
 
-Shader::Shader(const std::string& vertexSource, const std::string& fragmentSource) 
+static GLenum ShaderTypeFromString(const std::string& type)
+{
+	if (type == "vertex")
+		return GL_VERTEX_SHADER;
+	if (type == "fragment" || type == "pixel")
+		return GL_FRAGMENT_SHADER;
+
+	ASSERT(false, "Invalid shader type specified!");
+	return 0;
+}
+
+Shader::Shader(const std::string& filepath)
+{
+    std::string sourceFile = ReadShaderFile(filepath);
+    std::unordered_map<GLenum, std::string> shaderSources = PreprocessShaders(sourceFile);
+    CreateShader(shaderSources[GL_VERTEX_SHADER], shaderSources[GL_FRAGMENT_SHADER]);
+
+    // Extract the name of the shader from the filepath.
+	size_t lastSlash = filepath.find_last_of("/\\");
+    // If no slash position is 0 else it's the position after the slash.
+    lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+    // Find the position of the last dot.
+    size_t lastDot = filepath.rfind('.');
+    // Count is the number of characters to be extracted.
+    auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+    name_ = filepath.substr(lastSlash, count);
+}
+
+Shader::Shader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+	: name_(name)
 {
     // Create the shader program with given vertex and fragment shaders.
     CreateShader(vertexSource, fragmentSource);
@@ -17,6 +47,16 @@ Shader::~Shader()
 {
     // Delete the shader program.
     glDeleteProgram(renderer_id_);
+}
+
+std::shared_ptr<Shader> Shader::Create(const std::string& filepath)
+{
+    return std::make_shared<Shader>(filepath);
+}
+
+std::shared_ptr<Shader> Shader::Create(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+{
+    return std::make_shared<Shader>(name, vertexSource, fragmentSource);
 }
 
 void Shader::Bind() const 
@@ -85,7 +125,69 @@ void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void Shader::CreateShader(const std::string& vertexSource, const std::string& fragmentSource) 
+std::string Shader::ReadShaderFile(const std::string& filepath)
+{
+    std::string result;
+    std::ifstream in(filepath, std::ios::in | std::ios::binary);
+    if (in)
+    {
+        // Sets the position of the next character to be extracted from the input stream.
+        // Here , it sets the position to the end of the file.
+        // https://cplusplus.com/reference/istream/istream/seekg/
+        in.seekg(0, std::ios::end);
+        // Returns the position of the current character in the input stream. 
+        // Here, same as size of the file.
+        // https://cplusplus.com/reference/istream/istream/tellg/
+        result.resize(in.tellg());
+        // Sets the position back to the beginning of the file.
+        in.seekg(0, std::ios::beg);
+        // Reads the entire file into the string.
+        in.read(&result[0], result.size());
+        // Closes the input stream.
+        in.close();
+    }
+    else
+    {
+        // For now log an error if the shader file could not be opened.
+        LOG_ERROR("Could not open file '{0}'", filepath);
+    }
+
+    return result;
+}
+
+std::unordered_map<GLenum, std::string> Shader::PreprocessShaders(const std::string& source)
+{
+	std::unordered_map<GLenum, std::string> shaderSources;
+
+	const char* typeToken = "#type";
+	size_t typeTokenLength = strlen(typeToken);
+	size_t pos = source.find(typeToken, 0);
+    while (pos != std::string::npos)
+    {
+		// Find the end of the line.
+		size_t eol = source.find_first_of("\r\n", pos);
+        // Syntax error if no end of line is found.
+		ASSERT(eol != std::string::npos, "Syntax error!");
+
+		// Get the shader type from the line. Does only work for a single whitespace character.
+		size_t begin = pos + typeTokenLength + 1;
+		std::string type = source.substr(begin, eol - begin);
+		ASSERT(ShaderTypeFromString(type), "Invalid shader type specified!");
+
+		// Find the beginning of the shader source code.
+		size_t nextLinePos = source.find_first_not_of("\r\n", eol);
+		ASSERT(nextLinePos != std::string::npos, "Syntax error!");
+		pos = source.find(typeToken, nextLinePos);
+
+		// Store the shader source code in the map.
+		shaderSources[ShaderTypeFromString(type)] = 
+            source.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos));
+	}
+
+	return shaderSources;
+}
+
+void Shader::CreateShader(const std::string& vertexSource, const std::string& fragmentSource)
 {
     // Compile the vertex and fragment shaders.
     CompileShader(vertexSource, GL_VERTEX_SHADER);
@@ -175,4 +277,41 @@ void Shader::LinkShaderProgram()
     // Detach the shaders after linking successfully.
     glDetachShader(program, vertex_);
     glDetachShader(program, fragment_);
+}
+
+void ShaderLibrary::Add(const std::shared_ptr<Shader>& shader)
+{
+    const std::string& name = shader->name();
+    Add(name, shader);
+}
+
+void ShaderLibrary::Add(const std::string& name, const std::shared_ptr<Shader>& shader)
+{
+	ASSERT(!Exists(name), "Shader already exists!");
+	shaders_[name] = shader;
+}
+
+std::shared_ptr<Shader> ShaderLibrary::Load(const std::string& filepath)
+{
+    std::shared_ptr<Shader> shader = Shader::Create(filepath);
+    Add(shader);
+    return shader;
+}
+
+std::shared_ptr<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath)
+{
+    std::shared_ptr<Shader> shader = Shader::Create(filepath);
+    Add(name, shader);
+    return shader;
+}
+
+std::shared_ptr<Shader> ShaderLibrary::Get(const std::string& name)
+{
+    ASSERT(Exists(name), "Shader does not exist!");
+    return shaders_[name];
+}
+
+bool ShaderLibrary::Exists(const std::string& name) const
+{
+    return shaders_.find(name) != shaders_.end();
 }

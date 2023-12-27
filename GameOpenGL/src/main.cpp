@@ -112,85 +112,20 @@ public:
 		    )";
 
         // Create a shader with hardcoded vertex and fragment source code.
-        shader_.reset(new Shader(vertexSource, fragmentSource));
+        shader_ = Shader::Create("VertexPosColor", vertexSource, fragmentSource);
 
-        std::string flatColorVertexSource = R"(
-			    #version 330 core
-			    
-			    layout(location = 0) in vec3 a_Position;
+        // Create flat color shader from source file.
+        flat_color_shader_ = Shader::Create("assets/shaders/flat_color.glsl");
+        // Create texture shader from source file.
+        std::shared_ptr<Shader> textureShader = shader_library_.Load("assets/shaders/texture.glsl");
 
-                uniform mat4 u_projectionViewMatrix;
-                uniform mat4 u_modelMatrix;
-
-			    out vec3 v_Position;
-
-			    void main()
-			    {
-				    v_Position = a_Position;
-				    gl_Position = u_projectionViewMatrix * u_modelMatrix * vec4(a_Position, 1.0);	
-			    }
-		    )";
-
-        std::string flatColorFragmentSource = R"(
-			    #version 330 core
-			    
-			    layout(location = 0) out vec4 color;
-
-			    in vec3 v_Position;
-
-                uniform vec4 u_color;
-
-			    void main()
-			    {
-				    color = u_color;
-			    }
-		    )";
-
-        // Create a shader with hardcoded vertex and fragment source code.
-        flat_color_shader_.reset(new Shader(flatColorVertexSource, flatColorFragmentSource));
-
-        std::string textureVertexSource = R"(
-			    #version 330 core
-			    
-			    layout(location = 0) in vec3 a_Position;
-                layout(location = 1) in vec2 a_TexCoord;
-
-                uniform mat4 u_projectionViewMatrix;
-                uniform mat4 u_modelMatrix;
-
-                out vec2 v_TexCoord;
-
-			    void main()
-			    {
-				    v_TexCoord = a_TexCoord;
-				    gl_Position = u_projectionViewMatrix * u_modelMatrix * vec4(a_Position, 1.0);	
-			    }
-		    )";
-
-        std::string textureFragmentSource = R"(
-			    #version 330 core
-			    
-			    layout(location = 0) out vec4 color;
-
-			    in vec2 v_TexCoord;
-
-                uniform sampler2D u_Texture;
-
-			    void main()
-			    {
-				    color = texture(u_Texture, v_TexCoord);
-			    }
-		    )";
-
-        // Create a shader with hardcoded vertex and fragment source code.
-        texture_shader_.reset(new Shader(textureVertexSource, textureFragmentSource));
-
-        // Create the checkerboard texture.
+        // Create the checkerboard and logo textures.
         checkerboard_texture_ = std::make_shared<Texture2D>("assets/textures/Checkerboard.png");
+        logo_texture_ = std::make_shared<Texture2D>("assets/textures/Mario-Logo.png");
 
-        texture_shader_->Bind();
+        textureShader->Bind();
         // Set the sampler2D uniform by supplying the bound texture slot (in our case 0).
-        texture_shader_->UploadUniformInt("u_Texture", 0);
+        textureShader->UploadUniformInt("u_Texture", 0);
     }
 
     void OnUpdate(DeltaTime deltaTime) override
@@ -251,10 +186,15 @@ public:
             }
         }
 
+        std::shared_ptr<Shader> textureShader = shader_library_.Get("texture");
+
         // Bind the texture before submitting to renderer.
         checkerboard_texture_->Bind();
         // Render a textured square.
-        Renderer::Submit(texture_shader_, rectangle_vertex_array_, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+        Renderer::Submit(textureShader, rectangle_vertex_array_, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+        
+        logo_texture_->Bind();
+        Renderer::Submit(textureShader, rectangle_vertex_array_, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
         // Render a triangle.
         // Renderer::Submit(shader_, vertex_array_);
@@ -269,9 +209,10 @@ public:
     }
 
 private:
+    ShaderLibrary shader_library_;
     std::shared_ptr<VertexArray> vertex_array_, rectangle_vertex_array_;
-    std::shared_ptr<Shader> shader_, flat_color_shader_, texture_shader_;
-    std::shared_ptr<Texture2D> checkerboard_texture_;
+    std::shared_ptr<Shader> shader_, flat_color_shader_;
+    std::shared_ptr<Texture2D> checkerboard_texture_, logo_texture_;
 
     OrthographicCamera camera_;
 

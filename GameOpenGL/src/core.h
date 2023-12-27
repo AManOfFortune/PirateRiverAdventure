@@ -10,6 +10,8 @@
 #include "input/key_codes.h"
 #include "input/mouse_button_codes.h"
 
+#include "orthographic_camera_controller.h"
+
 // -- Renderer -----------------------------
 #include "renderer/renderer.h"
 #include "renderer/render_command.h"

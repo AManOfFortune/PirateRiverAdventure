@@ -8,6 +8,12 @@ OrthographicCamera::OrthographicCamera(float left, float right, float bottom, fl
     projection_view_matrix_ = projection_matrix_ * view_matrix_;
 }
 
+void OrthographicCamera::set_projection_matrix(float left, float right, float bottom, float top)
+{
+    projection_matrix_ = glm::ortho(left, right, bottom, top, -1.0f, 1.0f);
+    projection_view_matrix_ = projection_matrix_ * view_matrix_;
+}
+
 void OrthographicCamera::RecalculateViewMatrix()
 {
     // Calculate the inverse view matrix by translating first and rotating afterwards.

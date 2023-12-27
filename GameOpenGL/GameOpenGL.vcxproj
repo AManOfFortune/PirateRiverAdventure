@@ -158,6 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\application\application.cpp" />
+    <ClCompile Include="src\orthographic_camera_controller.cpp" />
     <ClCompile Include="src\renderer\index_buffer.cpp" />
     <ClCompile Include="src\renderer\context.cpp" />
     <ClCompile Include="src\renderer\texture.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="src\application\application.h" />
     <ClInclude Include="src\core.h" />
     <ClInclude Include="src\delta_time.h" />
+    <ClInclude Include="src\orthographic_camera_controller.h" />
     <ClInclude Include="src\renderer\orthographic_camera.h" />
     <ClInclude Include="src\renderer\renderer.h" />
     <ClInclude Include="src\renderer\renderer_api.h" />

@@ -7,7 +7,7 @@ class ExampleLayer : public Layer
 {
 public:
     ExampleLayer()
-        : Layer("Example"), camera_(-1.6f, 1.6f, -0.9f, 0.9f)
+        : Layer("Example"), camera_controller_(1280.0f / 720.0f, true) // 16:9 aspect ratio
     {
         float vertices[7 * 3] = {
             -0.5f, -0.5f, 0.0f, 0.8f, 0.2f, 0.8f, 1.0f,
@@ -130,32 +130,14 @@ public:
 
     void OnUpdate(DeltaTime deltaTime) override
     {
-        // Camera movement
-        if (Input::IsKeyPressed(CG_KEY_LEFT))
-            camera_pos_.x -= camera_speed_ * deltaTime;
-        else if (Input::IsKeyPressed(CG_KEY_RIGHT))
-            camera_pos_.x += camera_speed_ * deltaTime;
-
-        if (Input::IsKeyPressed(CG_KEY_DOWN))
-            camera_pos_.y -= camera_speed_ * deltaTime;
-        else if (Input::IsKeyPressed(CG_KEY_UP))
-            camera_pos_.y += camera_speed_ * deltaTime;
-
-        // Camera rotation
-        if (Input::IsKeyPressed(CG_KEY_Q))
-            camera_rot_ += camera_rot_speed_ * deltaTime;
-        else if (Input::IsKeyPressed(CG_KEY_E))
-            camera_rot_ -= camera_rot_speed_ * deltaTime;
+        // Update the camera controller.
+        camera_controller_.OnUpdate(deltaTime);
 
         RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
         RenderCommand::Clear();
 
-        // Test setting the camera position and rotation.
-        camera_.set_position(camera_pos_);
-        camera_.set_rotation(camera_rot_);
-
         // Takes in the camera object which calculates the projection view matrix (P * V) for the whole scene.
-        Renderer::BeginScene(camera_);
+        Renderer::BeginScene(camera_controller_.camera());
 
         glm::mat4 rotation(1.0f);
         glm::mat4 scale = glm::scale(glm::mat4(1.0f), glm::vec3(0.1f));
@@ -205,7 +187,7 @@ public:
 
     void OnEvent(Event& event) override
     {
-
+        camera_controller_.OnEvent(event);
     }
 
 private:
@@ -214,13 +196,7 @@ private:
     std::shared_ptr<Shader> shader_, flat_color_shader_;
     std::shared_ptr<Texture2D> checkerboard_texture_, logo_texture_;
 
-    OrthographicCamera camera_;
-
-    glm::vec3 camera_pos_ = { 0.0f, 0.0f, 0.0f };
-    float camera_rot_ = 0.0f;
-
-    float camera_speed_ = 1.0f;  // in units per second
-    float camera_rot_speed_ = 45.0f;  // in degrees per second
+    OrthographicCameraController camera_controller_;
 };
 
 class Sandbox : public Application

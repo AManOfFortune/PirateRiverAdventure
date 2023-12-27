@@ -73,32 +73,22 @@ protected:
 /// </summary>
 class EventDispatcher
 {
-    // The generic event function takes a single event reference as a parameter and returns a boolean.
-    template <typename T>
-    using EventFn = std::function<bool(T&)>;
 public:
     EventDispatcher(Event& event) : event_(event) {}
 
     /// <summary>
-    /// This generic method takes in a generic EventFn to which the event 
+    /// This generic method takes in a generic TFunc& to which the event 
     /// of type T is passed. Returns true if the event was dispatched, false if not.
     /// </summary>
-    template <typename T>
-    bool Dispatch(EventFn<T> func)
+    template <typename T, typename TFunc>
+    bool Dispatch(const TFunc& func)
     {
         // The event is only handled if the type of event this instance 
         // of EventDispatcher was instantiated with matches the generic type T.
         if (event_.event_type() == T::GetType())
         {
-            // Here the callback function the event is propagated to is invoked.
-            // The following line casts the &event_ reference to be of type T*
-            // and then dereferences the pointer to be used as an argument in func.
-            // The C-style casting TheCherno does here is to convert an Event* to 
-            // the generic T* pointer so that func can be invoked. Normally the 
-            // compiler would not allow this type of cast but since we know that we
-            // only want to use this method with event objects this workaround was used.
-            event_.is_handled_ = func(*(T*)&event_);
-
+            // Cast is necessary for the compiler to know which version of the event to use.
+            event_.is_handled_ = func(static_cast<T&>(event_));
             // Return true if dispatched (dispatched != handled successfully).
             return true;
         }

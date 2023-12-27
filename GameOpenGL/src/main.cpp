@@ -185,7 +185,7 @@ public:
         // Create a shader with hardcoded vertex and fragment source code.
         texture_shader_.reset(new Shader(textureVertexSource, textureFragmentSource));
 
-        // Create the checkerboard texture.
+        // Create the checkerboard and logo textures.
         checkerboard_texture_ = std::make_shared<Texture2D>("assets/textures/Checkerboard.png");
         logo_texture_ = std::make_shared<Texture2D>("assets/textures/Mario-Logo.png");
 

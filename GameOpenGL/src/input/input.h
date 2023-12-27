@@ -8,11 +8,16 @@
 class Input
 {
 public:
+    Input() = default;
+
     static bool IsKeyPressed(int key);
     static bool IsMouseButtonPressed(int button);
     static std::pair<float, float> MousePosition();
     static float MouseX();
     static float MouseY();
+protected:
+    Input(const Input&) = delete;
+    Input& operator=(const Input&) = delete;
 
 private:
     static Input* instance_;

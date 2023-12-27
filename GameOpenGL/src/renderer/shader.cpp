@@ -3,9 +3,28 @@
 #include "log/log.h"
 #include "utils.h"
 
+#include <fstream>
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
+
+static GLenum ShaderTypeFromString(const std::string& type)
+{
+	if (type == "vertex")
+		return GL_VERTEX_SHADER;
+	if (type == "fragment" || type == "pixel")
+		return GL_FRAGMENT_SHADER;
+
+	ASSERT(false, "Invalid shader type specified!");
+	return 0;
+}
+
+Shader::Shader(const std::string& filepath)
+{
+    std::string sourceFile = ReadShaderFile(filepath);
+    std::unordered_map<GLenum, std::string> shaderSources = PreprocessShaders(sourceFile);
+    CreateShader(shaderSources[GL_VERTEX_SHADER], shaderSources[GL_FRAGMENT_SHADER]);
+}
 
 Shader::Shader(const std::string& vertexSource, const std::string& fragmentSource) 
 {
@@ -85,7 +104,69 @@ void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void Shader::CreateShader(const std::string& vertexSource, const std::string& fragmentSource) 
+std::string Shader::ReadShaderFile(const std::string& filepath)
+{
+    std::string result;
+    std::ifstream in(filepath, std::ios::in, std::ios::binary);
+    if (in)
+    {
+        // Sets the position of the next character to be extracted from the input stream.
+        // Here , it sets the position to the end of the file.
+        // https://cplusplus.com/reference/istream/istream/seekg/
+        in.seekg(0, std::ios::end);
+        // Returns the position of the current character in the input stream. 
+        // Here, same as size of the file.
+        // https://cplusplus.com/reference/istream/istream/tellg/
+        result.resize(in.tellg());
+        // Sets the position back to the beginning of the file.
+        in.seekg(0, std::ios::beg);
+        // Reads the entire file into the string.
+        in.read(&result[0], result.size());
+        // Closes the input stream.
+        in.close();
+    }
+    else
+    {
+        // For now log an error if the shader file could not be opened.
+        LOG_ERROR("Could not open file '{0}'", filepath);
+    }
+
+    return result;
+}
+
+std::unordered_map<GLenum, std::string> Shader::PreprocessShaders(const std::string& source)
+{
+	std::unordered_map<GLenum, std::string> shaderSources;
+
+	const char* typeToken = "#type";
+	size_t typeTokenLength = strlen(typeToken);
+	size_t pos = source.find(typeToken, 0);
+    while (pos != std::string::npos)
+    {
+		// Find the end of the line.
+		size_t eol = source.find_first_of("\r\n", pos);
+        // Syntax error if no end of line is found.
+		ASSERT(eol != std::string::npos, "Syntax error!");
+
+		// Get the shader type from the line. Does only work for a single whitespace character.
+		size_t begin = pos + typeTokenLength + 1;
+		std::string type = source.substr(begin, eol - begin);
+		ASSERT(ShaderTypeFromString(type), "Invalid shader type specified!");
+
+		// Find the beginning of the shader source code.
+		size_t nextLinePos = source.find_first_not_of("\r\n", eol);
+		ASSERT(nextLinePos != std::string::npos, "Syntax error!");
+		pos = source.find(typeToken, nextLinePos);
+
+		// Store the shader source code in the map.
+		shaderSources[ShaderTypeFromString(type)] = 
+            source.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos));
+	}
+
+	return shaderSources;
+}
+
+void Shader::CreateShader(const std::string& vertexSource, const std::string& fragmentSource)
 {
     // Compile the vertex and fragment shaders.
     CompileShader(vertexSource, GL_VERTEX_SHADER);

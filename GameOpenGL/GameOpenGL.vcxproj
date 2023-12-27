@@ -206,6 +206,10 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
     <ClInclude Include="src\window\window.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\shaders\flat_color.glsl" />
+    <None Include="assets\shaders\texture.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

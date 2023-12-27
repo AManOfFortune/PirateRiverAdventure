@@ -2,6 +2,9 @@
 
 #include <glm/glm.hpp>
 #include <string>
+#include <unordered_map>
+
+typedef unsigned int GLenum;
 
 /// <summary>
 /// This class represents a shader program comprised of a vertex and a fragment shader.
@@ -9,6 +12,7 @@
 class Shader
 {
 public:
+    Shader(const std::string& filepath);
     Shader(const std::string& vertexSource, const std::string& fragmentSource);
     ~Shader();
 
@@ -27,6 +31,14 @@ public:
     void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
 
 private:
+    /// <summary>
+    /// Reads the shader source code from the given filepath and returns it as a string.
+    /// </summary>
+    std::string ReadShaderFile(const std::string& filepath);
+    /// <summary>
+    /// Processes the shader source code and returns a map of shader type and its source code.
+    /// </summary>
+    std::unordered_map<GLenum, std::string> PreprocessShaders(const std::string& source);
     /// <summary>
     /// Creates a shader program from the given vertex and fragment shader source code.
     /// </summary>

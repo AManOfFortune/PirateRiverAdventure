@@ -76,7 +76,7 @@ public:
         
         rectangle_vertex_array_->set_index_buffer(rectangleIndexBuffer);
 
-        std::string vertexSource = R"(
+        /*std::string vertexSource = R"(
 			    #version 330 core
 			    
 			    layout(location = 0) in vec3 a_Position;
@@ -109,81 +109,15 @@ public:
 				    color = vec4(v_Position * 0.5 + 0.5, 1.0);
                     color = v_Color;
 			    }
-		    )";
+		    )";*/
 
         // Create a shader with hardcoded vertex and fragment source code.
-        shader_.reset(new Shader(vertexSource, fragmentSource));
+        // shader_.reset(new Shader(vertexSource, fragmentSource));
 
-        std::string flatColorVertexSource = R"(
-			    #version 330 core
-			    
-			    layout(location = 0) in vec3 a_Position;
-
-                uniform mat4 u_projectionViewMatrix;
-                uniform mat4 u_modelMatrix;
-
-			    out vec3 v_Position;
-
-			    void main()
-			    {
-				    v_Position = a_Position;
-				    gl_Position = u_projectionViewMatrix * u_modelMatrix * vec4(a_Position, 1.0);	
-			    }
-		    )";
-
-        std::string flatColorFragmentSource = R"(
-			    #version 330 core
-			    
-			    layout(location = 0) out vec4 color;
-
-			    in vec3 v_Position;
-
-                uniform vec4 u_color;
-
-			    void main()
-			    {
-				    color = u_color;
-			    }
-		    )";
-
-        // Create a shader with hardcoded vertex and fragment source code.
-        flat_color_shader_.reset(new Shader(flatColorVertexSource, flatColorFragmentSource));
-
-        std::string textureVertexSource = R"(
-			    #version 330 core
-			    
-			    layout(location = 0) in vec3 a_Position;
-                layout(location = 1) in vec2 a_TexCoord;
-
-                uniform mat4 u_projectionViewMatrix;
-                uniform mat4 u_modelMatrix;
-
-                out vec2 v_TexCoord;
-
-			    void main()
-			    {
-				    v_TexCoord = a_TexCoord;
-				    gl_Position = u_projectionViewMatrix * u_modelMatrix * vec4(a_Position, 1.0);	
-			    }
-		    )";
-
-        std::string textureFragmentSource = R"(
-			    #version 330 core
-			    
-			    layout(location = 0) out vec4 color;
-
-			    in vec2 v_TexCoord;
-
-                uniform sampler2D u_Texture;
-
-			    void main()
-			    {
-				    color = texture(u_Texture, v_TexCoord);
-			    }
-		    )";
-
-        // Create a shader with hardcoded vertex and fragment source code.
-        texture_shader_.reset(new Shader(textureVertexSource, textureFragmentSource));
+        // Create flat color shader from source file.
+        flat_color_shader_.reset(new Shader("assets/shaders/flat_color.glsl"));
+        // Create texture shader from source file.
+        texture_shader_.reset(new Shader("assets/shaders/texture.glsl"));
 
         // Create the checkerboard and logo textures.
         checkerboard_texture_ = std::make_shared<Texture2D>("assets/textures/Checkerboard.png");

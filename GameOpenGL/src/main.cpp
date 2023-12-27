@@ -76,7 +76,7 @@ public:
         
         rectangle_vertex_array_->set_index_buffer(rectangleIndexBuffer);
 
-        /*std::string vertexSource = R"(
+        std::string vertexSource = R"(
 			    #version 330 core
 			    
 			    layout(location = 0) in vec3 a_Position;
@@ -109,23 +109,23 @@ public:
 				    color = vec4(v_Position * 0.5 + 0.5, 1.0);
                     color = v_Color;
 			    }
-		    )";*/
+		    )";
 
         // Create a shader with hardcoded vertex and fragment source code.
-        // shader_.reset(new Shader(vertexSource, fragmentSource));
+        shader_ = Shader::Create("VertexPosColor", vertexSource, fragmentSource);
 
         // Create flat color shader from source file.
-        flat_color_shader_.reset(new Shader("assets/shaders/flat_color.glsl"));
+        flat_color_shader_ = Shader::Create("assets/shaders/flat_color.glsl");
         // Create texture shader from source file.
-        texture_shader_.reset(new Shader("assets/shaders/texture.glsl"));
+        std::shared_ptr<Shader> textureShader = shader_library_.Load("assets/shaders/texture.glsl");
 
         // Create the checkerboard and logo textures.
         checkerboard_texture_ = std::make_shared<Texture2D>("assets/textures/Checkerboard.png");
         logo_texture_ = std::make_shared<Texture2D>("assets/textures/Mario-Logo.png");
 
-        texture_shader_->Bind();
+        textureShader->Bind();
         // Set the sampler2D uniform by supplying the bound texture slot (in our case 0).
-        texture_shader_->UploadUniformInt("u_Texture", 0);
+        textureShader->UploadUniformInt("u_Texture", 0);
     }
 
     void OnUpdate(DeltaTime deltaTime) override
@@ -186,13 +186,15 @@ public:
             }
         }
 
+        std::shared_ptr<Shader> textureShader = shader_library_.Get("texture");
+
         // Bind the texture before submitting to renderer.
         checkerboard_texture_->Bind();
         // Render a textured square.
-        Renderer::Submit(texture_shader_, rectangle_vertex_array_, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+        Renderer::Submit(textureShader, rectangle_vertex_array_, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
         
         logo_texture_->Bind();
-        Renderer::Submit(texture_shader_, rectangle_vertex_array_, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
+        Renderer::Submit(textureShader, rectangle_vertex_array_, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
 
         // Render a triangle.
         // Renderer::Submit(shader_, vertex_array_);
@@ -207,8 +209,9 @@ public:
     }
 
 private:
+    ShaderLibrary shader_library_;
     std::shared_ptr<VertexArray> vertex_array_, rectangle_vertex_array_;
-    std::shared_ptr<Shader> shader_, flat_color_shader_, texture_shader_;
+    std::shared_ptr<Shader> shader_, flat_color_shader_;
     std::shared_ptr<Texture2D> checkerboard_texture_, logo_texture_;
 
     OrthographicCamera camera_;

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <memory>
 #include <string>
 #include <unordered_map>
 
@@ -13,8 +14,11 @@ class Shader
 {
 public:
     Shader(const std::string& filepath);
-    Shader(const std::string& vertexSource, const std::string& fragmentSource);
+    Shader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
     ~Shader();
+
+    static std::shared_ptr<Shader> Create(const std::string& filepath);
+    static std::shared_ptr<Shader> Create(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource);
 
     void Bind() const;
     void Unbind() const;
@@ -29,6 +33,8 @@ public:
 
     void UploadUniformMat3(const std::string& name, const glm::mat3& matrix);
     void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
+
+    const std::string& name() const { return name_; }
 
 private:
     /// <summary>
@@ -53,4 +59,39 @@ private:
     void LinkShaderProgram();
 
     uint32_t renderer_id_, vertex_, fragment_;
+    std::string name_;
+};
+
+class ShaderLibrary
+{
+public:
+    /// <summary>
+    /// Adds a shader program to the library.
+    /// </summary>
+    void Add(const std::shared_ptr<Shader>& shader);
+    /// <summary>
+    /// Adds a shader program to the library with the given name.
+    /// </summary>
+    void Add(const std::string& name, const std::shared_ptr<Shader>& shader);
+    /// <summary>
+    /// Load a shader from the given filepath and add it to the library.
+    /// The name of the shader is the filename without the extension.    
+    /// </summary>
+    std::shared_ptr<Shader> Load(const std::string& filepath);
+    /// <summary>
+    /// Load a shader from the given filepath and add it to the library.
+    /// The name of the shader is the given name.
+    /// </summary>
+    std::shared_ptr<Shader> Load(const std::string& name, const std::string& filepath);
+    /// <summary>
+    /// Get a shader program by its unique name.
+    /// </summary>
+    std::shared_ptr<Shader> Get(const std::string& name);
+    /// <summary>
+    /// Specifies whether a shader program with the given name exists in the library.
+    /// </summary>
+    bool Exists(const std::string& name) const;
+private:
+    // Map of unique shader name and its shader program.
+    std::unordered_map<std::string, std::shared_ptr<Shader>> shaders_;
 };

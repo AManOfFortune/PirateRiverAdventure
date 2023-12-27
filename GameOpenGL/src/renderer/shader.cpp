@@ -24,9 +24,20 @@ Shader::Shader(const std::string& filepath)
     std::string sourceFile = ReadShaderFile(filepath);
     std::unordered_map<GLenum, std::string> shaderSources = PreprocessShaders(sourceFile);
     CreateShader(shaderSources[GL_VERTEX_SHADER], shaderSources[GL_FRAGMENT_SHADER]);
+
+    // Extract the name of the shader from the filepath.
+	size_t lastSlash = filepath.find_last_of("/\\");
+    // If no slash position is 0 else it's the position after the slash.
+    lastSlash = lastSlash == std::string::npos ? 0 : lastSlash + 1;
+    // Find the position of the last dot.
+    size_t lastDot = filepath.rfind('.');
+    // Count is the number of characters to be extracted.
+    auto count = lastDot == std::string::npos ? filepath.size() - lastSlash : lastDot - lastSlash;
+    name_ = filepath.substr(lastSlash, count);
 }
 
-Shader::Shader(const std::string& vertexSource, const std::string& fragmentSource) 
+Shader::Shader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+	: name_(name)
 {
     // Create the shader program with given vertex and fragment shaders.
     CreateShader(vertexSource, fragmentSource);
@@ -36,6 +47,16 @@ Shader::~Shader()
 {
     // Delete the shader program.
     glDeleteProgram(renderer_id_);
+}
+
+std::shared_ptr<Shader> Shader::Create(const std::string& filepath)
+{
+    return std::make_shared<Shader>(filepath);
+}
+
+std::shared_ptr<Shader> Shader::Create(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
+{
+    return std::make_shared<Shader>(name, vertexSource, fragmentSource);
 }
 
 void Shader::Bind() const 
@@ -107,7 +128,7 @@ void Shader::UploadUniformMat4(const std::string& name, const glm::mat4& matrix)
 std::string Shader::ReadShaderFile(const std::string& filepath)
 {
     std::string result;
-    std::ifstream in(filepath, std::ios::in, std::ios::binary);
+    std::ifstream in(filepath, std::ios::in | std::ios::binary);
     if (in)
     {
         // Sets the position of the next character to be extracted from the input stream.
@@ -256,4 +277,41 @@ void Shader::LinkShaderProgram()
     // Detach the shaders after linking successfully.
     glDetachShader(program, vertex_);
     glDetachShader(program, fragment_);
+}
+
+void ShaderLibrary::Add(const std::shared_ptr<Shader>& shader)
+{
+    const std::string& name = shader->name();
+    Add(name, shader);
+}
+
+void ShaderLibrary::Add(const std::string& name, const std::shared_ptr<Shader>& shader)
+{
+	ASSERT(!Exists(name), "Shader already exists!");
+	shaders_[name] = shader;
+}
+
+std::shared_ptr<Shader> ShaderLibrary::Load(const std::string& filepath)
+{
+    std::shared_ptr<Shader> shader = Shader::Create(filepath);
+    Add(shader);
+    return shader;
+}
+
+std::shared_ptr<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filepath)
+{
+    std::shared_ptr<Shader> shader = Shader::Create(filepath);
+    Add(name, shader);
+    return shader;
+}
+
+std::shared_ptr<Shader> ShaderLibrary::Get(const std::string& name)
+{
+    ASSERT(Exists(name), "Shader does not exist!");
+    return shaders_[name];
+}
+
+bool ShaderLibrary::Exists(const std::string& name) const
+{
+    return shaders_.find(name) != shaders_.end();
 }

@@ -1,6 +1,6 @@
 #include "texture.h"
 
-#include <utils.h>
+#include "core/utils.h"
 
 #include <glad/glad.h>
 #include <stb_image.h>

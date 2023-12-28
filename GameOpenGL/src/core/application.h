@@ -3,7 +3,7 @@
 #include "events/application_event.h"
 #include "events/event.h"
 #include "layers/layer_stack.h"
-#include "window/window.h"
+#include "core/window.h"
 
 #include <memory>
 
@@ -50,11 +50,17 @@ private:
     /// Stops the running application and should always return true.
     /// </summary>
     bool OnWindowClose(WindowCloseEvent& event);
+    /// <summary>
+    /// Is invoked when a WindowResizeEvent is triggered.
+    /// Updates the viewport of the window and should always return false.
+    /// </summary>
+    bool OnWindowResize(WindowResizeEvent& event);
 
     static Application* instance_;
 
     std::unique_ptr<Window> window_;
     bool is_running_ = true;
+    bool is_minimized_ = false;
     LayerStack layer_stack_;
 
     // Time that it took to render the last frame [s].

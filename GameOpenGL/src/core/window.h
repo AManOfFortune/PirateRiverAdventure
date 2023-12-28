@@ -1,7 +1,6 @@
 #pragma once
 
 #include "events/event.h"
-
 #include "renderer/context.h"
 
 #include <string>

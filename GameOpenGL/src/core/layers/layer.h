@@ -1,7 +1,7 @@
 #pragma once
 
-#include "delta_time.h"
-#include "events/event.h"
+#include "core/delta_time.h"
+#include "core/events/event.h"
 
 #include <string>
 

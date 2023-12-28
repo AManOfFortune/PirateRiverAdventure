@@ -1,6 +1,6 @@
 #pragma once
 
-#include "log/log.h"
+#include "core/log.h"
 
 // This preprocessor definition is only defined in the Debug configuration.
 #ifdef ENABLE_ASSERT

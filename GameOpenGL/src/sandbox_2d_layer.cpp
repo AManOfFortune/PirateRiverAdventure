@@ -1,6 +1,6 @@
 #include "sandbox_2d_layer.h"
 
-#include "renderer/renderer.h"
+#include "core/core.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -52,13 +52,9 @@ void Sandbox2DLayer::OnUpdate(DeltaTime deltaTime)
     RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
     RenderCommand::Clear();
 
-    Renderer::BeginScene(camera_controller_.camera());
-
-    flat_color_shader_->Bind();
-    flat_color_shader_->UploadUniformFloat4("u_color", glm::vec4({ 0.0f, 0.2f, 0.8f, 1.0f }));
-    Renderer::Submit(flat_color_shader_, vertex_array_, glm::scale(glm::mat4(1.0f), glm::vec3(1.5f)));
-
-    Renderer::EndScene();
+    Renderer2D::BeginScene(camera_controller_.camera());
+    Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+    Renderer2D::EndScene();
 }
 
 void Sandbox2DLayer::OnEvent(Event& event)

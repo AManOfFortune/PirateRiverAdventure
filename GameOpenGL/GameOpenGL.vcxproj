@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\renderer\renderer_2d.cpp" />
     <ClCompile Include="src\core\application.cpp" />
     <ClCompile Include="src\example_layer.cpp" />
     <ClCompile Include="src\renderer\orthographic_camera_controller.cpp" />
@@ -181,6 +182,7 @@
     <ClCompile Include="src\core\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\renderer\renderer_2d.h" />
     <ClInclude Include="src\core\application.h" />
     <ClInclude Include="src\core\core.h" />
     <ClInclude Include="src\core\delta_time.h" />

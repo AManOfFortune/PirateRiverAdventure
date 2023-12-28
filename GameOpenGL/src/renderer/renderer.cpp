@@ -1,10 +1,13 @@
 #include "renderer.h"
+#include "renderer_2d.h"
 
 std::shared_ptr<Renderer::SceneData> Renderer::sceneData = std::make_shared<Renderer::SceneData>();
 
 void Renderer::Init()
 {
     RenderCommand::Init();
+    // Because the 3D renderer is the main renderer we initialize the 2D renderer here.
+    Renderer2D::Init();
 }
 
 void Renderer::BeginScene(OrthographicCamera& camera)

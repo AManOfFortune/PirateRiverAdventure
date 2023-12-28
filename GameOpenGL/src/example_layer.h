@@ -2,8 +2,6 @@
 
 #include "core/core.h"
 
-
-
 class ExampleLayer : public Layer
 {
 public:

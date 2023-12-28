@@ -13,6 +13,8 @@ public:
     VertexBuffer(float* vertices, uint32_t size);
     ~VertexBuffer();
 
+    static std::shared_ptr<VertexBuffer> Create(float* vertices, uint32_t size);
+
     void Bind() const;
     void Unbind() const;
 

@@ -28,15 +28,13 @@ void Sandbox2DLayer::OnAttach()
         2, 3, 0
     };
 
-    std::shared_ptr<VertexBuffer> vertexBuffer;
-    vertexBuffer.reset(new VertexBuffer(rectangleVertices, sizeof(rectangleVertices)));
+    std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(rectangleVertices, sizeof(rectangleVertices));
     vertexBuffer->set_layout({
         { VertexBufferAttributeType::Float3, "a_Position" }        
     });
     vertex_array_->add_vertex_buffer(vertexBuffer);
 
-    std::shared_ptr<IndexBuffer> indexBuffer;
-    indexBuffer.reset(new IndexBuffer(rectangleIndices, sizeof(rectangleIndices) / sizeof(uint32_t)));
+    std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(rectangleIndices, sizeof(rectangleIndices) / sizeof(uint32_t));
     vertex_array_->set_index_buffer(indexBuffer);
 
     flat_color_shader_ = Shader::Create("assets/shaders/flat_color.glsl");

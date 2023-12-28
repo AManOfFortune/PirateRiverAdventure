@@ -19,23 +19,18 @@ ExampleLayer::ExampleLayer()
     vertex_array_ = VertexArray::Create();
 
     // Create a vertex buffer.
-    std::shared_ptr<VertexBuffer> vertexBuffer;
-    vertexBuffer.reset(new VertexBuffer(vertices, sizeof(vertices)));
-
+     std::shared_ptr<VertexBuffer> vertexBuffer = VertexBuffer::Create(vertices, sizeof(vertices));
     // Create and set a layout for the vertex buffer.
     VertexBufferLayout layout = {
         { VertexBufferAttributeType::Float3, "a_Position" },
         { VertexBufferAttributeType::Float4, "a_Color" }
     };
     vertexBuffer->set_layout(layout);
-
     // Add the vertex buffer after (!) the layout is set.
     vertex_array_->add_vertex_buffer(vertexBuffer);
 
     // Create an index buffer.
-    std::shared_ptr<IndexBuffer> indexBuffer;
-    indexBuffer.reset(new IndexBuffer(indices, sizeof(indices) / sizeof(uint32_t)));
-
+    std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
     // Set the index buffer.
     vertex_array_->set_index_buffer(indexBuffer);
 
@@ -55,21 +50,16 @@ ExampleLayer::ExampleLayer()
         2, 3, 0
     };
 
-    rectangle_vertex_array_.reset(new VertexArray());
+    rectangle_vertex_array_ = VertexArray::Create();
 
-    std::shared_ptr<VertexBuffer> rectangleVertexBuffer;
-    rectangleVertexBuffer.reset(new VertexBuffer(rectangleVertices, sizeof(rectangleVertices)));
-
+    std::shared_ptr<VertexBuffer> rectangleVertexBuffer = VertexBuffer::Create(rectangleVertices, sizeof(rectangleVertices));
     rectangleVertexBuffer->set_layout({
         { VertexBufferAttributeType::Float3, "a_Position" },
         { VertexBufferAttributeType::Float2, "a_TexCoord" }
         });
-
     rectangle_vertex_array_->add_vertex_buffer(rectangleVertexBuffer);
 
-    std::shared_ptr<IndexBuffer> rectangleIndexBuffer;
-    rectangleIndexBuffer.reset(new IndexBuffer(rectangleIndices, sizeof(rectangleIndices) / sizeof(uint32_t)));
-
+    std::shared_ptr<IndexBuffer> rectangleIndexBuffer = IndexBuffer::Create(rectangleIndices, sizeof(rectangleIndices) / sizeof(uint32_t));
     rectangle_vertex_array_->set_index_buffer(rectangleIndexBuffer);
 
     std::string vertexSource = R"(

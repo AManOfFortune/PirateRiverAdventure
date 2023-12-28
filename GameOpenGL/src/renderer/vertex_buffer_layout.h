@@ -49,6 +49,8 @@ static uint32_t VertexBufferAttributeTypeSize(VertexBufferAttributeType type)
 /// </summary>
 struct VertexBufferAttribute
 {
+    VertexBufferAttribute() = default;
+
     VertexBufferAttribute(VertexBufferAttributeType type, const std::string& name, bool normalized = false)
         : type(type), name(name), size(VertexBufferAttributeTypeSize(type)), offset(0), normalized(normalized) {}
 
@@ -74,7 +76,7 @@ struct VertexBufferAttribute
     VertexBufferAttributeType type;
     std::string name;
     uint32_t size;
-    uint32_t offset;
+    size_t offset;
     bool normalized;
 };
 
@@ -105,7 +107,7 @@ public:
 private:
     void CalculateOffsetsAndStride()
     {
-        uint32_t offset = 0;
+        size_t offset = 0;
         stride_ = 0;
 
         for (auto& attribute : attributes_)

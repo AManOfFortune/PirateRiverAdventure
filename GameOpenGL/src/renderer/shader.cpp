@@ -69,6 +69,26 @@ void Shader::Unbind() const
     glUseProgram(0);
 }
 
+void Shader::SetInt(const std::string& name, int value)
+{
+    UploadUniformInt(name, value);
+}
+
+void Shader::SetFloat3(const std::string& name, const glm::vec3& value)
+{
+    UploadUniformFloat3(name, value);
+}
+
+void Shader::SetFloat4(const std::string& name, const glm::vec4& value)
+{
+    UploadUniformFloat4(name, value);
+}
+
+void Shader::SetMat4(const std::string& name, const glm::mat4& value)
+{
+    UploadUniformMat4(name, value);
+}
+
 void Shader::UploadUniformInt(const std::string& name, int value)
 {
     // TODO: Implement cache for the location using a hash map so look up is not performed every time.

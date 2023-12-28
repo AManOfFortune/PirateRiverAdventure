@@ -53,7 +53,10 @@ void Sandbox2DLayer::OnUpdate(DeltaTime deltaTime)
     RenderCommand::Clear();
 
     Renderer2D::BeginScene(camera_controller_.camera());
-    Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 1.0f, 1.0f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+
+    Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.5f, 0.5f }, { 0.8f, 0.2f, 0.3f, 1.0f });
+    Renderer2D::DrawQuad({  1.0f, 0.0f }, { 0.5f, 0.5f }, { 0.2f, 0.3f, 0.8f, 1.0f });
+
     Renderer2D::EndScene();
 }
 

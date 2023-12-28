@@ -5,6 +5,7 @@
 #include "vertex_array.h"
 #include "vertex_buffer.h"
 
+#include <glm/gtc/matrix_transform.hpp>
 #include <memory>
 
 struct Renderer2DData
@@ -56,8 +57,7 @@ void Renderer2D::Shutdown()
 void Renderer2D::BeginScene(const OrthographicCamera& camera)
 {
     data->flatColorShader->Bind();
-    data->flatColorShader->UploadUniformMat4("u_projectionViewMatrix", camera.projection_view_matrix());
-    data->flatColorShader->UploadUniformMat4("u_modelMatrix", glm::mat4(1.0f));
+    data->flatColorShader->SetMat4("u_projectionViewMatrix", camera.projection_view_matrix());
 }
 
 void Renderer2D::EndScene()
@@ -73,7 +73,11 @@ void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, cons
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 {
     data->flatColorShader->Bind();
-    data->flatColorShader->UploadUniformFloat4("u_color", color);
+    data->flatColorShader->SetFloat4("u_color", color);
+
+    // Calculate the quad transform (model matrix) and set the corresponding uniform in the shader.
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+    data->flatColorShader->SetMat4("u_modelMatrix", transform);
 
     data->vertexArray->Bind();
     RenderCommand::DrawIndexed(data->vertexArray);

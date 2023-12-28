@@ -2,6 +2,8 @@
 
 #include "renderer_api.h"
 
+#include <memory>
+
 /// <summary>
 /// The render command class is used to access the low level functionality of the renderer
 /// API without using it directly. In the future the render command would not be handled 
@@ -38,5 +40,5 @@ public:
     }
 
 private:
-    static RendererAPI* renderer_api_;
+    static std::unique_ptr<RendererAPI> renderer_api_;
 };

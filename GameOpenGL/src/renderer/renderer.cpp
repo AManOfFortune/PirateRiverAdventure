@@ -1,6 +1,6 @@
 #include "renderer.h"
 
-Renderer::SceneData* Renderer::sceneData = new Renderer::SceneData;
+std::shared_ptr<Renderer::SceneData> Renderer::sceneData = std::make_shared<Renderer::SceneData>();
 
 void Renderer::Init()
 {

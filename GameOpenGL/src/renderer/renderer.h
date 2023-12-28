@@ -4,6 +4,8 @@
 #include "render_command.h"
 #include "shader.h"
 
+#include <memory>
+
 /// <summary>
 /// The renderer holds higher level rendering functionality which is independent of the rendering API
 /// used since it uses our own RendererAPI class under the hood. Because we only need to worry about 
@@ -46,5 +48,5 @@ private:
         glm::mat4 projectionViewMatrix;
     };
 
-    static SceneData* sceneData;
+    static std::shared_ptr<SceneData> sceneData;
 };

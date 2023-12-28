@@ -3,6 +3,7 @@
 #include "events/event.h"
 #include "renderer/context.h"
 
+#include <memory>
 #include <string>
 
 /// <summary>
@@ -60,7 +61,7 @@ private:
     void Shutdown();
 
     GLFWwindow* window_;
-    Context* context_;
+    std::unique_ptr<Context> context_;
 
     struct WindowData
     {

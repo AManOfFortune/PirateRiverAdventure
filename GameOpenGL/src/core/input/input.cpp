@@ -4,7 +4,7 @@
 
 #include <GLFW/glfw3.h>
 
-Input* Input::instance_ = new Input();
+std::unique_ptr<Input> Input::instance_ = std::make_unique<Input>();
 
 bool Input::IsKeyPressed(int key)
 {

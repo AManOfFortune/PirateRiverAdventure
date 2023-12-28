@@ -35,6 +35,11 @@ public:
     static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, 
         const glm::mat4& transform = glm::mat4(1.0f));  // Future: shader -> material, vertexArray -> mesh
 
+    /// <summary>
+    /// Gets called when the window is resized and updates the viewport.
+    /// This currently supports only one viewport.
+    /// </summary>
+    static void OnWindowResize(uint32_t width, uint32_t height);
 private:
     struct SceneData
     {

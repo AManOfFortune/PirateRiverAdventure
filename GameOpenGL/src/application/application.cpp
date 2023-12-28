@@ -34,14 +34,18 @@ void Application::Run()
         // Update the value of last_frame_time.
         last_frame_time_ = time;
 
-        // Iterate through the layer stack from the first to the last layer
-        // and call its OnUpdate method. Rendering should happen in this order
-        // so that the layers further on top are rendered after the ones at the bottom.
-        for (auto it = layer_stack_.begin(); it != layer_stack_.end(); it++)
+        // Only update the application if it is not minimized.
+        if (!is_minimized_)
         {
-            (*it)->OnUpdate(deltaTime);
+            // Iterate through the layer stack from the first to the last layer
+            // and call its OnUpdate method. Rendering should happen in this order
+            // so that the layers further on top are rendered after the ones at the bottom.
+            for (auto it = layer_stack_.begin(); it != layer_stack_.end(); it++)
+            {
+                (*it)->OnUpdate(deltaTime);
+            }
+            window_->OnUpdate();
         }
-        window_->OnUpdate();
     }
 }
 
@@ -53,6 +57,8 @@ void Application::OnEvent(Event& event)
     EventDispatcher dispatcher(event);
     // Here, only events of type WindowCloseEvent are propagated to the OnWindowClose method.
     dispatcher.Dispatch<WindowCloseEvent>(std::bind(&Application::OnWindowClose, this, std::placeholders::_1));
+    // Here, only events of type WindowResizeEvent are propagated to the OnWindowResize method.
+    dispatcher.Dispatch<WindowResizeEvent>(std::bind(&Application::OnWindowResize, this, std::placeholders::_1));
 
     // Iterate through the layer stack in reverse order from the last to the first layer
     // and call its OnEvent method. If the event was handled this way by any layer stop
@@ -83,6 +89,18 @@ bool Application::OnWindowClose(WindowCloseEvent& event)
 {
     is_running_ = false;
     return true;
+}
+
+bool Application::OnWindowResize(WindowResizeEvent& event)
+{
+    if (event.width() == 0 || event.height() == 0)
+    {
+		is_minimized_ = true;
+		return false;
+	}
+    Renderer::OnWindowResize(event.width(), event.height());
+    is_minimized_ = false;
+    return false;
 }
 
 Application* CreateApplication()

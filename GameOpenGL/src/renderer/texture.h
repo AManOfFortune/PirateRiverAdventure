@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <memory>
 #include <string>
 
 /// <summary>
@@ -26,6 +27,8 @@ class Texture2D : public Texture
 public:
     Texture2D(const std::string& path);
     ~Texture2D();
+
+    static std::shared_ptr<Texture2D> Create(const std::string& path);
 
     void Bind(uint32_t slot = 0) const override;
 

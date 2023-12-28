@@ -22,6 +22,7 @@ private:
 	// Temporary, this should be moved to the 2D renderer.
 	std::shared_ptr<Shader> flat_color_shader_;
 	std::shared_ptr<VertexArray> vertex_array_;
+	std::shared_ptr<Texture2D> texture_;
 
 	OrthographicCameraController camera_controller_;
 };

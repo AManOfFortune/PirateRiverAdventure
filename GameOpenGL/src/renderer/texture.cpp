@@ -45,7 +45,11 @@ Texture2D::Texture2D(const std::string& path)
 
     // Set magnification and minification filters.
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // GL_NEAREST selects the texel (texture pixel) center that is closest to the texture coordinate.
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);  // GL_LINEAR linearly interpolates between the neighbouring texels to create an approximated color.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);  // GL_LINEAR linearly interpolates between the neighbouring texels to create an approximated color.\
+
+    // Set the texture wrapping parameters to repeat the texture image.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
     // Upload the texture image.
     glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width_, height_, 0, dataFormat, GL_UNSIGNED_BYTE, data);
@@ -61,6 +65,11 @@ Texture2D::~Texture2D()
 {
     // Delete the texture.
     glDeleteTextures(1, &renderer_id_);
+}
+
+std::shared_ptr<Texture2D> Texture2D::Create(const std::string& path)
+{
+    return std::make_shared<Texture2D>(path);
 }
 
 void Texture2D::Bind(uint32_t slot) const

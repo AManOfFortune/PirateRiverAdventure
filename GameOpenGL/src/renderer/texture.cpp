@@ -5,6 +5,27 @@
 #include <glad/glad.h>
 #include <stb_image.h>
 
+Texture2D::Texture2D(uint32_t width, uint32_t height)
+    : width_(width), height_(height)
+{
+    // Set the internal and data formats depending on the number of color channels.
+    internal_format_ = GL_RGBA8; 
+    data_format_ = GL_RGBA;
+
+    // Generate a texture.
+    glGenTextures(1, &renderer_id_);
+    // Bind the 2D texture.
+    glBindTexture(GL_TEXTURE_2D, renderer_id_);
+
+    // Set magnification and minification filters.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // GL_NEAREST selects the texel (texture pixel) center that is closest to the texture coordinate.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);  // GL_LINEAR linearly interpolates between the neighbouring texels to create an approximated color.\
+
+    // Set the texture wrapping parameters to repeat the texture image.
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+}
+
 Texture2D::Texture2D(const std::string& path)
     : path_(path)
 {
@@ -34,6 +55,9 @@ Texture2D::Texture2D(const std::string& path)
         dataFormat = GL_RGBA;
         break;
     }
+
+    internal_format_ = GL_RGBA8;
+    data_format_ = GL_RGBA;
 
     ASSERT(internalFormat, "Internal format not supported!");
     ASSERT(dataFormat, "Data format not supported");
@@ -67,9 +91,21 @@ Texture2D::~Texture2D()
     glDeleteTextures(1, &renderer_id_);
 }
 
+std::shared_ptr<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
+{
+    return std::make_shared<Texture2D>(width, height);
+}
+
 std::shared_ptr<Texture2D> Texture2D::Create(const std::string& path)
 {
     return std::make_shared<Texture2D>(path);
+}
+
+void Texture2D::UploadData(void* data, uint32_t size)
+{
+    uint32_t bytesPerPixel = data_format_ == GL_RGBA ? 4 : 3;
+    ASSERT(size == width_ * height_ * bytesPerPixel, "Incorrect data size!");
+    glTexImage2D(GL_TEXTURE_2D, 0, internal_format_, width_, height_, 0, data_format_, GL_UNSIGNED_BYTE, data);
 }
 
 void Texture2D::Bind(uint32_t slot) const

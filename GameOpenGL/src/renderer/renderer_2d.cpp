@@ -2,6 +2,7 @@
 
 #include "render_command.h"
 #include "shader.h"
+#include "texture.h"
 #include "vertex_array.h"
 #include "vertex_buffer.h"
 
@@ -11,8 +12,8 @@
 struct Renderer2DData
 {
     std::shared_ptr<VertexArray> vertexArray;
-	std::shared_ptr<Shader> flatColorShader;
     std::shared_ptr<Shader> textureShader;
+    std::shared_ptr<Texture2D> whiteTexture;
 };
 
 static Renderer2DData* data;
@@ -49,10 +50,14 @@ void Renderer2D::Init()
     std::shared_ptr<IndexBuffer> indexBuffer = IndexBuffer::Create(rectangleIndices, sizeof(rectangleIndices) / sizeof(uint32_t));
     data->vertexArray->set_index_buffer(indexBuffer);
 
-    data->flatColorShader = Shader::Create("assets/shaders/flat_color.glsl");
     data->textureShader = Shader::Create("assets/shaders/texture.glsl");
     data->textureShader->Bind();
     data->textureShader->SetInt("u_Texture", 0);
+
+    data->whiteTexture = Texture2D::Create(1, 1);
+    // RGBA (255, 255, 255, 255) = 0xffffffff => white.
+    uint32_t whiteTextureData = 0xffffffff;
+    data->whiteTexture->UploadData(&whiteTextureData, sizeof(uint32_t)); // 4 bytes.
 }
 
 void Renderer2D::Shutdown()
@@ -62,11 +67,8 @@ void Renderer2D::Shutdown()
 
 void Renderer2D::BeginScene(const OrthographicCamera& camera)
 {
-    data->flatColorShader->Bind();
-    data->flatColorShader->SetMat4("u_projectionViewMatrix", camera.projection_view_matrix());
-
     data->textureShader->Bind();
-    data->textureShader->SetMat4("u_projectionViewMatrix", camera.projection_view_matrix());
+    data->textureShader->SetMat4("u_ProjectionViewMatrix", camera.projection_view_matrix());
 }
 
 void Renderer2D::EndScene()
@@ -81,12 +83,12 @@ void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, cons
 
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 {
-    data->flatColorShader->Bind();
-    data->flatColorShader->SetFloat4("u_color", color);
+    data->textureShader->SetFloat4("u_Color", color);
+    data->whiteTexture->Bind();
 
     // Calculate the quad transform (model matrix) and set the corresponding uniform in the shader.
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-    data->flatColorShader->SetMat4("u_modelMatrix", transform);
+    data->textureShader->SetMat4("u_ModelMatrix", transform);
 
     data->vertexArray->Bind();
     RenderCommand::DrawIndexed(data->vertexArray);
@@ -99,11 +101,12 @@ void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, cons
 
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture)
 {
-    data->textureShader->Bind();
+    data->textureShader->SetFloat4("u_Color", glm::vec4(1.0f));
+    texture->Bind();
 
     // Calculate the quad transform (model matrix) and set the corresponding uniform in the shader.
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-    data->textureShader->SetMat4("u_modelMatrix", transform);
+    data->textureShader->SetMat4("u_ModelMatrix", transform);
 
     data->vertexArray->Bind();
     RenderCommand::DrawIndexed(data->vertexArray);

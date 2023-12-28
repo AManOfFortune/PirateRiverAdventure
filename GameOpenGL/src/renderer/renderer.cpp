@@ -10,6 +10,11 @@ void Renderer::Init()
     Renderer2D::Init();
 }
 
+void Renderer::Shutdown()
+{
+    Renderer2D::Shutdown();
+}
+
 void Renderer::BeginScene(OrthographicCamera& camera)
 {
     sceneData->projectionViewMatrix = camera.projection_view_matrix();
@@ -26,9 +31,9 @@ void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_p
     // It is important to bind the shader first before setting its projection view matrix uniform.
     shader->Bind();
     // Bind the projection view (P * V) matrix uniform.
-    shader->UploadUniformMat4("u_projectionViewMatrix", sceneData->projectionViewMatrix);
+    shader->SetMat4("u_ProjectionViewMatrix", sceneData->projectionViewMatrix);
     // Bind the model (M) matrix uniform (also called transform -> position, rotation, scale in world space).
-    shader->UploadUniformMat4("u_modelMatrix", transform);
+    shader->SetMat4("u_ModelMatrix", transform);
     // In OpenGL the order of binding the shader or vertex array does not matter.
     vertexArray->Bind();
     RenderCommand::DrawIndexed(vertexArray);

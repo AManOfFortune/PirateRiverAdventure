@@ -14,7 +14,7 @@ class Application
 {
 public:
     Application();
-    virtual ~Application() = default;
+    virtual ~Application();
 
     /// <summary>
     /// Getter for the static application singleton.

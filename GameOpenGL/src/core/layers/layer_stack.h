@@ -13,7 +13,7 @@
 class LayerStack 
 {
 public:
-    LayerStack();
+    LayerStack() = default;
     ~LayerStack();
 
     /// <summary>

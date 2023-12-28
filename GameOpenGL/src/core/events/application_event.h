@@ -36,7 +36,7 @@ private:
 class WindowCloseEvent : public Event
 {
 public:
-    WindowCloseEvent() {}
+    WindowCloseEvent() = default;
 
     // Instead of manual implementation of method overrides.
     EVENT_CLASS_CATEGORY(kEventCategoryApplication)
@@ -47,7 +47,7 @@ public:
 class AppTickEvent : public Event
 {
 public:
-    AppTickEvent() {}
+    AppTickEvent() = default;
 
     // Instead of manual implementation of method overrides.
     EVENT_CLASS_CATEGORY(kEventCategoryApplication)
@@ -57,7 +57,7 @@ public:
 class AppUpdateEvent : public Event
 {
 public:
-    AppUpdateEvent() {}
+    AppUpdateEvent() = default;
 
     // Instead of manual implementation of method overrides.
     EVENT_CLASS_CATEGORY(kEventCategoryApplication)
@@ -67,7 +67,7 @@ public:
 class AppRenderEvent : public Event
 {
 public:
-    AppRenderEvent() {}
+    AppRenderEvent() = default;
 
     // Instead of manual implementation of method overrides.
     EVENT_CLASS_CATEGORY(kEventCategoryApplication)

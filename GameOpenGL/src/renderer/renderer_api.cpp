@@ -2,6 +2,11 @@
 
 #include <glad/glad.h>
 
+std::unique_ptr<RendererAPI> RendererAPI::Create()
+{
+    return std::make_unique<RendererAPI>();
+}
+
 void RendererAPI::Init()
 {
     // Enable blending.

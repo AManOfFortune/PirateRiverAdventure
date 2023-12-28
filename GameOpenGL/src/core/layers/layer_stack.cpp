@@ -1,10 +1,5 @@
 #include "layer_stack.h"
 
-LayerStack::LayerStack() 
-{
-
-}
-
 LayerStack::~LayerStack() 
 {
     // Layers are only deleted at the end of the applications lifetime.

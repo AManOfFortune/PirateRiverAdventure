@@ -68,8 +68,8 @@ ExampleLayer::ExampleLayer()
 			    layout(location = 0) in vec3 a_Position;
                 layout(location = 1) in vec4 a_Color;
 
-                uniform mat4 u_projectionViewMatrix;
-                uniform mat4 u_modelMatrix;
+                uniform mat4 u_ProjectionViewMatrix;
+                uniform mat4 u_ModelMatrix;
 
 			    out vec3 v_Position;
                 out vec4 v_Color;
@@ -78,7 +78,7 @@ ExampleLayer::ExampleLayer()
 			    {
 				    v_Position = a_Position;
                     v_Color = a_Color;
-				    gl_Position = u_projectionViewMatrix * u_modelMatrix * vec4(a_Position, 1.0);	
+				    gl_Position = u_ProjectionViewMatrix * u_ModelMatrix * vec4(a_Position, 1.0);	
 			    }
 		    )";
 
@@ -106,12 +106,12 @@ ExampleLayer::ExampleLayer()
     std::shared_ptr<Shader> textureShader = shader_library_.Load("assets/shaders/texture.glsl");
 
     // Create the checkerboard and logo textures.
-    checkerboard_texture_ = std::make_shared<Texture2D>("assets/textures/Checkerboard.png");
-    logo_texture_ = std::make_shared<Texture2D>("assets/textures/Mario-Logo.png");
+    checkerboard_texture_ = Texture2D::Create("assets/textures/Checkerboard.png");
+    logo_texture_ = Texture2D::Create("assets/textures/Mario-Logo.png");
 
     textureShader->Bind();
     // Set the sampler2D uniform by supplying the bound texture slot (in our case 0).
-    textureShader->UploadUniformInt("u_Texture", 0);
+    textureShader->SetInt("u_Texture", 0);
 }
 
 void ExampleLayer::OnUpdate(DeltaTime deltaTime)
@@ -143,11 +143,11 @@ void ExampleLayer::OnUpdate(DeltaTime deltaTime)
 
             if (x % 2 == 0)
             {
-                flat_color_shader_->UploadUniformFloat4("u_color", redColor);
+                flat_color_shader_->SetFloat4("u_Color", redColor);
             }
             else
             {
-                flat_color_shader_->UploadUniformFloat4("u_color", blueColor);
+                flat_color_shader_->SetFloat4("u_Color", blueColor);
             }
 
             Renderer::Submit(flat_color_shader_, rectangle_vertex_array_, modelMatrix);

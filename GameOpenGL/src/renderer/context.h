@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 struct GLFWwindow;
 
 /// <summary>
@@ -9,6 +11,8 @@ class Context
 {
 public:
     Context(GLFWwindow* window);
+
+    static std::unique_ptr<Context> Create(GLFWwindow* window);
 
     /// <summary>
     /// Initializes the context and glad.

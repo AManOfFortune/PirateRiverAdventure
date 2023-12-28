@@ -34,7 +34,7 @@ public:
     /// <summary>
     /// Factory method to create a window.
     /// </summary>
-    static Window* Create(const WindowProperties& properties = WindowProperties());
+    static std::unique_ptr<Window> Create(const WindowProperties& properties = WindowProperties());
 
     /// <summary>
     /// This callback method is called in the applications OnUpdate method.

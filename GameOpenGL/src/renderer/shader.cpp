@@ -1,7 +1,7 @@
 #include "shader.h"
 
-#include "log/log.h"
-#include "utils.h"
+#include "core/log.h"
+#include "core/utils.h"
 
 #include <fstream>
 #include <glad/glad.h>

@@ -1,5 +1,5 @@
-#include "core.h"
-#include "events/key_event.h"
+#include "core/core.h"
+#include "core/events/key_event.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 

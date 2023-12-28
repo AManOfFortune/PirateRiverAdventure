@@ -1,6 +1,6 @@
 #include "input.h"
 
-#include "application/application.h"
+#include "core/application.h"
 
 #include <GLFW/glfw3.h>
 

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "delta_time.h"
-#include "events/application_event.h"
-#include "events/mouse_event.h"
+#include "core/delta_time.h"
+#include "core/events/application_event.h"
+#include "core/events/mouse_event.h"
 #include "renderer/orthographic_camera.h"
 
 class OrthographicCameraController

@@ -1,7 +1,7 @@
 #include "orthographic_camera_controller.h"
 
-#include "input/input.h"
-#include "input/key_codes.h"
+#include "core/input/input.h"
+#include "core/input/key_codes.h"
 
 OrthographicCameraController::OrthographicCameraController(float aspectRatio, bool canRotate)
     : aspect_ratio_{ aspectRatio }, camera_(-aspectRatio * zoom_level_, aspectRatio * zoom_level_, -zoom_level_, zoom_level_), can_rotate_{ canRotate }

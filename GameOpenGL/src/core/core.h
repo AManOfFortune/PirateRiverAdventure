@@ -1,16 +1,16 @@
 #pragma once
 
-#include "application/application.h"
-#include "layers/layer.h"
-#include "log/log.h"
+// -- Core ---------------------------------
+#include "core/application.h"
+#include "core/layers/layer.h"
+#include "core/log.h"
 
-#include "delta_time.h"
+#include "core/delta_time.h"
 
-#include "input/input.h"
-#include "input/key_codes.h"
-#include "input/mouse_button_codes.h"
-
-#include "orthographic_camera_controller.h"
+#include "core/input/input.h"
+#include "core/input/key_codes.h"
+#include "core/input/mouse_button_codes.h"
+// -----------------------------------------
 
 // -- Renderer -----------------------------
 #include "renderer/renderer.h"
@@ -25,4 +25,5 @@
 #include "renderer/vertex_array.h"
 
 #include "renderer/orthographic_camera.h"
+#include "renderer/orthographic_camera_controller.h"
 // -----------------------------------------

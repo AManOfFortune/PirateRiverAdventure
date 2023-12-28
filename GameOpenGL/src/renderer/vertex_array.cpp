@@ -31,6 +31,11 @@ VertexArray::~VertexArray()
     glDeleteVertexArrays(1, &renderer_id_);
 }
 
+std::shared_ptr<VertexArray> VertexArray::Create()
+{
+    return std::make_shared<VertexArray>();
+}
+
 void VertexArray::Bind() const
 {
     glBindVertexArray(renderer_id_);

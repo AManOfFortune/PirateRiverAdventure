@@ -158,10 +158,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\core\application.cpp" />
+    <ClCompile Include="src\example_layer.cpp" />
     <ClCompile Include="src\renderer\orthographic_camera_controller.cpp" />
     <ClCompile Include="src\renderer\index_buffer.cpp" />
     <ClCompile Include="src\renderer\context.cpp" />
     <ClCompile Include="src\renderer\texture.cpp" />
+    <ClCompile Include="src\sandbox_2d_layer.cpp" />
     <ClCompile Include="vendor\glad\glad.c" />
     <ClCompile Include="src\core\input\input.cpp" />
     <ClCompile Include="src\core\layers\layer.cpp" />
@@ -182,6 +184,7 @@
     <ClInclude Include="src\core\application.h" />
     <ClInclude Include="src\core\core.h" />
     <ClInclude Include="src\core\delta_time.h" />
+    <ClInclude Include="src\example_layer.h" />
     <ClInclude Include="src\renderer\orthographic_camera_controller.h" />
     <ClInclude Include="src\renderer\orthographic_camera.h" />
     <ClInclude Include="src\renderer\renderer.h" />
@@ -205,6 +208,8 @@
     <ClInclude Include="src\core\log.h" />
     <ClInclude Include="src\renderer\shader.h" />
     <ClInclude Include="src\renderer\vertex_buffer.h" />
+    <ClInclude Include="src\sandbox.h" />
+    <ClInclude Include="src\sandbox_2d_layer.h" />
     <ClInclude Include="vendor\stb_image\stb_image.h" />
     <ClInclude Include="src\core\window.h" />
   </ItemGroup>

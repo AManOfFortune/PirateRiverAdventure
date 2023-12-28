@@ -180,8 +180,8 @@ std::unordered_map<GLenum, std::string> Shader::PreprocessShaders(const std::str
 		pos = source.find(typeToken, nextLinePos);
 
 		// Store the shader source code in the map.
-		shaderSources[ShaderTypeFromString(type)] = 
-            source.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos));
+		shaderSources[ShaderTypeFromString(type)] = (pos == std::string::npos) ? 
+            source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
 	}
 
 	return shaderSources;

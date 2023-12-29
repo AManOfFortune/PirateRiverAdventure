@@ -69,6 +69,31 @@ void Shader::Unbind() const
     glUseProgram(0);
 }
 
+void Shader::SetInt(const std::string& name, int value)
+{
+    UploadUniformInt(name, value);
+}
+
+void Shader::SetFloat(const std::string& name, float value)
+{
+    UploadUniformFloat(name, value);
+}
+
+void Shader::SetFloat3(const std::string& name, const glm::vec3& value)
+{
+    UploadUniformFloat3(name, value);
+}
+
+void Shader::SetFloat4(const std::string& name, const glm::vec4& value)
+{
+    UploadUniformFloat4(name, value);
+}
+
+void Shader::SetMat4(const std::string& name, const glm::mat4& value)
+{
+    UploadUniformMat4(name, value);
+}
+
 void Shader::UploadUniformInt(const std::string& name, int value)
 {
     // TODO: Implement cache for the location using a hash map so look up is not performed every time.
@@ -138,13 +163,21 @@ std::string Shader::ReadShaderFile(const std::string& filepath)
         // Returns the position of the current character in the input stream. 
         // Here, same as size of the file.
         // https://cplusplus.com/reference/istream/istream/tellg/
-        result.resize(in.tellg());
-        // Sets the position back to the beginning of the file.
-        in.seekg(0, std::ios::beg);
-        // Reads the entire file into the string.
-        in.read(&result[0], result.size());
-        // Closes the input stream.
-        in.close();
+        size_t size = in.tellg();
+        if (size != -1)
+        {
+            result.resize(size);
+            // Sets the position back to the beginning of the file.
+            in.seekg(0, std::ios::beg);
+            // Reads the entire file into the string.
+            in.read(&result[0], result.size());
+            // Closes the input stream.
+            in.close();
+        }
+        else
+        {
+            LOG_ERROR("Could not read from file '{0}'", filepath);
+        }
     }
     else
     {
@@ -180,8 +213,8 @@ std::unordered_map<GLenum, std::string> Shader::PreprocessShaders(const std::str
 		pos = source.find(typeToken, nextLinePos);
 
 		// Store the shader source code in the map.
-		shaderSources[ShaderTypeFromString(type)] = 
-            source.substr(nextLinePos, pos - (nextLinePos == std::string::npos ? source.size() - 1 : nextLinePos));
+		shaderSources[ShaderTypeFromString(type)] = (pos == std::string::npos) ? 
+            source.substr(nextLinePos) : source.substr(nextLinePos, pos - nextLinePos);
 	}
 
 	return shaderSources;

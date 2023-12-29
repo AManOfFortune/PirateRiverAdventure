@@ -16,12 +16,17 @@ Application::Application()
     ASSERT(!instance_, "Application singleton already exists!");
     instance_ = this;
 
-    window_ = std::unique_ptr<Window>(Window::Create());
+    window_ = Window::Create();
     // Sets the OnEvent method of this instance to be the event callback of the window class.
     // An event triggered in the window class will be handled by the OnEvent method.
     window_->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 
     Renderer::Init();
+}
+
+Application::~Application()
+{
+    Renderer::Shutdown();
 }
 
 void Application::Run()

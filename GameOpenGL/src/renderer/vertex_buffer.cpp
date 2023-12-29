@@ -14,6 +14,11 @@ VertexBuffer::~VertexBuffer()
     glDeleteBuffers(1, &renderer_id_);
 }
 
+std::shared_ptr<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
+{
+    return std::make_shared<VertexBuffer>(vertices, size);
+}
+
 void VertexBuffer::Bind() const
 {
     glBindBuffer(GL_ARRAY_BUFFER, renderer_id_);

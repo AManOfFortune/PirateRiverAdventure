@@ -3,6 +3,7 @@
 #include "events/event.h"
 #include "renderer/context.h"
 
+#include <memory>
 #include <string>
 
 /// <summary>
@@ -33,7 +34,7 @@ public:
     /// <summary>
     /// Factory method to create a window.
     /// </summary>
-    static Window* Create(const WindowProperties& properties = WindowProperties());
+    static std::unique_ptr<Window> Create(const WindowProperties& properties = WindowProperties());
 
     /// <summary>
     /// This callback method is called in the applications OnUpdate method.
@@ -60,7 +61,7 @@ private:
     void Shutdown();
 
     GLFWwindow* window_;
-    Context* context_;
+    std::unique_ptr<Context> context_;
 
     struct WindowData
     {

@@ -16,6 +16,8 @@ public:
     VertexArray();
     ~VertexArray();
 
+    static std::shared_ptr<VertexArray> Create();
+
     void Bind() const;
     void Unbind() const;
 

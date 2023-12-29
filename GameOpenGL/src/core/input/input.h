@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>
 #include <utility>
 
 /// <summary>
@@ -20,5 +21,5 @@ protected:
     Input& operator=(const Input&) = delete;
 
 private:
-    static Input* instance_;
+    static std::unique_ptr<Input> instance_;
 };

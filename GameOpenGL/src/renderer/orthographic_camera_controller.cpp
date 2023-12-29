@@ -11,14 +11,26 @@ void OrthographicCameraController::OnUpdate(DeltaTime deltaTime)
 {
     // Camera movement
     if (Input::IsKeyPressed(CG_KEY_A))
-        camera_pos_.x -= camera_translation_speed_ * deltaTime;
+    {
+        camera_pos_.x -= cos(glm::radians(camera_rot_)) * camera_translation_speed_ * deltaTime;
+        camera_pos_.y -= sin(glm::radians(camera_rot_)) * camera_translation_speed_ * deltaTime;
+    }
     else if (Input::IsKeyPressed(CG_KEY_D))
-        camera_pos_.x += camera_translation_speed_ * deltaTime;
+    {
+        camera_pos_.x += cos(glm::radians(camera_rot_)) * camera_translation_speed_ * deltaTime;
+        camera_pos_.y += sin(glm::radians(camera_rot_)) * camera_translation_speed_ * deltaTime;
+    }
 
     if (Input::IsKeyPressed(CG_KEY_S))
-        camera_pos_.y -= camera_translation_speed_ * deltaTime;
+    {
+        camera_pos_.x -= -sin(glm::radians(camera_rot_)) * camera_translation_speed_ * deltaTime;
+        camera_pos_.y -= cos(glm::radians(camera_rot_)) * camera_translation_speed_ * deltaTime;
+    }
     else if (Input::IsKeyPressed(CG_KEY_W))
-        camera_pos_.y += camera_translation_speed_ * deltaTime;
+    {
+        camera_pos_.x += -sin(glm::radians(camera_rot_)) * camera_translation_speed_ * deltaTime;
+        camera_pos_.y += cos(glm::radians(camera_rot_)) * camera_translation_speed_ * deltaTime;
+    }
 
     // Camera rotation if enabled
     if (can_rotate_)
@@ -27,6 +39,11 @@ void OrthographicCameraController::OnUpdate(DeltaTime deltaTime)
             camera_rot_ += camera_rotation_speed_ * deltaTime;
         else if (Input::IsKeyPressed(CG_KEY_E))
             camera_rot_ -= camera_rotation_speed_ * deltaTime;
+
+        if (camera_rot_ > 180.0f)
+			camera_rot_ -= 360.0f;
+		else if (camera_rot_ <= -180.0f)
+			camera_rot_ += 360.0f;
 
         camera_.set_rotation(camera_rot_);
     }

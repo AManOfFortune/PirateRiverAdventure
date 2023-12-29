@@ -1,15 +1,11 @@
 #include "layer_stack.h"
 
-LayerStack::LayerStack() 
-{
-
-}
-
 LayerStack::~LayerStack() 
 {
     // Layers are only deleted at the end of the applications lifetime.
     for (Layer* layer : layers_) 
     { 
+        layer->OnDetach();
         delete layer; 
     }
 }

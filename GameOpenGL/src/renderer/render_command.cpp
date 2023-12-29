@@ -1,3 +1,3 @@
 #include "render_command.h"
 
-RendererAPI* RenderCommand::renderer_api_ = new RendererAPI();
+std::unique_ptr<RendererAPI> RenderCommand::renderer_api_ = std::make_unique<RendererAPI>();

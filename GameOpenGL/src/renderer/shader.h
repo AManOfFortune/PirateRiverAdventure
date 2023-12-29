@@ -23,14 +23,23 @@ public:
     void Bind() const;
     void Unbind() const;
 
-    // Uniform methods to set a uniform of type with given name and value.
-    void UploadUniformInt(const std::string& name, int value);
+    // These methods are not tied to the OpenGL API and are a more high level abstraction.
+    // For now they simply delegate to the UploadUniform methods. Once a material system is in place
+    // these methods will be used to set the uniforms of a material and do more than simply call 
+    // the UploadUniform methods.
+    void SetInt(const std::string& name, int value);
+    void SetFloat(const std::string& name, float value);
+    void SetFloat3(const std::string& name, const glm::vec3& value);
+    void SetFloat4(const std::string& name, const glm::vec4& value);
+    void SetMat4(const std::string& name, const glm::mat4& value);
 
+    // Uniform methods to set a uniform of type with given name and value.
+    // These are low level methods that represent the OpenGL calls.
+    void UploadUniformInt(const std::string& name, int value);
     void UploadUniformFloat(const std::string& name, float value);
     void UploadUniformFloat2(const std::string& name, const glm::vec2& vec);
     void UploadUniformFloat3(const std::string& name, const glm::vec3& vec);
     void UploadUniformFloat4(const std::string& name, const glm::vec4& vec);
-
     void UploadUniformMat3(const std::string& name, const glm::mat3& matrix);
     void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
 

@@ -11,6 +11,11 @@ Context::Context(GLFWwindow* window)
     ASSERT(window, "GLFW window is null!");
 }
 
+std::unique_ptr<Context> Context::Create(GLFWwindow* window)
+{
+    return std::make_unique<Context>(window);
+}
+
 void Context::Initialize()
 {
     glfwMakeContextCurrent(window_);

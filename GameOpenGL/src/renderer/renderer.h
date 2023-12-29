@@ -4,6 +4,8 @@
 #include "render_command.h"
 #include "shader.h"
 
+#include <memory>
+
 /// <summary>
 /// The renderer holds higher level rendering functionality which is independent of the rendering API
 /// used since it uses our own RendererAPI class under the hood. Because we only need to worry about 
@@ -16,6 +18,10 @@ public:
     /// Initializes the renderer.
     /// </summary>
     static void Init();
+    /// <summary>
+    /// Called on shutdown of the application.
+    /// </summary>
+    static void Shutdown();
     /// <summary>
     /// Specifies the start of a new scene. Here all model independent data should be submitted.
     /// This includes environmental information such as the camera and lights. By doing it this
@@ -46,5 +52,5 @@ private:
         glm::mat4 projectionViewMatrix;
     };
 
-    static SceneData* sceneData;
+    static std::shared_ptr<SceneData> sceneData;
 };

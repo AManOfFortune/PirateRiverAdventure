@@ -15,9 +15,9 @@ static void OnGlfwError(int error, const char* description)
     LOG_ERROR("GLFW Error ({0}): {1}", error, description);
 }
 
-Window* Window::Create(const WindowProperties& properties)
+std::unique_ptr<Window> Window::Create(const WindowProperties& properties)
 {
-    return new Window(properties);
+    return std::make_unique<Window>(properties);
 }
 
 Window::Window(const WindowProperties& properties)
@@ -66,7 +66,7 @@ void Window::Initialize(const WindowProperties& properties)
 
     window_ = glfwCreateWindow((int)data_.width, (int)data_.height, data_.title.c_str(), nullptr, nullptr);
     
-    context_ = new Context(window_);
+    context_ = Context::Create(window_);
     context_->Initialize();
     
     // Set the user pointer (data_) which is stored until the window is destroyed.

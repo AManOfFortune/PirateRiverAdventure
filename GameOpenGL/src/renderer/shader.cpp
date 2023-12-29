@@ -158,13 +158,21 @@ std::string Shader::ReadShaderFile(const std::string& filepath)
         // Returns the position of the current character in the input stream. 
         // Here, same as size of the file.
         // https://cplusplus.com/reference/istream/istream/tellg/
-        result.resize(in.tellg());
-        // Sets the position back to the beginning of the file.
-        in.seekg(0, std::ios::beg);
-        // Reads the entire file into the string.
-        in.read(&result[0], result.size());
-        // Closes the input stream.
-        in.close();
+        size_t size = in.tellg();
+        if (size != -1)
+        {
+            result.resize(size);
+            // Sets the position back to the beginning of the file.
+            in.seekg(0, std::ios::beg);
+            // Reads the entire file into the string.
+            in.read(&result[0], result.size());
+            // Closes the input stream.
+            in.close();
+        }
+        else
+        {
+            LOG_ERROR("Could not read from file '{0}'", filepath);
+        }
     }
     else
     {

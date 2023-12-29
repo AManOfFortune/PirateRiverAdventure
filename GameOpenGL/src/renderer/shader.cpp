@@ -74,6 +74,11 @@ void Shader::SetInt(const std::string& name, int value)
     UploadUniformInt(name, value);
 }
 
+void Shader::SetFloat(const std::string& name, float value)
+{
+    UploadUniformFloat(name, value);
+}
+
 void Shader::SetFloat3(const std::string& name, const glm::vec3& value)
 {
     UploadUniformFloat3(name, value);

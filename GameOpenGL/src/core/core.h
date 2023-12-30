@@ -12,6 +12,12 @@
 #include "core/input/mouse_button_codes.h"
 // -----------------------------------------
 
+// -- ECS ----------------------------------
+#include "ecs/components.h"
+#include "ecs/entity.h"
+#include "ecs/scene.h"
+// -----------------------------------------
+
 // -- Renderer -----------------------------
 #include "renderer/renderer.h"
 #include "renderer/renderer_2d.h"

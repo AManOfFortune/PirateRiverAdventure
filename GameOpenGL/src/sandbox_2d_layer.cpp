@@ -12,6 +12,10 @@ Sandbox2DLayer::Sandbox2DLayer()
 void Sandbox2DLayer::OnAttach()
 {
     texture_ = Texture2D::Create("assets/textures/Checkerboard.png");
+
+    active_scene_ = std::make_shared<Scene>();
+    Entity entity = active_scene_->CreateEntity("Square");
+    entity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
 }
 
 void Sandbox2DLayer::OnDetach()
@@ -26,13 +30,11 @@ void Sandbox2DLayer::OnUpdate(DeltaTime deltaTime)
     RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
     RenderCommand::Clear();
 
-    Renderer2D::BeginScene(camera_controller_.camera());
 
-    Renderer2D::DrawQuad({ -1.0f, 0.0f }, { 0.5f, 0.5f }, { 0.8f, 0.2f, 0.3f, 1.0f });
-    Renderer2D::DrawQuad({  1.0f, 0.0f }, { 0.5f, 0.5f }, { 0.2f, 0.3f, 0.8f, 1.0f });
-    // The z value is used to determine draw order. OpenGL uses a right-handed coordinate system.
-    // This means that the positive z-axis points out of the screen.
-    Renderer2D::DrawRotatedQuad({ 0.0f, 0.0f, -0.1f }, { 10.0f, 10.0f }, glm::radians(45.0f), texture_, Texture2DProperties(10.0f, glm::vec4(1.0f)));  
+    Renderer2D::BeginScene(camera_controller_.camera()); 
+
+    // In here the DrawQuad calls are made.
+    active_scene_->OnUpdate(deltaTime);
 
     Renderer2D::EndScene();
 }

@@ -83,16 +83,8 @@ void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, cons
 
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 {
-    data->textureShader->SetFloat4("u_Color", color);
-    data->textureShader->SetFloat("u_TilingFactor", 1.0f);
-    data->whiteTexture->Bind();
-
-    // Calculate the quad transform (model matrix) and set the corresponding uniform in the shader.
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-    data->textureShader->SetMat4("u_ModelMatrix", transform);
-
-    data->vertexArray->Bind();
-    RenderCommand::DrawIndexed(data->vertexArray);
+    DrawQuad(transform, color);
 }
 
 void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties)
@@ -102,16 +94,8 @@ void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, cons
 
 void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties)
 {
-    data->textureShader->SetFloat4("u_Color", textureProperties.tintColor);
-    data->textureShader->SetFloat("u_TilingFactor", textureProperties.tilingFactor);
-    texture->Bind();
-
-    // Calculate the quad transform (model matrix) and set the corresponding uniform in the shader.
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-    data->textureShader->SetMat4("u_ModelMatrix", transform);
-
-    data->vertexArray->Bind();
-    RenderCommand::DrawIndexed(data->vertexArray);
+    DrawQuad(transform, texture, textureProperties);
 }
 
 void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
@@ -119,20 +103,36 @@ void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& siz
     DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, color);
 }
 
-void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
 {
     data->textureShader->SetFloat4("u_Color", color);
     data->textureShader->SetFloat("u_TilingFactor", 1.0f);
     data->whiteTexture->Bind();
 
-    // Calculate the quad transform (model matrix) and set the corresponding uniform in the shader.
-    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
-        * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
-        * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
     data->textureShader->SetMat4("u_ModelMatrix", transform);
 
     data->vertexArray->Bind();
     RenderCommand::DrawIndexed(data->vertexArray);
+}
+
+void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties)
+{
+    data->textureShader->SetFloat4("u_Color", textureProperties.tintColor);
+    data->textureShader->SetFloat("u_TilingFactor", textureProperties.tilingFactor);
+    texture->Bind();
+
+    data->textureShader->SetMat4("u_ModelMatrix", transform);
+
+    data->vertexArray->Bind();
+    RenderCommand::DrawIndexed(data->vertexArray);
+}
+
+void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+{
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
+        * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+        * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+    DrawQuad(transform, color);
 }
 
 void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties)
@@ -142,16 +142,8 @@ void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& siz
 
 void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties)
 {
-    data->textureShader->SetFloat4("u_Color", textureProperties.tintColor);
-    data->textureShader->SetFloat("u_TilingFactor", textureProperties.tilingFactor);
-    texture->Bind();
-
-    // Calculate the quad transform (model matrix) and set the corresponding uniform in the shader.
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
         * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
         * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });    
-    data->textureShader->SetMat4("u_ModelMatrix", transform);
-
-    data->vertexArray->Bind();
-    RenderCommand::DrawIndexed(data->vertexArray);
+    DrawQuad(transform, texture, textureProperties);
 }

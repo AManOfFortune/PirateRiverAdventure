@@ -191,6 +191,9 @@
     <ClInclude Include="src\ecs\scene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\ecs\components.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\texture.glsl" />

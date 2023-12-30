@@ -1,11 +1,10 @@
 #include "scene.h"
 
+#include "components.h"
+#include "renderer/renderer.h"
+#include "renderer/renderer_2d.h"
+
 #include <glm/glm.hpp>
-
-static void OnTransformConstruct(entt::registry& registry, entt::entity entity)
-{
-
-}
 
 Scene::Scene()
 {
@@ -13,20 +12,6 @@ Scene::Scene()
 	// Because it is just an integer, it does not contain any methods or data.
 	// Any time we want to modify an entity, we need to use the registry.
 	entt::entity entity = registry_.create();
-
-	// The components are just structs because we do not need any inheritance.
-	struct TransformComponent
-	{
-		glm::mat4 transform;
-
-		TransformComponent() = default;
-		TransformComponent(const TransformComponent& transform) = default;
-		TransformComponent(const glm::mat4& transform) : transform(transform) {}
-
-		// Implicit cast operators for convenience when needed to access the underlying mat4.
-		operator glm::mat4& () { return transform; }
-		operator const glm::mat4& () const { return transform; }
-	};
 
 	// This is how components are added to an entity. 
 	// Fist we need to specify the entity we want to add the component to, then the component arguments.
@@ -45,12 +30,25 @@ Scene::Scene()
 	{
 		TransformComponent& transform = view.get<TransformComponent>(entity);
 	}
-
-	// Here we connect a function to be called when a transform component is constructed.
-	registry_.on_construct<TransformComponent>().connect<&OnTransformConstruct>(entity);
-
 }
 
 Scene::~Scene()
 {
+}
+
+void Scene::OnUpdate(DeltaTime deltaTime)
+{
+	auto group = registry_.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+	for (auto entity : group)
+	{
+		TransformComponent& transform = group.get<TransformComponent>(entity);
+		SpriteRendererComponent& spriteRenderer = group.get<SpriteRendererComponent>(entity);
+
+		Renderer2D::DrawQuad(transform.transform, spriteRenderer.color);
+	}
+}
+
+entt::entity Scene::CreateEntity()
+{
+	return registry_.create();
 }

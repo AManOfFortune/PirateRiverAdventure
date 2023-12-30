@@ -1,5 +1,7 @@
 #pragma once
 
+#include "core/delta_time.h"
+
 #include <entt.hpp>
 
 class Scene
@@ -7,6 +9,13 @@ class Scene
 public:
 	Scene();
 	~Scene();
+
+	void OnUpdate(DeltaTime deltaTime);
+
+	entt::entity CreateEntity();
+
+	// TEMPORARY
+	entt::registry& registry() { return registry_; }
 
 private:
 	// An entity is basically just an ID that is associated with a bunch of components.

@@ -187,6 +187,7 @@
     <ClCompile Include="src\core\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ecs\components.h" />
     <ClInclude Include="src\ecs\scene.h" />
     <ClInclude Include="src\renderer\renderer_2d.h" />
     <ClInclude Include="src\core\application.h" />

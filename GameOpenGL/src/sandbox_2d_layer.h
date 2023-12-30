@@ -1,10 +1,12 @@
 #pragma once
 
 #include "core/layers/layer.h"
+#include "ecs/scene.h"
 #include "renderer/orthographic_camera_controller.h"
 #include "renderer/shader.h"
 #include "renderer/texture.h"
 #include "renderer/vertex_array.h"
+
 
 class Sandbox2DLayer : public Layer
 {
@@ -25,4 +27,6 @@ private:
 	std::shared_ptr<Texture2D> texture_;
 
 	OrthographicCameraController camera_controller_;
+
+	std::shared_ptr<Scene> active_scene_;
 };

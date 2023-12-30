@@ -4,6 +4,13 @@
 
 #include <entt.hpp>
 
+// Forward declaration of Entity class. We need this because we have a circular dependency.
+class Entity;
+
+/// <summary>
+/// A scene is a container for all entities and their components and provides an API to create entities.
+/// For now, the entities created here always have a tag and a transform component.
+/// </summary>
 class Scene
 {
 public:
@@ -12,10 +19,11 @@ public:
 
 	void OnUpdate(DeltaTime deltaTime);
 
-	entt::entity CreateEntity();
-
-	// TEMPORARY
-	entt::registry& registry() { return registry_; }
+	/// <summary>
+	/// Creates an entity with the given name as tag. They are not unique yet, so multiple entities can have the same name.
+	/// For now, each entity is automatically given a tag and a transform component.
+	/// </summary>
+	Entity CreateEntity(const std::string& name = std::string());
 
 private:
 	// An entity is basically just an ID that is associated with a bunch of components.
@@ -24,5 +32,7 @@ private:
 	// registry for each scene. There are possibilities to persist registries across scenes,
 	// but we won't do that here.
 	entt::registry registry_;
+	// Defined as friend so that it can access the underlying registry_.
+	friend class Entity;
 };
 

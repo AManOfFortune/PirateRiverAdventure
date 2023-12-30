@@ -14,9 +14,8 @@ void Sandbox2DLayer::OnAttach()
     texture_ = Texture2D::Create("assets/textures/Checkerboard.png");
 
     active_scene_ = std::make_shared<Scene>();
-    entt::entity entity = active_scene_->CreateEntity();
-    active_scene_->registry().emplace<TransformComponent>(entity);
-    active_scene_->registry().emplace<SpriteRendererComponent>(entity, glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
+    Entity entity = active_scene_->CreateEntity("Square");
+    entity.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
 }
 
 void Sandbox2DLayer::OnDetach()
@@ -34,8 +33,8 @@ void Sandbox2DLayer::OnUpdate(DeltaTime deltaTime)
 
     Renderer2D::BeginScene(camera_controller_.camera()); 
 
+    // In here the DrawQuad calls are made.
     active_scene_->OnUpdate(deltaTime);
-
 
     Renderer2D::EndScene();
 }

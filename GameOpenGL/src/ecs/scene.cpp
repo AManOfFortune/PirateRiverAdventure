@@ -1,10 +1,12 @@
 #include "scene.h"
 
 #include "components.h"
+#include "entity.h"
 #include "renderer/renderer.h"
 #include "renderer/renderer_2d.h"
 
 #include <glm/glm.hpp>
+#include <memory>
 
 Scene::Scene()
 {
@@ -38,6 +40,7 @@ Scene::~Scene()
 
 void Scene::OnUpdate(DeltaTime deltaTime)
 {
+	// Here, we get all entities that have a transform and sprite renderer component and issue a draw call for them.
 	auto group = registry_.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 	for (auto entity : group)
 	{
@@ -48,7 +51,17 @@ void Scene::OnUpdate(DeltaTime deltaTime)
 	}
 }
 
-entt::entity Scene::CreateEntity()
+/// <summary>
+/// Creates an entity with a tag and transform component.
+/// </summary>
+Entity Scene::CreateEntity(const std::string& name)
 {
-	return registry_.create();
+	Entity entity = Entity(registry_.create(), this);
+
+	// Here, all entities are created with a tag and transform component.
+	TagComponent& tag = entity.AddComponent<TagComponent>();
+	tag.tag = name.empty() ? "Entity" : name;
+	entity.AddComponent<TransformComponent>();
+
+	return entity;
 }

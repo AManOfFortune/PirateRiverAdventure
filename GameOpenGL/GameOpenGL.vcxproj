@@ -161,6 +161,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ecs\entity.cpp" />
     <ClCompile Include="src\ecs\scene.cpp" />
     <ClCompile Include="src\renderer\renderer_2d.cpp" />
     <ClCompile Include="src\core\application.cpp" />
@@ -188,6 +189,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\ecs\components.h" />
+    <ClInclude Include="src\ecs\entity.h" />
     <ClInclude Include="src\ecs\scene.h" />
     <ClInclude Include="src\renderer\renderer_2d.h" />
     <ClInclude Include="src\core\application.h" />

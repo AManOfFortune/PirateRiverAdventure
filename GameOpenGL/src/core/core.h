@@ -14,6 +14,7 @@
 
 // -- ECS ----------------------------------
 #include "ecs/components.h"
+#include "ecs/entity.h"
 #include "ecs/scene.h"
 // -----------------------------------------
 

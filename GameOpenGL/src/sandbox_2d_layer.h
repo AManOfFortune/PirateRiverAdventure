@@ -6,6 +6,7 @@
 #include "renderer/orthographic_camera_controller.h"
 #include "renderer/shader.h"
 #include "renderer/texture.h"
+#include "renderer/frame_buffer.h"
 #include "renderer/vertex_array.h"
 
 
@@ -24,8 +25,10 @@ public:
 private:
 	// Temporary, this should be moved to the 2D renderer.
 	std::shared_ptr<Shader> flat_color_shader_;
-	std::shared_ptr<VertexArray> vertex_array_;
 	std::shared_ptr<Texture2D> texture_;
+
+	std::shared_ptr<Framebuffer> framebuffer_;
+	std::shared_ptr<VertexArray> vertex_array_;
 
 	OrthographicCameraController camera_controller_;
 

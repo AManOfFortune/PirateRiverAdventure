@@ -67,6 +67,40 @@ void Scene::OnUpdate(DeltaTime deltaTime)
 		auto [transform, spriteRenderer] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 		Renderer2D::DrawQuad(transform.transform, spriteRenderer.color);
 	}
+
+	if (mainCamera)
+	{
+		Renderer2D::BeginScene(mainCamera->projection(), *transform);
+
+		// Here, we get all entities that have a transform and sprite renderer component and issue a draw call for them.
+		auto group = registry_.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+		for (auto entity : group)
+		{
+			auto [transform, spriteRenderer] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+			Renderer2D::DrawQuad(transform.transform, spriteRenderer.color);
+		}
+
+		Renderer2D::EndScene();
+	}
+}
+
+void Scene::OnViewportResize(uint32_t width, uint32_t height)
+{
+	viewport_width_ = width;
+	viewport_height_ = height;
+	
+	// Resize all cameras with non-fixed aspect ratios.
+	auto view = registry_.view<CameraComponent>();
+	for (auto entity : view)
+	{
+		auto& cameraComponent = view.get<CameraComponent>(entity);
+		if (!cameraComponent.hasFixedAspectRatio)
+		{
+			// In order to update the aspect ratio, the projection matrix needs to be recalculated.
+			//cameraComponent.camera.set_aspect_ratio((float)width / (float)height);
+
+		}
+	}
 }
 
 /// <summary>

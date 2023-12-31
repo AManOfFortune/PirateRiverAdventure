@@ -26,8 +26,6 @@ void Sandbox2DLayer::OnAttach()
 
     camera_entity_ = active_scene_->CreateEntity("Camera");
     camera_entity_.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
-
-    // TODO: Weiter bei Timestamp 12:00 Minuten
 }
 
 void Sandbox2DLayer::OnDetach()
@@ -37,22 +35,19 @@ void Sandbox2DLayer::OnDetach()
 
 void Sandbox2DLayer::OnUpdate(DeltaTime deltaTime)
 {
-	camera_controller_.OnUpdate(deltaTime);
+	//camera_controller_.OnUpdate(deltaTime);
 
     framebuffer_->Bind();
     RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
     RenderCommand::Clear();
 
-    Renderer2D::BeginScene(camera_controller_.camera()); 
-
     // In here the DrawQuad calls are made.
     active_scene_->OnUpdate(deltaTime);
 
-    Renderer2D::EndScene();
     framebuffer_->Unbind();
 }
 
 void Sandbox2DLayer::OnEvent(Event& event)
 {
-	camera_controller_.OnEvent(event);
+	//camera_controller_.OnEvent(event);
 }

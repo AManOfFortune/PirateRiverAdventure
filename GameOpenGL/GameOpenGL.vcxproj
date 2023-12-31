@@ -132,7 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);ENABLE_ASSERTGLFW_INCLUDE_NONE;;ENABLE_ASSERT</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameOpenGL\vendor\stb_image\;$(SolutionDir)GameOpenGL\vendor\spdlog\include\;src\;$(SolutionDir)GameOpenGL\vendor\entt\include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameOpenGL\vendor\stb_image\;$(SolutionDir)GameOpenGL\vendor\spdlog\include\;$(SolutionDir)GameOpenGL\src\;$(SolutionDir)GameOpenGL\vendor\entt\include\</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -163,6 +163,7 @@
   <ItemGroup>
     <ClCompile Include="src\ecs\entity.cpp" />
     <ClCompile Include="src\ecs\scene.cpp" />
+    <ClCompile Include="src\renderer\camera.cpp" />
     <ClCompile Include="src\renderer\renderer_2d.cpp" />
     <ClCompile Include="src\core\application.cpp" />
     <ClCompile Include="src\example_layer.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="src\ecs\components.h" />
     <ClInclude Include="src\ecs\entity.h" />
     <ClInclude Include="src\ecs\scene.h" />
+    <ClInclude Include="src\renderer\camera.h" />
     <ClInclude Include="src\renderer\renderer_2d.h" />
     <ClInclude Include="src\core\application.h" />
     <ClInclude Include="src\core\core.h" />

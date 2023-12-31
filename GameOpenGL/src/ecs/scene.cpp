@@ -40,13 +40,31 @@ Scene::~Scene()
 
 void Scene::OnUpdate(DeltaTime deltaTime)
 {
+	//Camera* mainCamera = nullptr;
+	//{
+	//	auto group = registry_.group<TransformComponent>(entt::get<CameraComponent>);
+	//	for (auto entity : group)
+	//	{
+	//		auto [transform, camera] = group.get<TransformComponent, CameraComponent>(entity);
+
+	//		if (camera.isPrimary)
+	//		{
+	//			mainCamera = &camera.camera;
+	//			break;
+	//		}
+	//	}
+	//}
+
+	//if (mainCamera)
+	//{
+	//	// Renderer2D::BeginScene(*mainCamera, transform);
+	//}
+
 	// Here, we get all entities that have a transform and sprite renderer component and issue a draw call for them.
 	auto group = registry_.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 	for (auto entity : group)
 	{
-		TransformComponent& transform = group.get<TransformComponent>(entity);
-		SpriteRendererComponent& spriteRenderer = group.get<SpriteRendererComponent>(entity);
-
+		auto [transform, spriteRenderer] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 		Renderer2D::DrawQuad(transform.transform, spriteRenderer.color);
 	}
 }

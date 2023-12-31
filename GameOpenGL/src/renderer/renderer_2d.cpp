@@ -1,5 +1,6 @@
 #include "renderer_2d.h"
 
+#include "camera.h"
 #include "render_command.h"
 #include "shader.h"
 #include "texture.h"
@@ -63,6 +64,14 @@ void Renderer2D::Init()
 void Renderer2D::Shutdown()
 {
     delete data;
+}
+
+void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+{
+    glm::mat4 projectionViewMatrix = camera.projection() * glm::inverse(transform);
+
+    data->textureShader->Bind();
+	data->textureShader->SetMat4("u_ProjectionViewMatrix", projectionViewMatrix);
 }
 
 void Renderer2D::BeginScene(const OrthographicCamera& camera)

@@ -12,6 +12,7 @@
 class Entity
 {
 public:
+	Entity() = default;
 	Entity(entt::entity entity, Scene* scene);
 	Entity(const Entity& other) = default;
 
@@ -51,7 +52,7 @@ public:
 	operator bool() const { return entity_ != entt::null; }
 
 private:
-	entt::entity entity_{ 0 };
+	entt::entity entity_{ entt::null };
 	// We do not want to delete this should the entity be destroyed since the scene should still live on.
 	Scene* scene_ = nullptr;
 };

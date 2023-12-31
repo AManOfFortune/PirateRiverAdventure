@@ -1,5 +1,6 @@
 #pragma once
 
+#include "camera.h"
 #include "orthographic_camera.h"
 #include "texture.h"
 
@@ -30,7 +31,8 @@ public:
 	// 1. Begin the scene.
 	// 2. Submit the geometry.
 	// 3. End the scene.
-	static void BeginScene(const OrthographicCamera& camera);
+	static void BeginScene(const Camera& camera, const glm::mat4& transform);
+	static void BeginScene(const OrthographicCamera& camera);  // TODO: Remove this camera parameter later.
 	static void EndScene();
 
 	// The API distinguishes between non-rotated and rotated quads because there is a slight overhead to rotating the quads.

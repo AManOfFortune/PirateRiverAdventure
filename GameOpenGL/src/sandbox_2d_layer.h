@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/layers/layer.h"
+#include "ecs/entity.h"
 #include "ecs/scene.h"
 #include "renderer/orthographic_camera_controller.h"
 #include "renderer/shader.h"
@@ -29,4 +30,7 @@ private:
 	OrthographicCameraController camera_controller_;
 
 	std::shared_ptr<Scene> active_scene_;
+
+	Entity square_entity_;
+	Entity camera_entity_;
 };

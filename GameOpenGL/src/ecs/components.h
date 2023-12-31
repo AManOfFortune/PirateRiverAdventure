@@ -1,5 +1,7 @@
 #pragma once
 
+#include "renderer/camera.h"
+
 #include <glm/glm.hpp>
 
 /// <summary>
@@ -42,4 +44,16 @@ struct SpriteRendererComponent
 	SpriteRendererComponent() = default;
 	SpriteRendererComponent(const SpriteRendererComponent& spriteRenderer) = default;
 	SpriteRendererComponent(const glm::vec4& color) : color(color) {}
+};
+
+struct CameraComponent
+{
+	Camera camera;
+	bool isPrimary = true;
+
+	CameraComponent() = default;
+	CameraComponent(const CameraComponent& camera) = default;
+	CameraComponent(const glm::mat4& projection) 
+		: camera(projection) 
+	{}
 };

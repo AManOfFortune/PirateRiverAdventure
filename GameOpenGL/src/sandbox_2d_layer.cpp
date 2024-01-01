@@ -1,6 +1,7 @@
 #include "sandbox_2d_layer.h"
 
 #include "core/core.h"
+#include "scripts/camera_controller.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -26,6 +27,9 @@ void Sandbox2DLayer::OnAttach()
 
     camera_entity_ = active_scene_->CreateEntity("Camera");
     camera_entity_.AddComponent<CameraComponent>();
+
+    // Add a script to the camera entity and bind it to the ScriptableEntity subclass CameraController.
+    camera_entity_.AddComponent<ScriptComponent>().Bind<CameraController>();
 }
 
 void Sandbox2DLayer::OnDetach()

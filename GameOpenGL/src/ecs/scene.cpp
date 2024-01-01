@@ -19,6 +19,24 @@ Scene::~Scene()
 
 void Scene::OnUpdate(DeltaTime deltaTime)
 {
+	// Here, all script components are created/updated.
+	{
+		registry_.view<ScriptComponent>().each([=](auto entity, auto& scriptComponent)
+		{
+			// Instantiate the script instance if it doesn't exist yet then call its OnCreate method.
+			if (!scriptComponent.instance)
+			{
+				scriptComponent.instance = scriptComponent.instantiateScript();
+				scriptComponent.instance->entity_ = Entity(entity, this);
+				scriptComponent.instance->OnCreate();
+			}
+
+			// Call the OnUpdate method of the script instance.
+			scriptComponent.instance->OnUpdate(deltaTime);
+		});
+	}
+
+
 	Camera* mainCamera = nullptr;
 	glm::mat4* transform = nullptr;
 	{

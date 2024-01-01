@@ -164,6 +164,7 @@
     <ClCompile Include="src\ecs\entity.cpp" />
     <ClCompile Include="src\ecs\scene.cpp" />
     <ClCompile Include="src\ecs\scene_camera.cpp" />
+    <ClCompile Include="src\ecs\scriptable_entity.cpp" />
     <ClCompile Include="src\renderer\camera.cpp" />
     <ClCompile Include="src\renderer\frame_buffer.cpp" />
     <ClCompile Include="src\renderer\renderer_2d.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="src\ecs\entity.h" />
     <ClInclude Include="src\ecs\scene.h" />
     <ClInclude Include="src\ecs\scene_camera.h" />
+    <ClInclude Include="src\ecs\scriptable_entity.h" />
     <ClInclude Include="src\renderer\camera.h" />
     <ClInclude Include="src\renderer\frame_buffer.h" />
     <ClInclude Include="src\renderer\renderer_2d.h" />
@@ -227,6 +229,7 @@
     <ClInclude Include="src\renderer\vertex_buffer.h" />
     <ClInclude Include="src\sandbox.h" />
     <ClInclude Include="src\sandbox_2d_layer.h" />
+    <ClInclude Include="src\scripts\camera_controller.h" />
     <ClInclude Include="vendor\entt\include\entt.hpp" />
     <ClInclude Include="vendor\stb_image\stb_image.h" />
     <ClInclude Include="src\core\window.h" />

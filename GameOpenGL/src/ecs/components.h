@@ -3,6 +3,7 @@
 #include "scene_camera.h"
 
 #include <glm/glm.hpp>
+#include <string>
 
 /// <summary>
 /// The TagComponent is used to identify an entity with a string tag.

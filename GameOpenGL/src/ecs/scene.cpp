@@ -52,6 +52,18 @@ void Scene::OnUpdate(DeltaTime deltaTime)
 	}
 }
 
+void Scene::OnResize(uint32_t width, uint32_t height)
+{
+	auto view = registry_.view<CameraComponent>();
+	for (auto entity : view)
+	{
+		CameraComponent& cameraComponent = view.get<CameraComponent>(entity);
+
+		if (!cameraComponent.isFixedAspectRatio)
+			cameraComponent.camera.set_aspect_ratio((float)width / (float) height);
+	}
+}
+
 /// <summary>
 /// Creates an entity with a tag and transform component.
 /// </summary>

@@ -13,6 +13,6 @@ public:
 
 	inline const glm::mat4& projection() const { return projection_; }
 
-private:
+protected:
 	glm::mat4 projection_ = glm::mat4(1.0f);
 };

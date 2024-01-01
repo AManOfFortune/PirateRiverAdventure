@@ -1,6 +1,6 @@
 #pragma once
 
-#include "renderer/camera.h"
+#include "scene_camera.h"
 
 #include <glm/glm.hpp>
 
@@ -48,12 +48,10 @@ struct SpriteRendererComponent
 
 struct CameraComponent
 {
-	Camera camera;
+	SceneCamera camera;
 	bool isPrimary = true;
+	bool isFixedAspectRatio = false;
 
 	CameraComponent() = default;
 	CameraComponent(const CameraComponent& camera) = default;
-	CameraComponent(const glm::mat4& projection) 
-		: camera(projection) 
-	{}
 };

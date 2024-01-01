@@ -163,6 +163,7 @@
   <ItemGroup>
     <ClCompile Include="src\ecs\entity.cpp" />
     <ClCompile Include="src\ecs\scene.cpp" />
+    <ClCompile Include="src\ecs\scene_camera.cpp" />
     <ClCompile Include="src\renderer\camera.cpp" />
     <ClCompile Include="src\renderer\frame_buffer.cpp" />
     <ClCompile Include="src\renderer\renderer_2d.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="src\ecs\components.h" />
     <ClInclude Include="src\ecs\entity.h" />
     <ClInclude Include="src\ecs\scene.h" />
+    <ClInclude Include="src\ecs\scene_camera.h" />
     <ClInclude Include="src\renderer\camera.h" />
     <ClInclude Include="src\renderer\frame_buffer.h" />
     <ClInclude Include="src\renderer\renderer_2d.h" />

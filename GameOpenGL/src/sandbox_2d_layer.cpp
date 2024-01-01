@@ -5,7 +5,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 Sandbox2DLayer::Sandbox2DLayer()
-    : Layer("Sandbox2D"), camera_controller_(1280.0f / 720.0f)
+    : Layer("Sandbox2D")
 { }
 
 
@@ -25,7 +25,7 @@ void Sandbox2DLayer::OnAttach()
     square_entity_.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
 
     camera_entity_ = active_scene_->CreateEntity("Camera");
-    camera_entity_.AddComponent<CameraComponent>(glm::ortho(-16.0f, 16.0f, -9.0f, 9.0f, -1.0f, 1.0f));
+    camera_entity_.AddComponent<CameraComponent>();
 }
 
 void Sandbox2DLayer::OnDetach()
@@ -35,8 +35,6 @@ void Sandbox2DLayer::OnDetach()
 
 void Sandbox2DLayer::OnUpdate(DeltaTime deltaTime)
 {
-	//camera_controller_.OnUpdate(deltaTime);
-
     framebuffer_->Bind();
     RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
     RenderCommand::Clear();
@@ -49,5 +47,12 @@ void Sandbox2DLayer::OnUpdate(DeltaTime deltaTime)
 
 void Sandbox2DLayer::OnEvent(Event& event)
 {
-	//camera_controller_.OnEvent(event);
+	EventDispatcher dispatcher(event);
+    dispatcher.Dispatch<WindowResizeEvent>(std::bind(&Sandbox2DLayer::OnWindowResized, this, std::placeholders::_1));
+}
+
+bool Sandbox2DLayer::OnWindowResized(WindowResizeEvent& event)
+{
+    active_scene_->OnResize(event.width(), event.height());
+    return false;
 }

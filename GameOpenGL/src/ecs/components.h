@@ -4,6 +4,7 @@
 #include "scriptable_entity.h"
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 #include <string>
 
 /// <summary>
@@ -28,6 +29,7 @@ struct TransformComponent
 	TransformComponent() = default;
 	TransformComponent(const TransformComponent& transform) = default;
 	TransformComponent(const glm::mat4& transform) : transform(transform) {}
+	TransformComponent(const glm::vec3& position) : transform(glm::translate(glm::mat4(1.0f), position)) {}
 
 	// Implicit cast operators for convenience when needed to access the underlying mat4.
 	operator glm::mat4& () { return transform; }

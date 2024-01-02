@@ -1,11 +1,11 @@
 #pragma once
 
 #include "core/utils.h"
-#include "scene.h"
 
 #include <entt.hpp>
 #include <memory>
 
+#include "scene.h"
 /// <summary>
 /// This is a wrapper over entt::entity (which is just an uint32_t) which stores the ID and the scene it belongs to.
 /// </summary>

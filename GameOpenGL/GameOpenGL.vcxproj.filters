@@ -93,6 +93,10 @@
     <ClCompile Include="src\renderer\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\game_layer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\scripts\tiles\tile_factory.cpp">
     <ClCompile Include="src\renderer\frame_buffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -215,6 +219,22 @@
     <ClInclude Include="src\renderer\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\scripts\tiles\tile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game_layer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scripts\map.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scripts\tiles\tile_types.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\scripts\tiles\tile_factory.h">
     <ClInclude Include="src\renderer\frame_buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>

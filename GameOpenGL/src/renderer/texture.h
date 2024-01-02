@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <glad/glad.h>
+#include <glm/glm.hpp>
 
 /// <summary>
 /// Abstract base texture class.
@@ -47,4 +48,37 @@ private:
     std::string path_;
     uint32_t renderer_id_, width_, height_;
     GLenum internal_format_, data_format_;
+};
+
+/// <summary>
+/// Wrapper class for a Texture2D with texture coordinate information for rendering a subtexture of a sprite sheet.
+/// </summary>
+class SubTexture2D
+{
+public:
+    /// <summary>
+    /// Creates a subtexture from a sprite sheet. If the given bounds are { 0.0f, 0.0f } and { 1.0f, 1.0f }, the entire texture will be used.
+    /// 
+    /// </summary>
+    /// <param name="texture">The source texture.</param>
+    /// <param name="min">Minimum bounds of the subtexture.</param>
+    /// <param name="max">Maximum bounds of the subtexture.</param>
+    SubTexture2D(const std::shared_ptr<Texture2D>& texture, const glm::vec2& min, const glm::vec2& max);
+
+    static std::shared_ptr<SubTexture2D> Create(const std::shared_ptr<Texture2D>& texture, const glm::vec2& min, const glm::vec2& max);
+    /// <summary>
+    /// Creates a subtexture at given sprite sheet coordinates with a given subtexture size to calculate the bounds.
+    /// </summary>
+    /// <param name="texture">The source texture.</param>
+    /// <param name="coords">The sprite sheet coordinates (0, 0) starts at the bottom left.</param>
+    /// <param name="size">The size of the subtextures in the sprite sheet.</param>
+    /// <returns></returns>
+    static std::shared_ptr<SubTexture2D>CreateFromCoords(const std::shared_ptr<Texture2D>& texture, const glm::vec2& coords, const glm::vec2& size);
+
+    const std::shared_ptr<Texture2D>& texture() const { return texture_; }
+    const glm::vec2* texture_coords() const { return texture_coords_; }
+
+private:
+    std::shared_ptr<Texture2D> texture_;
+	glm::vec2 texture_coords_[4];
 };

@@ -13,6 +13,8 @@ Sandbox2DLayer::Sandbox2DLayer()
 void Sandbox2DLayer::OnAttach()
 {
     texture_ = Texture2D::Create("assets/textures/Checkerboard.png");
+    sprite_sheet_ = Texture2D::Create("assets/textures/Tilemap_Flat.png");
+    tile_texture_ = SubTexture2D::CreateFromCoords(sprite_sheet_, { 1, 3 }, { 64, 64 });
 
     // Create a framebuffer.
     FramebufferSpecification spec;
@@ -45,6 +47,8 @@ void Sandbox2DLayer::OnUpdate(DeltaTime deltaTime)
 
     // In here the DrawQuad calls are made.
     active_scene_->OnUpdate(deltaTime);
+
+    Renderer2D::DrawQuad(glm::mat4(1.0f), tile_texture_);
 
     framebuffer_->Unbind();
 }

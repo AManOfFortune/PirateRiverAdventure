@@ -1,10 +1,11 @@
 #pragma once
 
-#include "renderer/camera.h"
+#include "scene_camera.h"
+#include "scriptable_entity.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-
+#include <string>
 
 /// <summary>
 /// The TagComponent is used to identify an entity with a string tag.
@@ -49,14 +50,50 @@ struct SpriteRendererComponent
 	SpriteRendererComponent(const glm::vec4& color) : color(color) {}
 };
 
+/// <summary>
+/// The camera component stores the camera used to render the scene.
+/// </summary>
 struct CameraComponent
 {
-	Camera camera;
+	SceneCamera camera;
 	bool isPrimary = true;
+	bool isFixedAspectRatio = false;
 
 	CameraComponent() = default;
 	CameraComponent(const CameraComponent& camera) = default;
-	CameraComponent(const glm::mat4& projection) 
-		: camera(projection) 
-	{}
+};
+
+
+struct ScriptComponent
+{
+	ScriptableEntity* instance = nullptr;
+
+	/// <summary>
+	/// Function pointer to the function that instantiates the scriptable entity.
+	/// The target function has the signature: ScriptableEntity* foo();
+	/// </summary>
+	ScriptableEntity* (*instantiateScript)() = nullptr;
+	/// <summary>
+	/// Function pointer to the function that destroys the script component.
+	/// The target function has the signature: void foo(ScriptComponent*);
+	/// </summary>
+	void (*destroyScript)(ScriptComponent*) = nullptr;
+
+	/// <summary>
+	/// Binds the script component to the given scriptable entity class.
+	/// </summary>
+	template<typename T>
+	void Bind()
+	{
+		// Binds the instantiateScript function pointer to a function that allocates a new instance of 
+		// the given template type T which is then cast to a ScriptableEntity*.
+		instantiateScript = []() { return static_cast<ScriptableEntity*>(new T()); };
+
+		// Binds the destroyScript function pointer to a function that deletes the given script component.
+		destroyScript = [](ScriptComponent* scriptComponent) 
+		{
+			delete scriptComponent->instance;
+			scriptComponent->instance = nullptr;
+		};
+	}
 };

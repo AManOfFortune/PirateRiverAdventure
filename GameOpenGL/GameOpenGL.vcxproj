@@ -164,7 +164,10 @@
     <ClCompile Include="src\game_layer.cpp" />
     <ClCompile Include="src\ecs\entity.cpp" />
     <ClCompile Include="src\ecs\scene.cpp" />
+    <ClCompile Include="src\ecs\scene_camera.cpp" />
+    <ClCompile Include="src\ecs\scriptable_entity.cpp" />
     <ClCompile Include="src\renderer\camera.cpp" />
+    <ClCompile Include="src\renderer\frame_buffer.cpp" />
     <ClCompile Include="src\renderer\renderer_2d.cpp" />
     <ClCompile Include="src\core\application.cpp" />
     <ClCompile Include="src\example_layer.cpp" />
@@ -196,7 +199,10 @@
     <ClInclude Include="src\ecs\components.h" />
     <ClInclude Include="src\ecs\entity.h" />
     <ClInclude Include="src\ecs\scene.h" />
+    <ClInclude Include="src\ecs\scene_camera.h" />
+    <ClInclude Include="src\ecs\scriptable_entity.h" />
     <ClInclude Include="src\renderer\camera.h" />
+    <ClInclude Include="src\renderer\frame_buffer.h" />
     <ClInclude Include="src\renderer\renderer_2d.h" />
     <ClInclude Include="src\core\application.h" />
     <ClInclude Include="src\core\core.h" />
@@ -231,6 +237,7 @@
     <ClInclude Include="src\scripts\tiles\tile.h" />
     <ClInclude Include="src\scripts\tiles\tile_types.h" />
     <ClInclude Include="src\scripts\tiles\tile_factory.h" />
+    <ClInclude Include="src\scripts\camera_controller.h" />
     <ClInclude Include="vendor\entt\include\entt.hpp" />
     <ClInclude Include="vendor\stb_image\stb_image.h" />
     <ClInclude Include="src\core\window.h" />

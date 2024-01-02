@@ -10,28 +10,7 @@
 
 Scene::Scene()
 {
-	// Here we create an entity, internally it is simply an uint32_t.
-	// Because it is just an integer, it does not contain any methods or data.
-	// Any time we want to modify an entity, we need to use the registry.
-	entt::entity entity = registry_.create();
 
-	// This is how components are added to an entity. 
-	// Fist we need to specify the entity we want to add the component to, then the component arguments.
-	registry_.emplace<TransformComponent>(entity, glm::mat4(1.0f));
-
-	// Checking if a component exists and then getting it looks like this.
-	if (registry_.all_of<TransformComponent>(entity))
-		TransformComponent& transform = registry_.get<TransformComponent>(entity);
-
-	// Iterating over all entities that have a TransformComponent looks like this.
-	// First we need to get a view of all entities that have the component.
-	// Then we can iterate over the view and get the entity from it.
-	// A use case for this would be to render all sprite/mesh components.
-	auto view = registry_.view<TransformComponent>();
-	for (auto entity : view)
-	{
-		TransformComponent& transform = view.get<TransformComponent>(entity);
-	}
 }
 
 Scene::~Scene()
@@ -40,32 +19,66 @@ Scene::~Scene()
 
 void Scene::OnUpdate(DeltaTime deltaTime)
 {
-	//Camera* mainCamera = nullptr;
-	//{
-	//	auto group = registry_.group<TransformComponent>(entt::get<CameraComponent>);
-	//	for (auto entity : group)
-	//	{
-	//		auto [transform, camera] = group.get<TransformComponent, CameraComponent>(entity);
-
-	//		if (camera.isPrimary)
-	//		{
-	//			mainCamera = &camera.camera;
-	//			break;
-	//		}
-	//	}
-	//}
-
-	//if (mainCamera)
-	//{
-	//	// Renderer2D::BeginScene(*mainCamera, transform);
-	//}
-
-	// Here, we get all entities that have a transform and sprite renderer component and issue a draw call for them.
-	auto group = registry_.group<TransformComponent>(entt::get<SpriteRendererComponent>);
-	for (auto entity : group)
+	// Here, all script components are created/updated.
 	{
-		auto [transform, spriteRenderer] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-		Renderer2D::DrawQuad(transform.transform, spriteRenderer.color);
+		registry_.view<ScriptComponent>().each([=](auto entity, auto& scriptComponent)
+		{
+			// Instantiate the script instance if it doesn't exist yet then call its OnCreate method.
+			if (!scriptComponent.instance)
+			{
+				scriptComponent.instance = scriptComponent.instantiateScript();
+				scriptComponent.instance->entity_ = Entity(entity, this);
+				scriptComponent.instance->OnCreate();
+			}
+
+			// Call the OnUpdate method of the script instance.
+			scriptComponent.instance->OnUpdate(deltaTime);
+		});
+	}
+
+
+	Camera* mainCamera = nullptr;
+	glm::mat4* transform = nullptr;
+	{
+		auto view = registry_.view<TransformComponent, CameraComponent>();
+		for (auto entity : view)
+		{
+			auto [transformComponent, cameraComponent] = view.get<TransformComponent, CameraComponent>(entity);
+
+			if (cameraComponent.isPrimary)
+			{
+				mainCamera = &cameraComponent.camera;
+				transform = &transformComponent.transform;
+				break;
+			}
+		}
+	}
+
+	if (mainCamera)
+	{
+		Renderer2D::BeginScene(*mainCamera, *transform);
+
+		// Here, we get all entities that have a transform and sprite renderer component and issue a draw call for them.
+		auto group = registry_.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+		for (auto entity : group)
+		{
+			auto [transform, spriteRenderer] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+			// Renderer2D::DrawQuad(transform.transform, spriteRenderer.color);
+		}
+
+		Renderer2D::EndScene();
+	}
+}
+
+void Scene::OnResize(uint32_t width, uint32_t height)
+{
+	auto view = registry_.view<CameraComponent>();
+	for (auto entity : view)
+	{
+		CameraComponent& cameraComponent = view.get<CameraComponent>(entity);
+
+		if (!cameraComponent.isFixedAspectRatio)
+			cameraComponent.camera.set_aspect_ratio((float)width / (float) height);
 	}
 }
 

@@ -19,6 +19,7 @@ public:
 	~Scene();
 
 	void OnUpdate(DeltaTime deltaTime);
+	void OnResize(uint32_t width, uint32_t height);
 
 	/// <summary>
 	/// Creates an entity with the given name as tag. They are not unique yet, so multiple entities can have the same name.

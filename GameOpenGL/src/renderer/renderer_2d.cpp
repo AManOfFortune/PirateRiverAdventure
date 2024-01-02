@@ -107,6 +107,17 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, cons
     DrawQuad(transform, texture, textureProperties);
 }
 
+void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties)
+{
+    DrawQuad({ position.x, position.y, 0.0f }, size, sub, textureProperties);
+}
+
+void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties)
+{
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+    DrawQuad(transform, sub, textureProperties);
+}
+
 void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 {
     DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, color);
@@ -136,6 +147,64 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<Text
     RenderCommand::DrawIndexed(data->vertexArray);
 }
 
+void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties)
+{
+    data->textureShader->SetFloat4("u_Color", textureProperties.tintColor);
+    data->textureShader->SetFloat("u_TilingFactor", textureProperties.tilingFactor);
+    sub->texture()->Bind();
+
+    data->textureShader->SetMat4("u_ModelMatrix", transform);
+
+    data->vertexArray->Bind();
+    RenderCommand::DrawIndexed(data->vertexArray);
+
+ //   constexpr size_t quadVertexCount = 4;
+ //   constexpr glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+ //   const glm::vec2* textureCoords = sub->texture_coords();
+ //   const std::shared_ptr<Texture2D> texture = sub->texture();
+
+ //   if (data->quadIndexCount >= Renderer2DData::maxIndices)
+ //   {
+ //       FlushAndReset();
+ //   }
+
+ //   float textureIndex = 0.0f;
+ //   for (uint32_t i = 1; i < data->textureSlotIndex; i++)
+ //   {
+ //       if (*data->textureSlots[i].get() == *texture.get())
+ //       {
+	//		textureIndex = (float)i;
+	//		break;
+	//	}
+	//}
+
+ //   if (textureIndex == 0.0f)
+ //   {
+ //       if (data->textureSlotIndex >= Renderer2DData::maxTextureSlots)
+ //       {
+	//		FlushAndReset();
+	//	}
+
+	//	textureIndex = (float)data->textureSlotIndex;
+	//	data->textureSlots[data->textureSlotIndex] = texture;
+	//	data->textureSlotIndex++;
+	//}
+
+ //   for (size_t i = 0; i < quadVertexCount; i++)
+ //   {
+	//	data->quadVertexBufferPtr->position = transform * data->quadVertexPositions[i];
+	//	data->quadVertexBufferPtr->color = color;
+	//	data->quadVertexBufferPtr->texCoord = textureCoords[i];
+	//	data->quadVertexBufferPtr->texIndex = textureIndex;
+	//	data->quadVertexBufferPtr->texTilingFactor = textureProperties.tilingFactor;
+	//	data->quadVertexBufferPtr->texTintColor = textureProperties.tintColor;
+	//	data->quadVertexBufferPtr++;
+	//}
+
+ //   data->quadIndexCount += 6;
+ //   data->stats->quadCount++;
+}
+
 void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
 {
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) 
@@ -155,4 +224,17 @@ void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& siz
         * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
         * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });    
     DrawQuad(transform, texture, textureProperties);
+}
+
+void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties)
+{
+    DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, sub, textureProperties);
+}
+
+void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties)
+{
+    glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
+        * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+        * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+    DrawQuad(transform, sub, textureProperties);
 }

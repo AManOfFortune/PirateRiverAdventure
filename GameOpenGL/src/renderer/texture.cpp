@@ -115,3 +115,25 @@ void Texture2D::Bind(uint32_t slot) const
     // Bind the texture.
     glBindTexture(GL_TEXTURE_2D, renderer_id_);
 }
+
+SubTexture2D::SubTexture2D(const std::shared_ptr<Texture2D>& texture, const glm::vec2& min, const glm::vec2& max)
+    : texture_(texture)
+{
+    // Set the texture coordinates.
+	texture_coords_[0] = { min.x, min.y }; // Bottom left
+	texture_coords_[1] = { max.x, min.y }; // Bottom right
+	texture_coords_[2] = { max.x, max.y }; // Top right
+	texture_coords_[3] = { min.x, max.y }; // Top left
+}
+
+std::shared_ptr<SubTexture2D> SubTexture2D::Create(const std::shared_ptr<Texture2D>& texture, const glm::vec2& min, const glm::vec2& max)
+{
+    return std::make_shared<SubTexture2D>(texture, min, max);
+}
+
+std::shared_ptr<SubTexture2D> SubTexture2D::CreateFromCoords(const std::shared_ptr<Texture2D>& texture, const glm::vec2& coords, const glm::vec2& size)
+{
+    glm::vec2 min = { (coords.x * size.x) / texture->width(), (coords.y * size.y) / texture->height() }; // Bottom left
+    glm::vec2 max = { ((coords.x + 1) * size.x) / texture->width(), ((coords.y + 1) * size.y) / texture->height() }; // Top right
+    return Create(texture, min, max);
+}

@@ -15,6 +15,7 @@
 // -- ECS ----------------------------------
 #include "ecs/components.h"
 #include "ecs/entity.h"
+#include "ecs/scriptable_entity.h"
 #include "ecs/scene.h"
 // -----------------------------------------
 
@@ -26,6 +27,7 @@
 #include "renderer/shader.h"
 #include "renderer/texture.h"
 
+#include "renderer/frame_buffer.h"
 #include "renderer/index_buffer.h"
 #include "renderer/vertex_buffer.h"
 #include "renderer/vertex_buffer_layout.h"

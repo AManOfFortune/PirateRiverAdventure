@@ -48,11 +48,19 @@ public:
 	static void DrawQuad(const glm::mat4& transform, const glm::vec4& color);
 	static void DrawQuad(const glm::mat4& transform, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties = Texture2DProperties());
 
+	static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties());
+	static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties());
+	static void DrawQuad(const glm::mat4& transform, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties());
+
+
 	// Rotation is in radians.
 	static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color);
 	static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color);
 	static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties = Texture2DProperties());
 	static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties = Texture2DProperties());
+
+	static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties());
+	static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties());
 
 private:
 };

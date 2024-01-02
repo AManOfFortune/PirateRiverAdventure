@@ -22,10 +22,13 @@ public:
 	void OnEvent(Event& event) override;
 
 private:
-	OrthographicCameraController camera_controller_;
-
 	std::shared_ptr<Scene> active_scene_;
 	std::shared_ptr<Map> map_;
+
+	std::shared_ptr<Framebuffer> framebuffer_;
+	Entity camera_entity_;
+
+	bool OnWindowResized(WindowResizeEvent& event);
 
 	void CreateEntities();
 };

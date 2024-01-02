@@ -20,9 +20,9 @@ public:
 			transform[3][0] -= speed_ * ts;
 		if (Input::IsKeyPressed(CG_KEY_D))
 			transform[3][0] += speed_ * ts;
-		if (Input::IsKeyPressed(CG_KEY_W))
-			transform[3][1] -= speed_ * ts;
 		if (Input::IsKeyPressed(CG_KEY_S))
+			transform[3][1] -= speed_ * ts;
+		if (Input::IsKeyPressed(CG_KEY_W))
 			transform[3][1] += speed_ * ts;
 	}
 

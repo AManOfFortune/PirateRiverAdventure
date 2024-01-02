@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/delta_time.h"
+#include <glm/glm.hpp>
 
 #include <entt.hpp>
 
@@ -23,7 +24,12 @@ public:
 	/// Creates an entity with the given name as tag. They are not unique yet, so multiple entities can have the same name.
 	/// For now, each entity is automatically given a tag and a transform component.
 	/// </summary>
-	Entity CreateEntity(const std::string& name = std::string());
+	//Entity CreateEntity(const std::string& name = std::string());
+
+	/// <summary>
+	/// Creates an entity with the given name as tag and the given position.
+	/// </summary>
+	Entity CreateEntity(const std::string& name = std::string(), glm::vec3 position = glm::vec3(0.0f));
 
 private:
 	// An entity is basically just an ID that is associated with a bunch of components.

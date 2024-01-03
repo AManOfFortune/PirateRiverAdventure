@@ -36,8 +36,6 @@ void GameLayer::OnUpdate(DeltaTime deltaTime)
     // In here the DrawQuad calls are made.
     active_scene_->OnUpdate(deltaTime);
 
-    Renderer2D::DrawQuad(glm::mat4(1.0f), {1.0f, 1.0f, 1.0f, 1.0f});
-
     framebuffer_->Unbind();
 }
 

@@ -63,7 +63,7 @@ void Scene::OnUpdate(DeltaTime deltaTime)
 		for (auto entity : group)
 		{
 			auto [transform, spriteRenderer] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-			// Renderer2D::DrawQuad(transform.transform, spriteRenderer.color);
+			Renderer2D::DrawQuad(transform.transform, spriteRenderer.color);
 		}
 
 		Renderer2D::EndScene();

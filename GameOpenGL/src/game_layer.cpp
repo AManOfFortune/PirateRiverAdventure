@@ -15,13 +15,13 @@ void GameLayer::OnAttach()
     framebuffer_ = Framebuffer::Create(spec);
 
     active_scene_ = std::make_shared<Scene>();
-    map_ = std::make_shared<Map>();
+    map_ = std::make_shared<LevelData>();
 
     camera_entity_ = active_scene_->CreateEntity("Camera");
     camera_entity_.AddComponent<CameraComponent>();
 
     // Add a script to the camera entity and bind it to the ScriptableEntity subclass CameraController.
-    camera_entity_.AddComponent<ScriptComponent>().Bind<CameraController>();
+    //camera_entity_.AddComponent<ScriptComponent>().Bind<CameraController>();
     
     CreateEntities();
 }
@@ -53,11 +53,10 @@ bool GameLayer::OnWindowResized(WindowResizeEvent& event)
 
 void GameLayer::CreateEntities()
 {
-    std::list<std::shared_ptr<Tile>> tiles = map_->parseLevel(map_->level_, map_->levelWidth_, map_->levelHeight_, map_->tileWidth_);
+    std::vector<std::shared_ptr<Tile>> tiles = map_->GetNextLevel();
 
     for (auto& tile : tiles)
 	{
-		Entity entity = active_scene_->CreateEntity("Tile", tile->getPosition());
-		entity.AddComponent<SpriteRendererComponent>(tile->getColor());
+        tile->AttachToScene(active_scene_);
 	}
 }

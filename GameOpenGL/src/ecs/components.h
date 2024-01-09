@@ -34,6 +34,17 @@ struct TransformComponent
 	// Implicit cast operators for convenience when needed to access the underlying mat4.
 	operator glm::mat4& () { return transform; }
 	operator const glm::mat4& () const { return transform; }
+
+	// Get position
+	glm::vec3 GetPosition() const
+	{
+		return glm::vec3(transform[3]);
+	}
+
+	void SetPosition(const glm::vec3& position)
+	{
+		transform[3] = glm::vec4(position, 1.0f);
+	}
 };
 
 /// <summary>

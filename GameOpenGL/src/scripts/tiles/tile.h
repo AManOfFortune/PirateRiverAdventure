@@ -4,22 +4,40 @@
 class Tile
 {
 public:
-	glm::vec3 getPosition() { return position_; };
-	void setPosition(glm::vec3 position) { position_ = position; };
-
-	glm::vec4 getColor() { return color_; };
-	const std::string& getRepresentation() const { return stringRepresentation_; };
-
-protected:
-	Tile() {
-		size_ = glm::vec3(1.0f, 1.0f, 1.0f);
-		position_ = glm::vec3(0.0f);
-		color_ = glm::vec4(1.0f);
+    enum Direction
+	{
+		Top,
+		Bottom,
+		Left,
+		Right
 	};
 
-	std::string stringRepresentation_;
-	glm::vec3 position_;
-	glm::vec3 size_;
-	glm::vec4 color_;
-};
+    glm::vec3 GetPosition();
+    const std::string& GetRepresentation() const;
+    std::shared_ptr<Tile> GetConnection(Direction direction);
+    bool IsWalkable(Direction direction) const;
 
+    void SetPosition(glm::vec3 position);
+    void AddConnection(std::shared_ptr<Tile>, Direction direction);
+    void SetHasPlayer(bool hasPlayer);
+
+    void AttachToScene(std::shared_ptr<Scene> scene);
+
+protected:
+    Tile();
+    std::string stringRepresentation_;
+
+    // Render properties
+    glm::vec3 position_;
+    glm::vec3 size_;
+    glm::vec4 color_;
+
+    // Logic properties
+    bool isWalkable_[4];
+    std::shared_ptr<Tile> connections_[4];
+
+private:
+    // Unit properties
+    bool hasPlayer_;
+
+};

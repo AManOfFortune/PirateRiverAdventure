@@ -1,15 +1,15 @@
-#include "player.h"
-#include "game_manager.h"
+#include "player_mover_script.h"
+#include "scripts/game_manager.h"
 
-void Player::OnCreate()
+void PlayerMoverScript::OnCreate()
 {
 }
 
-void Player::OnDestroy()
+void PlayerMoverScript::OnDestroy()
 {
 }
 
-void Player::OnUpdate(DeltaTime ts)
+void PlayerMoverScript::OnUpdate(DeltaTime ts)
 {
 	auto& transform = GetComponent<TransformComponent>();
 	auto currentTile = GameManager::GetInstance().GetTileContainingPlayer();
@@ -44,7 +44,7 @@ void Player::OnUpdate(DeltaTime ts)
 }
 
 // Function to move from start to end position over a given time duration
-glm::vec3 Player::MoveOverTime(const glm::vec3& startPos, const glm::vec3& endPos, float durationInSeconds, float& currentTime, float deltaTime)
+glm::vec3 PlayerMoverScript::MoveOverTime(const glm::vec3& startPos, const glm::vec3& endPos, float durationInSeconds, float& currentTime, float deltaTime)
 {
 	// Update the current time based on deltaTime
 	currentTime += deltaTime;

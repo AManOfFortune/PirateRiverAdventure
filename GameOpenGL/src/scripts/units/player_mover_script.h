@@ -4,9 +4,9 @@
 #include "core/input/key_codes.h"
 #include "ecs/components.h"
 #include "ecs/scriptable_entity.h"
-#include "tiles/tile.h"
+#include "scripts/tiles/tile.h"
 
-class Player : public ScriptableEntity
+class PlayerMoverScript : public ScriptableEntity
 {
 public:
 	void OnCreate();

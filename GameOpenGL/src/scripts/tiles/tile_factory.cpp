@@ -1,4 +1,5 @@
 #include "tile_factory.h"
+#include "tile_types.h"
 
 void TileFactory::registerTileType(std::function<std::shared_ptr<Tile>()> creator) {
     getTileRegistry()->emplace(creator()->GetRepresentation(), creator);
@@ -16,3 +17,4 @@ std::shared_ptr<Tile> TileFactory::createTile(const std::string& representation)
 std::shared_ptr<std::unordered_map<std::string, std::function<std::shared_ptr<Tile>()>>> TileFactory::getTileRegistry() {
     return tileRegistry_;
 }
+

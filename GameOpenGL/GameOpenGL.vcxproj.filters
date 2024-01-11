@@ -1,8 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="src\scripts\level_data.cpp" />
-    <ClCompile Include="src\scripts\player.cpp" />
+    <ClCompile Include="src\scripts\units\player_mover_script.cpp" />
     <ClCompile Include="src\game_layer.cpp" />
     <ClCompile Include="src\ecs\entity.cpp" />
     <ClCompile Include="src\ecs\scene.cpp" />
@@ -35,9 +34,13 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
     <ClCompile Include="src\core\window.cpp" />
     <ClCompile Include="src\scripts\game_manager.cpp" />
+    <ClCompile Include="src\scripts\units\unit.cpp" />
+    <ClCompile Include="src\scripts\units\unit_types\player.cpp" />
+    <ClCompile Include="src\scripts\levels\level.cpp" />
+    <ClCompile Include="src\scripts\levels\level_factory.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\scripts\player.h" />
+    <ClInclude Include="src\scripts\units\player_mover_script.h" />
     <ClInclude Include="src\game.h" />
     <ClInclude Include="src\game_layer.h" />
     <ClInclude Include="src\ecs\components.h" />
@@ -77,7 +80,6 @@
     <ClInclude Include="src\renderer\vertex_buffer.h" />
     <ClInclude Include="src\sandbox.h" />
     <ClInclude Include="src\sandbox_2d_layer.h" />
-    <ClInclude Include="src\scripts\level_data.h" />
     <ClInclude Include="src\scripts\tiles\tile.h" />
     <ClInclude Include="src\scripts\tiles\tile_types.h" />
     <ClInclude Include="src\scripts\tiles\tile_factory.h" />
@@ -86,6 +88,11 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
     <ClInclude Include="src\core\window.h" />
     <ClInclude Include="src\scripts\game_manager.h" />
+    <ClInclude Include="src\scripts\units\unit.h" />
+    <ClInclude Include="src\scripts\units\unit_types\player.h" />
+    <ClInclude Include="src\scripts\levels\level.h" />
+    <ClInclude Include="src\scripts\levels\level_types.h" />
+    <ClInclude Include="src\scripts\levels\level_factory.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\flat_color.glsl" />

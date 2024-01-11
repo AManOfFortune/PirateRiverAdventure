@@ -19,7 +19,6 @@ public:
 
     void SetPosition(glm::vec3 position);
     void AddConnection(std::shared_ptr<Tile>, Direction direction);
-    void SetHasPlayer(bool hasPlayer);
 
     void AttachToScene(std::shared_ptr<Scene> scene);
 
@@ -35,9 +34,4 @@ protected:
     // Logic properties
     bool isWalkable_[4];
     std::shared_ptr<Tile> connections_[4];
-
-private:
-    // Unit properties
-    bool hasPlayer_;
-
 };

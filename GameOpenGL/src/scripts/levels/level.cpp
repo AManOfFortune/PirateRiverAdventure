@@ -1,33 +1,37 @@
-#include "level_data.h"
+#include "level.h"
+#include "scripts/tiles/tile_factory.h"
 
-LevelData::LevelData() {
-	level_ =
-		"GGGGGGGGGGGGGGGGGGGGG"
-		"G GG GG GG GG GG GG G"
-		"GGGGGGGGGGGGGGGGGGG|G"
-		"GGGGGGGGGGGGGGGGGGG|G"
-		"G GG GG GG GG -- -- G"
-		"GGGGGGGGGGGGG|GGGGG|G"
-		"GGGGGGGGGGGGG|GGGGG|G"
-		"G GG GG GG GG GG -- G"
-		"GGGGGGGGGGGGG|GGGGG|G"
-		"GGGGGGGGGGGGG|GGGGG|G"
-		"G GG GG -- -- -- -- G"
-		"GGGGGGG|GGGGG|GGGGG|G"
-		"GGGGGGG|GGGGG|GGGGG|G"
-		"G GG GG -- -- -- GGPG"
-		"GGGGGGGGGGGGGGGGGGGGG"
-		;
-	levelWidth_ = 7;
-	tileWidth_ = 3;
-}
-
-std::vector<std::shared_ptr<Tile>> LevelData::GetNextLevel()
+void Level::AttachToScene(std::shared_ptr<Scene> scene)
 {
-	return ParseLevel(level_, levelWidth_, tileWidth_);
+	// ------ 1. Parse level string ------
+	std::vector<std::shared_ptr<Tile>> tiles = ParseLevel(tileString_, levelWidth_, tileWidth_);
+
+	// ------ 2. Add tiles to scene ------
+	for (std::shared_ptr<Tile> tile : tiles) {
+		tile->AttachToScene(scene);
+	}
+
+	// ------ 3. Add units to scene ------
+	for (auto const& unit : units_) {
+		unit.second->AttachToScene(scene);
+	}
 }
 
-std::vector<std::shared_ptr<Tile>> LevelData::ParseLevel(std::string levelString, int width, int tileWidth) {
+Level::Level()
+{
+	tileString_ = "";
+	units_ = std::unordered_map<char, std::shared_ptr<Unit>>();
+	tileWidth_ = 3;
+	levelWidth_ = 0;
+}
+
+void Level::AddUnit(char key, std::shared_ptr<Unit> unit)
+{
+	units_.insert(std::make_pair(key, unit));
+}
+
+std::vector<std::shared_ptr<Tile>> Level::ParseLevel(std::string levelString, int width, int tileWidth)
+{
 	std::vector<std::shared_ptr<Tile>> result;
 
 	for (int i = 0, posCounter = 0; i < levelString.length(); i += tileWidth, posCounter++) {
@@ -40,13 +44,9 @@ std::vector<std::shared_ptr<Tile>> LevelData::ParseLevel(std::string levelString
 		// ------ 1. Create correct tile type -----
 		std::shared_ptr<Tile> tile = TileFactory::createTile(currentTile);
 
-		// ------ 2. Set unit toggles ------
-		switch (unitOnTile) {
-		case 'P':
-			tile->SetHasPlayer(true);
-			break;
-		default:
-			break;
+		// ------ 2. Set unit positions ------
+		if (units_.find(unitOnTile) != units_.end()) {
+			units_.at(unitOnTile)->SetPosition(tile);
 		}
 
 		// ------ 3. Add tile to result -------
@@ -59,7 +59,7 @@ std::vector<std::shared_ptr<Tile>> LevelData::ParseLevel(std::string levelString
 	}
 
 	// ------ 4. Set dynamic tile properties ------
-	for(int posCounter = 0; posCounter < result.size(); posCounter++) {
+	for (int posCounter = 0; posCounter < result.size(); posCounter++) {
 
 		std::shared_ptr<Tile> tile = result.at(posCounter);
 

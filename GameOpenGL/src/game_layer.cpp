@@ -1,5 +1,7 @@
 #include "game_layer.h"
 #include "scripts/camera_controller.h"
+#include "renderer/render_command.h"
+#include "scripts/levels/level_factory.h"
 
 GameLayer::GameLayer() :
 	Layer("GameLayer")
@@ -15,7 +17,6 @@ void GameLayer::OnAttach()
     framebuffer_ = Framebuffer::Create(spec);
 
     active_scene_ = std::make_shared<Scene>();
-    map_ = std::make_shared<LevelData>();
 
     camera_entity_ = active_scene_->CreateEntity("Camera");
     camera_entity_.AddComponent<CameraComponent>();
@@ -53,10 +54,5 @@ bool GameLayer::OnWindowResized(WindowResizeEvent& event)
 
 void GameLayer::CreateEntities()
 {
-    std::vector<std::shared_ptr<Tile>> tiles = map_->GetNextLevel();
-
-    for (auto& tile : tiles)
-	{
-        tile->AttachToScene(active_scene_);
-	}
+    LevelFactory::GetNextLevel()->AttachToScene(active_scene_);
 }

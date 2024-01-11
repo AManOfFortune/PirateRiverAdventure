@@ -7,7 +7,7 @@
 #include "renderer/shader.h"
 #include "renderer/texture.h"
 #include "renderer/vertex_array.h"
-#include "scripts/level_data.h"
+#include "renderer/frame_buffer.h"
 
 
 class GameLayer : public Layer
@@ -23,7 +23,6 @@ public:
 
 private:
 	std::shared_ptr<Scene> active_scene_;
-	std::shared_ptr<LevelData> map_;
 
 	std::shared_ptr<Framebuffer> framebuffer_;
 	Entity camera_entity_;

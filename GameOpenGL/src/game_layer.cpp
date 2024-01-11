@@ -2,6 +2,7 @@
 #include "scripts/camera_controller.h"
 #include "renderer/render_command.h"
 #include "scripts/levels/level_factory.h"
+#include "scripts/game_manager.h"
 
 GameLayer::GameLayer() :
 	Layer("GameLayer")
@@ -24,7 +25,7 @@ void GameLayer::OnAttach()
     // Add a script to the camera entity and bind it to the ScriptableEntity subclass CameraController.
     //camera_entity_.AddComponent<ScriptComponent>().Bind<CameraController>();
     
-    CreateEntities();
+    GameManager::GetInstance().StartGame(active_scene_);
 }
 
 void GameLayer::OnUpdate(DeltaTime deltaTime)
@@ -50,9 +51,4 @@ bool GameLayer::OnWindowResized(WindowResizeEvent& event)
 {
     active_scene_->OnResize(event.width(), event.height());
     return false;
-}
-
-void GameLayer::CreateEntities()
-{
-    LevelFactory::GetNextLevel()->AttachToScene(active_scene_);
 }

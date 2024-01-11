@@ -1,19 +1,27 @@
 #include "level.h"
 #include "scripts/tiles/tile_factory.h"
+#include "scripts/game_manager.h"
 
 void Level::AttachToScene(std::shared_ptr<Scene> scene)
+{
+	scene_ = scene;
+	Reset();
+}
+
+void Level::Reset()
 {
 	// ------ 1. Parse level string ------
 	std::vector<std::shared_ptr<Tile>> tiles = ParseLevel(tileString_, levelWidth_, tileWidth_);
 
 	// ------ 2. Add tiles to scene ------
 	for (std::shared_ptr<Tile> tile : tiles) {
-		tile->AttachToScene(scene);
+		tile->AttachToScene(scene_);
 	}
 
 	// ------ 3. Add units to scene ------
 	for (auto const& unit : units_) {
-		unit.second->AttachToScene(scene);
+		unit.second->AttachToScene(scene_);
+		GameManager::GetInstance().AddUnitToListeningToPlayerMovement(unit.second);
 	}
 }
 
@@ -46,7 +54,7 @@ std::vector<std::shared_ptr<Tile>> Level::ParseLevel(std::string levelString, in
 
 		// ------ 2. Set unit positions ------
 		if (units_.find(unitOnTile) != units_.end()) {
-			units_.at(unitOnTile)->SetPosition(tile);
+			units_.at(unitOnTile)->SetCurrentTile(tile);
 		}
 
 		// ------ 3. Add tile to result -------

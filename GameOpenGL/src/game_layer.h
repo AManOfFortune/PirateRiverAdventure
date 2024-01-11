@@ -28,6 +28,4 @@ private:
 	Entity camera_entity_;
 
 	bool OnWindowResized(WindowResizeEvent& event);
-
-	void CreateEntities();
 };

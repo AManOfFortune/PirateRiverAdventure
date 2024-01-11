@@ -19,8 +19,11 @@ void PlayerMoverScript::OnUpdate(DeltaTime ts)
 		glm::vec3 newPos = MoveOverTime(transform.GetPosition(), currentTile->GetPosition(), moveSpeedInSeconds_, currentTime_, ts);
 		transform.SetPosition(newPos);
 
-		if(newPos == currentTile->GetPosition())
+		// If the player has reached the tile position, reset the current time and notify the game manager
+		if (newPos == currentTile->GetPosition()) {
 			currentTime_ = 0.0f;
+			GameManager::GetInstance().NotifyUnitsListeningToPlayerMovement(true);
+		}
 
 		// Return to lock player input until the player has reached the tile position
 		return;
@@ -37,9 +40,10 @@ void PlayerMoverScript::OnUpdate(DeltaTime ts)
 	if (Input::IsKeyPressed(CG_KEY_W))
 		tileToMoveTo = currentTile->GetConnection(Tile::Direction::Top);
 
-	// If move is possible set the new tile containing the player
+	// If move is possible set the new tile containing the player & notify the game manager
 	if (tileToMoveTo != nullptr) {
 		GameManager::GetInstance().SetTileContainingPlayer(tileToMoveTo);
+		GameManager::GetInstance().NotifyUnitsListeningToPlayerMovement(false);
 	}
 }
 

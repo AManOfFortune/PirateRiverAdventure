@@ -8,6 +8,7 @@ public:
 	virtual ~Level() = default;
 
 	void AttachToScene(std::shared_ptr<Scene> scene);
+	void Reset();
 
 	std::unordered_map<char, std::shared_ptr<Unit>> GetUnits() { return units_; }
 
@@ -17,6 +18,8 @@ protected:
 
 	int tileWidth_;
 	int levelWidth_;
+
+	std::shared_ptr<Scene> scene_;
 
 	void AddUnit(char key, std::shared_ptr<Unit> unit);
 

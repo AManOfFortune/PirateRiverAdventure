@@ -14,9 +14,9 @@ void Player::AttachToScene(std::shared_ptr<Scene> scene)
     player.AddComponent<ScriptComponent>().Bind<PlayerMoverScript>();
 }
 
-void Player::SetPosition(std::shared_ptr<Tile> tile)
+void Player::SetCurrentTile(std::shared_ptr<Tile> tile)
 {
-    Unit::SetPosition(tile);
+    Unit::SetCurrentTile(tile);
 
     GameManager::GetInstance().SetTileContainingPlayer(tile);
 }

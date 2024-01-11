@@ -12,7 +12,5 @@ public:
 private:
 	Tile::Direction attackDirection_;
 	int range_ = 1;
-
-	void PerformAction();
 };
 

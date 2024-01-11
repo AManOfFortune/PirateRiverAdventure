@@ -36,7 +36,3 @@ void Grunt::OnPlayerMovement(std::shared_ptr<Tile> playerMovedTo, bool playerMov
 		}
 	}
 }
-
-void Grunt::PerformAction()
-{
-}

@@ -23,6 +23,11 @@ void Level::Reset()
 		unit.second->AttachToScene(scene_);
 		GameManager::GetInstance().AddUnitToListeningToPlayerMovement(unit.second);
 	}
+
+	// ------ 4. Add camera to scene ------
+	// TODO: Make each level have a fixed camera position
+	Entity camera = scene_->CreateEntity("Camera");
+	camera.AddComponent<CameraComponent>();
 }
 
 Level::Level()

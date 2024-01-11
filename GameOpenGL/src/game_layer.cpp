@@ -18,12 +18,6 @@ void GameLayer::OnAttach()
     framebuffer_ = Framebuffer::Create(spec);
 
     active_scene_ = std::make_shared<Scene>();
-
-    camera_entity_ = active_scene_->CreateEntity("Camera");
-    camera_entity_.AddComponent<CameraComponent>();
-
-    // Add a script to the camera entity and bind it to the ScriptableEntity subclass CameraController.
-    //camera_entity_.AddComponent<ScriptComponent>().Bind<CameraController>();
     
     GameManager::GetInstance().StartGame(active_scene_);
 }

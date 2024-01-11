@@ -82,20 +82,10 @@ void Scene::OnResize(uint32_t width, uint32_t height)
 	}
 }
 
-/// <summary>
-/// Creates an entity with a tag and transform component.
-/// </summary>
-//Entity Scene::CreateEntity(const std::string& name)
-//{
-//	Entity entity = Entity(registry_.create(), this);
-//
-//	// Here, all entities are created with a tag and transform component.
-//	TagComponent& tag = entity.AddComponent<TagComponent>();
-//	tag.tag = name.empty() ? "Entity" : name;
-//	entity.AddComponent<TransformComponent>();
-//
-//	return entity;
-//}
+void Scene::ClearScene()
+{
+	registry_.clear();
+}
 
 Entity Scene::CreateEntity(const std::string& name, glm::vec3 position)
 {

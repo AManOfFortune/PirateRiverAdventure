@@ -33,7 +33,11 @@ void GameManager::StartGame(std::shared_ptr<Scene> activeScene)
 
 void GameManager::ResetLevel()
 {
+	// Reset subscribed units
 	unitsListeningToPlayerMovement_.clear();
+	// Clear scene
+	activeScene_->ClearScene();
+	// Reset level
 	currentLevel_->Reset();
 }
 

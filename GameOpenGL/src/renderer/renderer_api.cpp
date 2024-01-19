@@ -32,7 +32,9 @@ void RendererAPI::Clear() const
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void RendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) const
+void RendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t count) const
 {
-    glDrawElements(GL_TRIANGLES, vertexArray->index_buffer()->count(), GL_UNSIGNED_INT, nullptr);
+    uint32_t indexCount = count ? count : vertexArray->index_buffer()->count();
+    glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
+    glBindTexture(GL_TEXTURE_2D, 0);
 }

@@ -23,5 +23,5 @@ public:
     /// <summary>
     /// Issues a draw call with index buffer data of the associated vertex array.
     /// </summary>
-    void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) const;
+    void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0) const;
 };

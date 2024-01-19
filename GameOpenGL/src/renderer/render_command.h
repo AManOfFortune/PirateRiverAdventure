@@ -34,9 +34,9 @@ public:
         renderer_api_->Clear();
     }
 
-    inline static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
+    inline static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray, uint32_t count = 0)
     {
-        renderer_api_->DrawIndexed(vertexArray);
+        renderer_api_->DrawIndexed(vertexArray, count);
     }
 
 private:

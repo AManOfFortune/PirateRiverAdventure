@@ -101,7 +101,7 @@ std::shared_ptr<Texture2D> Texture2D::Create(const std::string& path)
     return std::make_shared<Texture2D>(path);
 }
 
-void Texture2D::UploadData(void* data, uint32_t size)
+void Texture2D::SetData(void* data, uint32_t size)
 {
     uint32_t bytesPerPixel = data_format_ == GL_RGBA ? 4 : 3;
     ASSERT(size == width_ * height_ * bytesPerPixel, "Incorrect data size!");
@@ -114,6 +114,11 @@ void Texture2D::Bind(uint32_t slot) const
     glActiveTexture(GL_TEXTURE0 + slot);
     // Bind the texture.
     glBindTexture(GL_TEXTURE_2D, renderer_id_);
+}
+
+bool Texture2D::operator==(const Texture2D& other) const
+{
+    return renderer_id_ == other.renderer_id_;
 }
 
 SubTexture2D::SubTexture2D(const std::shared_ptr<Texture2D>& texture, const glm::vec2& min, const glm::vec2& max)
@@ -136,4 +141,9 @@ std::shared_ptr<SubTexture2D> SubTexture2D::CreateFromCoords(const std::shared_p
     glm::vec2 min = { (coords.x * size.x) / texture->width(), (coords.y * size.y) / texture->height() }; // Bottom left
     glm::vec2 max = { ((coords.x + 1) * size.x) / texture->width(), ((coords.y + 1) * size.y) / texture->height() }; // Top right
     return Create(texture, min, max);
+}
+
+void SubTexture2D::Bind(uint32_t slot) const
+{
+    texture_->Bind(slot);
 }

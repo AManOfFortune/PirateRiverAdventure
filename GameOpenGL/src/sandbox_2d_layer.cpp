@@ -25,7 +25,8 @@ void Sandbox2DLayer::OnAttach()
 
     active_scene_ = std::make_shared<Scene>();
     square_entity_ = active_scene_->CreateEntity("Square");
-    square_entity_.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.8f, 0.2f, 0.3f, 1.0f });
+    square_entity_.AddComponent<SpriteRendererComponent>(tile_texture_);
+    //square_entity_.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.3f, 0.2f, 0.8f, 1.0f });
 
     camera_entity_ = active_scene_->CreateEntity("Camera");
     camera_entity_.AddComponent<CameraComponent>();
@@ -47,8 +48,6 @@ void Sandbox2DLayer::OnUpdate(DeltaTime deltaTime)
 
     // In here the DrawQuad calls are made.
     active_scene_->OnUpdate(deltaTime);
-
-    Renderer2D::DrawQuad(glm::mat4(1.0f), tile_texture_);
 
     framebuffer_->Unbind();
 }

@@ -32,6 +32,8 @@ void Tile::AttachToScene(std::shared_ptr<Scene> scene)
     // Create tile at position
     Entity entity = scene->CreateEntity("Tile", position_);
     // Add sprite renderer component
+    
+    // TODO: Update to take in Subtexture2D -> SpriteSheets work! Raoul
     entity.AddComponent<SpriteRendererComponent>(color_);
 }
 

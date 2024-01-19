@@ -63,11 +63,18 @@ void Scene::OnUpdate(DeltaTime deltaTime)
 		for (auto entity : group)
 		{
 			auto [transform, spriteRenderer] = group.get<TransformComponent, SpriteRendererComponent>(entity);
-			Renderer2D::DrawQuad(transform.transform, spriteRenderer.color);
+			if (spriteRenderer.texture != nullptr)
+			{
+				Renderer2D::DrawQuad(transform.transform, spriteRenderer.texture, spriteRenderer.props);
+			}
+			else
+			{
+				Renderer2D::DrawQuad(transform.transform, spriteRenderer.props.tintColor);
+			}
 		}
 
 		Renderer2D::EndScene();
-	}
+	}	
 }
 
 void Scene::OnResize(uint32_t width, uint32_t height)

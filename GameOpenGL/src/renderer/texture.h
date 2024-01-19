@@ -6,6 +6,20 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
+struct Texture2DProperties
+{
+    Texture2DProperties()
+        : tilingFactor(1.0f), tintColor(1.0f, 1.0f, 1.0f, 1.0f)
+    { }
+
+    Texture2DProperties(float tilingFactor, const glm::vec4& tintColor)
+        : tilingFactor(tilingFactor), tintColor(tintColor)
+    { }
+
+    float tilingFactor;
+    glm::vec4 tintColor;
+};
+
 /// <summary>
 /// Abstract base texture class.
 /// </summary>
@@ -37,9 +51,11 @@ public:
     /// <summary>
     /// This method is used to upload a block of memory to the GPU.
     /// </summary>
-    void UploadData(void* data, uint32_t size);
+    void SetData(void* data, uint32_t size);
 
     void Bind(uint32_t slot = 0) const override;
+
+    bool operator==(const Texture2D& other) const;
 
     uint32_t width() const override { return width_; }
     uint32_t height() const override { return height_; }
@@ -74,6 +90,8 @@ public:
     /// <param name="size">The size of the subtextures in the sprite sheet.</param>
     /// <returns></returns>
     static std::shared_ptr<SubTexture2D>CreateFromCoords(const std::shared_ptr<Texture2D>& texture, const glm::vec2& coords, const glm::vec2& size);
+
+    void Bind(uint32_t slot = 0) const;
 
     const std::shared_ptr<Texture2D>& texture() const { return texture_; }
     const glm::vec2* texture_coords() const { return texture_coords_; }

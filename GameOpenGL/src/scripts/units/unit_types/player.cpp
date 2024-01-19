@@ -10,6 +10,7 @@ Player::Player()
 void Player::AttachToScene(std::shared_ptr<Scene> scene)
 {
     Entity player = scene->CreateEntity("Player", GetPosition());
+    // TODO: Update to take in Subtexture2D -> SpriteSheets work! Raoul
     player.AddComponent<SpriteRendererComponent>(GetColor());
     player.AddComponent<ScriptComponent>().Bind<PlayerMoverScript>();
 }

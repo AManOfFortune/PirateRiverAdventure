@@ -6,20 +6,6 @@
 
 #include <memory>
 
-struct Texture2DProperties
-{
-	Texture2DProperties()
-		: tilingFactor(1.0f), tintColor(1.0f, 1.0f, 1.0f, 1.0f)
-	{ }
-
-	Texture2DProperties(float tilingFactor, const glm::vec4& tintColor)
-		: tilingFactor(tilingFactor), tintColor(tintColor)
-	{ }
-
-	float tilingFactor;
-	glm::vec4 tintColor;
-};
-
 class Renderer2D
 {
 public:
@@ -34,6 +20,7 @@ public:
 	static void BeginScene(const Camera& camera, const glm::mat4& transform);
 	static void BeginScene(const OrthographicCamera& camera);  // TODO: Remove this camera parameter later.
 	static void EndScene();
+	static void Flush();
 
 	// The API distinguishes between non-rotated and rotated quads because there is a slight overhead to rotating the quads.
 
@@ -63,5 +50,6 @@ public:
 	static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties());
 
 private:
+	static void FlushAndReset();
 };
 

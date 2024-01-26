@@ -40,6 +40,7 @@
     <ClCompile Include="src\scripts\levels\level_factory.cpp" />
     <ClCompile Include="src\scripts\units\unit_types\grunt.cpp" />
     <ClCompile Include="src\scripts\items\item.cpp" />
+    <ClCompile Include="src\renderer\light.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\scripts\units\player_mover_script.h" />
@@ -98,6 +99,7 @@
     <ClInclude Include="src\scripts\units\unit_types\grunt.h" />
     <ClInclude Include="src\scripts\items\item.h" />
     <ClInclude Include="src\scripts\items\item_types.h" />
+    <ClInclude Include="src\renderer\light.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\flat_color.glsl" />

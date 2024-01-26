@@ -10,6 +10,7 @@ Grunt::Grunt(Tile::Direction facingTowards)
 void Grunt::AttachToScene(std::shared_ptr<Scene> scene)
 {
 	Entity grunt = scene->CreateEntity("Grunt", GetPosition());
+	// TODO: Update to take in Subtexture2D -> SpriteSheets work! Raoul
 	grunt.AddComponent<SpriteRendererComponent>(GetColor());
 }
 

@@ -28,6 +28,7 @@ public:
     // these methods will be used to set the uniforms of a material and do more than simply call 
     // the UploadUniform methods.
     void SetInt(const std::string& name, int value);
+    void SetIntArray(const std::string& name, int* values, uint32_t count);
     void SetFloat(const std::string& name, float value);
     void SetFloat3(const std::string& name, const glm::vec3& value);
     void SetFloat4(const std::string& name, const glm::vec4& value);
@@ -36,6 +37,7 @@ public:
     // Uniform methods to set a uniform of type with given name and value.
     // These are low level methods that represent the OpenGL calls.
     void UploadUniformInt(const std::string& name, int value);
+    void UploadUniformIntArray(const std::string& name, int* values, uint32_t count);
     void UploadUniformFloat(const std::string& name, float value);
     void UploadUniformFloat2(const std::string& name, const glm::vec2& vec);
     void UploadUniformFloat3(const std::string& name, const glm::vec3& vec);

@@ -27,9 +27,7 @@ private:
 
 
 	// Temporary, this should be moved to the 2D renderer.
-	std::shared_ptr<Shader> flat_color_shader_;
-	std::shared_ptr<Texture2D> texture_;
-	std::shared_ptr<Texture2D> sprite_sheet_;
+	std::shared_ptr<Texture2D> sprite_sheet_, sprite_sheet_normals_;
 	std::shared_ptr<SubTexture2D> tile_texture_;
 
 	std::shared_ptr<Framebuffer> framebuffer_;
@@ -39,4 +37,5 @@ private:
 
 	Entity square_entity_;
 	Entity camera_entity_;
+	Entity light_entity_;
 };

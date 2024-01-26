@@ -1,5 +1,7 @@
 #pragma once
 
+
+
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -37,9 +39,11 @@ public:
     /// <summary>
     /// This method is used to upload a block of memory to the GPU.
     /// </summary>
-    void UploadData(void* data, uint32_t size);
+    void SetData(void* data, uint32_t size);
 
     void Bind(uint32_t slot = 0) const override;
+
+    bool operator==(const Texture2D& other) const;
 
     uint32_t width() const override { return width_; }
     uint32_t height() const override { return height_; }
@@ -75,10 +79,31 @@ public:
     /// <returns></returns>
     static std::shared_ptr<SubTexture2D>CreateFromCoords(const std::shared_ptr<Texture2D>& texture, const glm::vec2& coords, const glm::vec2& size);
 
+    void Bind(uint32_t slot = 0) const;
+
     const std::shared_ptr<Texture2D>& texture() const { return texture_; }
     const glm::vec2* texture_coords() const { return texture_coords_; }
 
 private:
     std::shared_ptr<Texture2D> texture_;
 	glm::vec2 texture_coords_[4];
+};
+
+struct Texture2DProperties
+{
+    Texture2DProperties()
+        : tilingFactor(1.0f), tintColor(1.0f, 1.0f, 1.0f, 1.0f), normalMap(nullptr)
+    { }
+
+    Texture2DProperties(const std::shared_ptr<SubTexture2D>& normalMap)
+		: tilingFactor(1.0f), tintColor(1.0f, 1.0f, 1.0f, 1.0f), normalMap(normalMap)
+	{ }
+
+    Texture2DProperties(float tilingFactor, const glm::vec4& tintColor, const std::shared_ptr<SubTexture2D>& normalMap)
+        : tilingFactor(tilingFactor), tintColor(tintColor), normalMap(normalMap)
+    { }
+
+    float tilingFactor;
+    glm::vec4 tintColor;
+    std::shared_ptr<SubTexture2D> normalMap;
 };

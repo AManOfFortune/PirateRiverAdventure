@@ -2,6 +2,7 @@
 
 #include "scene_camera.h"
 #include "scriptable_entity.h"
+#include "renderer/texture.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -60,13 +61,14 @@ struct TransformComponent
 /// </summary>
 struct SpriteRendererComponent
 {
-	// For now, we only support a single color for the entire sprite.
-	// TODO: Add textures, normal maps, ... later.
-	glm::vec4 color{ 1.0f, 1.0f, 1.0f, 1.0f };
+	std::shared_ptr<SubTexture2D> texture = nullptr;
+	Texture2DProperties props;
 
 	SpriteRendererComponent() = default;
 	SpriteRendererComponent(const SpriteRendererComponent& spriteRenderer) = default;
-	SpriteRendererComponent(const glm::vec4& color) : color(color) {}
+	SpriteRendererComponent(const glm::vec4& color) : props(Texture2DProperties(1.0f, color, nullptr)) {}
+	SpriteRendererComponent(const std::shared_ptr<SubTexture2D>& texture, const Texture2DProperties& props = Texture2DProperties()) 
+		:  texture(texture), props(props) {}
 };
 
 /// <summary>
@@ -115,4 +117,14 @@ struct ScriptComponent
 			scriptComponent->instance = nullptr;
 		};
 	}
+};
+
+struct LightComponent
+{
+	glm::vec3 color;
+	float ambientStrength;
+
+	LightComponent() = default;
+	LightComponent(const LightComponent& light) = default;
+	LightComponent(const glm::vec3& color, float ambientStrength) : color(color), ambientStrength(ambientStrength) {}
 };

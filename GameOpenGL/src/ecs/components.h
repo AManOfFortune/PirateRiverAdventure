@@ -45,6 +45,14 @@ struct TransformComponent
 	{
 		transform[3] = glm::vec4(position, 1.0f);
 	}
+
+	void SetScale(const glm::vec3& scale)
+	{
+		glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
+
+		// Multiply the original matrix by the scaling matrix
+		transform = transform * scaleMatrix;
+	}
 };
 
 /// <summary>

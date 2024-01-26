@@ -13,6 +13,11 @@ void Tile::AddConnection(std::shared_ptr<Tile> tile, Direction direction) {
     connections_[direction] = tile;
 }
 
+void Tile::SetItemOnTile(std::shared_ptr<Item> item)
+{
+	item_ = item;
+}
+
 std::shared_ptr<Tile> Tile::GetConnection(Direction direction)
 {
     return connections_[direction];
@@ -25,6 +30,16 @@ const std::string& Tile::GetRepresentation() const {
 bool Tile::IsWalkable(Direction direction) const
 {
     return isWalkable_[direction];
+}
+
+bool Tile::IsExit() const
+{
+    return isExit_;
+}
+
+std::shared_ptr<Item> Tile::GetItemOnTile() const
+{
+    return item_;
 }
 
 void Tile::AttachToScene(std::shared_ptr<Scene> scene)
@@ -42,4 +57,5 @@ Tile::Tile() {
     stringRepresentation_ = "";
     for (int i = 0; i < 4; i++) { isWalkable_[i] = false; };
     for(int i = 0; i < 4; i++) { connections_[i] = nullptr;	}
+    isExit_ = false;
 }

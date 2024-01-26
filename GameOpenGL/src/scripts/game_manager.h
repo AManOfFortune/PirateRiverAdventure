@@ -1,7 +1,7 @@
 #pragma once
 
 #include "tiles/tile.h"
-#include "units/unit.h"
+#include "units/unit_types/player.h"
 #include "levels/level.h"
 
 class GameManager
@@ -24,6 +24,7 @@ public:
     // End Observer pattern
 
     void SetTileContainingPlayer(std::shared_ptr<Tile> tile);
+    void SetPlayer(std::shared_ptr<Player> player);
     std::shared_ptr<Tile> GetTileContainingPlayer() const;
 
     void StartGame(std::shared_ptr<Scene> activeScene);
@@ -39,6 +40,7 @@ private:
     std::vector<std::shared_ptr<Unit>> unitsListeningToPlayerMovement_;
     // End Observer pattern
 
+    std::shared_ptr<Player> player_;
     std::shared_ptr<Tile> tileContainingPlayer_;
     std::shared_ptr<Level> currentLevel_;
     std::shared_ptr<Scene> activeScene_;

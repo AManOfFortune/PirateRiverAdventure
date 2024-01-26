@@ -1,5 +1,5 @@
 #pragma once
-#include "core/core.h"
+#include "scripts/items/item.h"
 
 class Tile
 {
@@ -16,9 +16,12 @@ public:
     const std::string& GetRepresentation() const;
     std::shared_ptr<Tile> GetConnection(Direction direction);
     bool IsWalkable(Direction direction) const;
+    bool IsExit() const;
+    std::shared_ptr<Item> GetItemOnTile() const;
 
     void SetPosition(glm::vec3 position);
     void AddConnection(std::shared_ptr<Tile>, Direction direction);
+    void SetItemOnTile(std::shared_ptr<Item> item);
 
     void AttachToScene(std::shared_ptr<Scene> scene);
 
@@ -34,4 +37,6 @@ protected:
     // Logic properties
     bool isWalkable_[4];
     std::shared_ptr<Tile> connections_[4];
+    bool isExit_;
+    std::shared_ptr<Item> item_;
 };

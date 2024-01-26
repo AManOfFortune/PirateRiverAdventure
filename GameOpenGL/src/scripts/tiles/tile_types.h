@@ -296,3 +296,76 @@ public:
 	}
 };
 REGISTER_TILE_TYPE(TilePathCross);
+
+// Exits
+class TileExitBottom : public Tile
+{
+public:
+	TileExitBottom()
+	{
+		stringRepresentation_ =
+			"EEE"
+			"E E"
+			"E|E";
+
+		color_ = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
+
+		isWalkable_[Bottom] = true;
+		isExit_ = true;
+	}
+};
+REGISTER_TILE_TYPE(TileExitBottom);
+
+class TileExitTop : public Tile
+{
+public:
+	TileExitTop()
+	{
+		stringRepresentation_ =
+			"E|E"
+			"E E"
+			"EEE";
+
+		color_ = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
+
+		isWalkable_[Top] = true;
+		isExit_ = true;
+	}
+};
+REGISTER_TILE_TYPE(TileExitTop);
+
+class TileExitLeft : public Tile
+{
+public:
+	TileExitLeft()
+	{
+		stringRepresentation_ =
+			"EEE"
+			"- E"
+			"EEE";
+
+		color_ = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
+
+		isWalkable_[Left] = true;
+		isExit_ = true;
+	}
+};
+REGISTER_TILE_TYPE(TileExitLeft);
+
+class TileExitRight : public Tile
+{
+public:
+	TileExitRight()
+	{
+		stringRepresentation_ =
+			"EEE"
+			"E -"
+			"EEE";
+
+		color_ = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
+
+		isWalkable_[Right] = true;
+		isExit_ = true;
+	}
+};
+REGISTER_TILE_TYPE(TileExitRight);

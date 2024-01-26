@@ -49,6 +49,8 @@ public:
 		scene_->registry_.remove<T>(entity_);
 	}
 
+	void Destroy();
+
 	operator bool() const { return entity_ != entt::null; }
 
 private:

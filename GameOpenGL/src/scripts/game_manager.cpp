@@ -1,5 +1,6 @@
 #include "game_manager.h"
 #include "levels/level_factory.h"
+#include "items/item_types.h"
 
 void GameManager::AddUnitToListeningToPlayerMovement(std::shared_ptr<Unit> unit)
 {
@@ -12,11 +13,32 @@ void GameManager::NotifyUnitsListeningToPlayerMovement(bool playerMoveEnded)
 	{
 		unit->OnPlayerMovement(GetTileContainingPlayer(), playerMoveEnded);
 	}
+
+	// Pick up item
+	std::shared_ptr<Item> itemOnTile = tileContainingPlayer_->GetItemOnTile();
+	if(playerMoveEnded && itemOnTile != nullptr)
+	{
+		player_->AddItemToInventory(itemOnTile);
+		itemOnTile->DetachFromScene();
+	}
+
+	// Exit level
+	if (playerMoveEnded && tileContainingPlayer_->IsExit() && player_->GetItemsOfType<Key>().size() >= currentLevel_->GetKeysRequiredToExit())
+	{
+		NextLevel();
+	}
+
+
 }
 
 void GameManager::SetTileContainingPlayer(std::shared_ptr<Tile> tile)
 {
 	tileContainingPlayer_ = tile;
+}
+
+void GameManager::SetPlayer(std::shared_ptr<Player> player)
+{
+	player_ = player;
 }
 
 std::shared_ptr<Tile> GameManager::GetTileContainingPlayer() const

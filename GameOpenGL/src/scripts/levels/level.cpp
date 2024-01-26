@@ -24,6 +24,11 @@ void Level::Reset()
 		GameManager::GetInstance().AddUnitToListeningToPlayerMovement(unit.second);
 	}
 
+	// ------ 4. Add items to scene ------
+	for (auto const& item : items_) {
+		item.second->AttachToScene(scene_);
+	}
+
 	// ------ 4. Add camera to scene ------
 	// TODO: Make each level have a fixed camera position
 	Entity camera = scene_->CreateEntity("Camera");
@@ -36,11 +41,17 @@ Level::Level()
 	units_ = std::unordered_map<char, std::shared_ptr<Unit>>();
 	tileWidth_ = 3;
 	levelWidth_ = 0;
+	keysRequiredToExit_ = 0;
 }
 
 void Level::AddUnit(char key, std::shared_ptr<Unit> unit)
 {
 	units_.insert(std::make_pair(key, unit));
+}
+
+void Level::AddItem(char key, std::shared_ptr<Item> item)
+{
+	items_.insert(std::make_pair(key, item));
 }
 
 std::vector<std::shared_ptr<Tile>> Level::ParseLevel(std::string levelString, int width, int tileWidth)
@@ -50,19 +61,34 @@ std::vector<std::shared_ptr<Tile>> Level::ParseLevel(std::string levelString, in
 	for (int i = 0, posCounter = 0; i < levelString.length(); i += tileWidth, posCounter++) {
 		std::string currentTile = levelString.substr(i, tileWidth) + levelString.substr(i + (width * tileWidth), tileWidth) + levelString.substr(i + (width * tileWidth * 2), tileWidth);
 		// Get unit on tile (middle character)
-		char unitOnTile = currentTile[tileWidth * 1.5];
+		char unitOnTile = currentTile[(const unsigned __int64) tileWidth * 1.5];
 		// Remove unit from tile to leave blank tile string
-		currentTile[tileWidth * 1.5] = ' ';
+		currentTile[(const unsigned __int64) tileWidth * 1.5] = ' ';
 
 		// ------ 1. Create correct tile type -----
 		std::shared_ptr<Tile> tile = TileFactory::createTile(currentTile);
 
-		// ------ 2. Set unit positions ------
+		// ------ 2. Set tile position ------
+		int posX = posCounter % width;
+		int posY = -(posCounter / width);
+		int posZ = 0;
+
+		glm::vec3 tilePosition = glm::vec3(posX, posY, posZ);
+
+		tile->SetPosition(tilePosition);
+
+		// ------ 3. Set unit positions ------
 		if (units_.find(unitOnTile) != units_.end()) {
 			units_.at(unitOnTile)->SetCurrentTile(tile);
 		}
 
-		// ------ 3. Add tile to result -------
+		// ------ 4. Set item positions ------
+		if (items_.find(unitOnTile) != items_.end()) {
+			items_.at(unitOnTile)->SetPosition(tilePosition);
+			tile->SetItemOnTile(items_.at(unitOnTile));
+		}
+
+		// ------ 5. Add tile to result -------
 		result.push_back(tile);
 
 		// Skip 2 rows of characters if we are at the end of a row
@@ -77,15 +103,6 @@ std::vector<std::shared_ptr<Tile>> Level::ParseLevel(std::string levelString, in
 		std::shared_ptr<Tile> tile = result.at(posCounter);
 
 		if (tile == nullptr) continue;
-
-		int posX = posCounter % width;
-		int posY = -(posCounter / width);
-		int posZ = 0.0f;
-
-		glm::vec3 tilePosition = glm::vec3(posX, posY, posZ);
-
-		// Set position
-		tile->SetPosition(tilePosition);
 
 		// Add top
 		if (tile->IsWalkable(Tile::Direction::Top)) {

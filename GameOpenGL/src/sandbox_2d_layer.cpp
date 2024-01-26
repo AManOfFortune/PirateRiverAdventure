@@ -34,7 +34,7 @@ void Sandbox2DLayer::OnAttach()
     camera_entity_ = active_scene_->CreateEntity("Camera");
     camera_entity_.AddComponent<CameraComponent>();
 
-    light_entity_ = active_scene_->CreateEntity("Light");
+    light_entity_ = active_scene_->CreateEntity("Light", glm::vec3(0.5f, -0.5f, 0.0f));
     light_entity_.AddComponent<LightComponent>(glm::vec3(0.8f, 0.2f, 0.3f), 0.5f);
     // Add a script to the camera entity and bind it to the ScriptableEntity subclass CameraController.
     camera_entity_.AddComponent<ScriptComponent>().Bind<CameraController>();

@@ -10,6 +10,7 @@ layout(location = 5) in float a_TilingFactor;
 
 uniform mat4 u_ProjectionViewMatrix;
 
+out vec3 v_Position;
 out vec4 v_Color;
 out vec2 v_TexCoord;
 out float v_TexIndex;
@@ -18,6 +19,7 @@ out float v_TilingFactor;
 
 void main()
 {
+	v_Position = a_Position;
 	v_Color = a_Color;
 	v_TexCoord = a_TexCoord;
 	v_TexIndex = a_TexIndex;
@@ -31,6 +33,7 @@ void main()
 			    
 layout(location = 0) out vec4 color;
 
+in vec3 v_Position;
 in vec4 v_Color;
 in vec2 v_TexCoord;
 in float v_TexIndex;
@@ -44,6 +47,7 @@ uniform float u_AmbientStrength;
 
 void main()
 {
+	// Get color from main texture.
 	vec4 texColor = v_Color;
 	switch(int(v_TexIndex))
 	{
@@ -65,6 +69,7 @@ void main()
 		case 15: texColor *= texture(u_Textures[15], v_TexCoord * v_TilingFactor); break;
 	}
 
+	// Get normal from normal map.
 	vec4 normal;
 	switch(int(v_NormalMapIndex))
 	{
@@ -86,7 +91,14 @@ void main()
 		case 31: normal = texture(u_Textures[31], v_TexCoord * v_TilingFactor); break;
 	}
 
+	// Calculate diffuse light
+	vec3 normalNormalized = normalize(normal.rgb * 2.0f - 1.0f);
+	vec3 lightDirNormalized = normalize(u_LightPos - v_Position);
+	float diffuseStrength = max(dot(normalNormalized, lightDirNormalized), 0.0f);
+	vec4 diffuseLight = vec4(diffuseStrength * u_LightColor, 1.0f);
+
+	// Calculate ambient light
 	vec4 ambientLight = vec4(u_AmbientStrength * u_LightColor, 1.0f);
 
-	color = texColor * ambientLight;
+	color = texColor * (ambientLight + diffuseLight);
 }

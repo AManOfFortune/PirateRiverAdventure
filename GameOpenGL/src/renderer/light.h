@@ -12,6 +12,7 @@ struct LightProperties
 		: position(position), color(color), ambientStrength(ambientStrength)
 	{}
 
+	// TODO: If wanted, we could split the color into diffuse, specular and ambient light colors.
 	glm::vec3 position;
 	glm::vec3 color;
 	float ambientStrength = 0.1f;

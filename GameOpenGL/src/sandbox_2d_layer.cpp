@@ -15,7 +15,7 @@ void Sandbox2DLayer::OnAttach()
     sprite_sheet_ = Texture2D::Create("assets/textures/brick_tiles.png");
     sprite_sheet_normals_ = Texture2D::Create("assets/textures/brick_normals.png");
 
-    tile_texture_ = SubTexture2D::CreateFromCoords(sprite_sheet_normals_, { 0, 0 }, { 16, 16 });
+    tile_texture_ = SubTexture2D::CreateFromCoords(sprite_sheet_, { 0, 0 }, { 16, 16 });
 
     auto normal = SubTexture2D::CreateFromCoords(sprite_sheet_normals_, { 0, 0 }, { 16, 16 });
     auto props = Texture2DProperties(normal);

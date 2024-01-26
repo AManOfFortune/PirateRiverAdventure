@@ -5,13 +5,15 @@ layout(location = 0) in vec3 a_Position;
 layout(location = 1) in vec4 a_Color;
 layout(location = 2) in vec2 a_TexCoord;
 layout(location = 3) in float a_TexIndex;
-layout(location = 4) in float a_TilingFactor;
+layout(location = 4) in float a_NormalMapIndex;
+layout(location = 5) in float a_TilingFactor;
 
 uniform mat4 u_ProjectionViewMatrix;
 
 out vec4 v_Color;
 out vec2 v_TexCoord;
 out float v_TexIndex;
+out float v_NormalMapIndex;
 out float v_TilingFactor;
 
 void main()
@@ -19,6 +21,7 @@ void main()
 	v_Color = a_Color;
 	v_TexCoord = a_TexCoord;
 	v_TexIndex = a_TexIndex;
+	v_NormalMapIndex = a_NormalMapIndex;
 	v_TilingFactor = a_TilingFactor;
 	gl_Position = u_ProjectionViewMatrix * vec4(a_Position, 1.0);	
 }
@@ -31,9 +34,10 @@ layout(location = 0) out vec4 color;
 in vec4 v_Color;
 in vec2 v_TexCoord;
 in float v_TexIndex;
+in float v_NormalMapIndex;
 in float v_TilingFactor;
 
-uniform sampler2D u_Textures[16];
+uniform sampler2D u_Textures[32];
 uniform vec3 u_LightPos;
 uniform vec3 u_LightColor;
 uniform float u_AmbientStrength;
@@ -61,7 +65,28 @@ void main()
 		case 15: texColor *= texture(u_Textures[15], v_TexCoord * v_TilingFactor); break;
 	}
 
-	vec3 ambientLight = u_AmbientStrength * u_LightColor;
+	vec4 normal;
+	switch(int(v_NormalMapIndex))
+	{
+		case 16: normal = texture(u_Textures[16], v_TexCoord * v_TilingFactor); break;
+		case 17: normal = texture(u_Textures[17], v_TexCoord * v_TilingFactor); break;
+		case 18: normal = texture(u_Textures[18], v_TexCoord * v_TilingFactor); break;
+		case 19: normal = texture(u_Textures[19], v_TexCoord * v_TilingFactor); break;
+		case 20: normal = texture(u_Textures[20], v_TexCoord * v_TilingFactor); break;
+		case 21: normal = texture(u_Textures[21], v_TexCoord * v_TilingFactor); break;
+		case 22: normal = texture(u_Textures[22], v_TexCoord * v_TilingFactor); break;
+		case 23: normal = texture(u_Textures[23], v_TexCoord * v_TilingFactor); break;
+		case 24: normal = texture(u_Textures[24], v_TexCoord * v_TilingFactor); break;
+		case 25: normal = texture(u_Textures[25], v_TexCoord * v_TilingFactor); break;
+		case 26: normal = texture(u_Textures[26], v_TexCoord * v_TilingFactor); break;
+		case 27: normal = texture(u_Textures[27], v_TexCoord * v_TilingFactor); break;
+		case 28: normal = texture(u_Textures[28], v_TexCoord * v_TilingFactor); break;
+		case 29: normal = texture(u_Textures[29], v_TexCoord * v_TilingFactor); break;
+		case 30: normal = texture(u_Textures[30], v_TexCoord * v_TilingFactor); break;
+		case 31: normal = texture(u_Textures[31], v_TexCoord * v_TilingFactor); break;
+	}
 
-	color = texColor * vec4(ambientLight, 1.0);
+	vec4 ambientLight = vec4(u_AmbientStrength * u_LightColor, 1.0f);
+
+	color = texColor * ambientLight;
 }

@@ -16,6 +16,7 @@ struct QuadVertex
     glm::vec4 color;
     glm::vec2 texCoord;
     float texIndex;
+    float normalIndex;
     float tilingFactor;
 };
 
@@ -62,7 +63,7 @@ void Renderer2D::Init()
         { VertexBufferAttributeType::Float4, "a_Color" },
         { VertexBufferAttributeType::Float2, "a_TexCoord" },
         { VertexBufferAttributeType::Float, "a_TexIndex" },
-        //{ VertexBufferAttributeType::Float, "a_NormalMapIndex" },
+        { VertexBufferAttributeType::Float, "a_NormalMapIndex" },
         { VertexBufferAttributeType::Float, "a_TilingFactor" },
         });
     data.quadVertexArray->add_vertex_buffer(data.quadVertexBuffer);
@@ -96,8 +97,8 @@ void Renderer2D::Init()
 
     data.normalMapTexture = Texture2D::Create(1, 1);
     // RGBA (128, 128, 255, 255) = 0x8080ffff => normal map.
-    uint32_t normalMapTextureData = 0x8080ffff;
-    data.normalMapTexture->SetData(&normalMapTextureData, sizeof(uint32_t)); // 4 bytes.
+    uint32_t normalMapTextureData = 0xffff8080; // This one is the right blue color, i dont know why.
+    data.normalMapTexture->SetData(&normalMapTextureData, sizeof(uint32_t)); // 4 bytes. Depends on the byte order of the system (Big Endian or Little Endian).
 
     int32_t samplers[data.maxTextureSlots];
     for (uint32_t i = 0; i < data.maxTextureSlots; i++)
@@ -135,6 +136,7 @@ void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	data.quadVertexBufferPtr = data.quadVertexBufferBase;
 
 	data.textureSlotIndex = 1;
+    data.normalMapIndex = 17;
 }
 
 void Renderer2D::BeginScene(const OrthographicCamera& camera)
@@ -146,6 +148,7 @@ void Renderer2D::BeginScene(const OrthographicCamera& camera)
     data.quadVertexBufferPtr = data.quadVertexBufferBase;
 
     data.textureSlotIndex = 1;
+    data.normalMapIndex = 17;
 }
 
 void Renderer2D::EndScene()
@@ -167,6 +170,11 @@ void Renderer2D::Flush()
     {
 		data.textureSlots[i]->Bind(i);
 	}
+
+    for (uint32_t i = 16; i < data.normalMapIndex; i++)
+    {
+        data.textureSlots[i]->Bind(i);
+    }
 
 	RenderCommand::DrawIndexed(data.quadVertexArray, data.quadIndexCount);
 }
@@ -208,6 +216,7 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
 {
     constexpr size_t quadVertexCount = 4;
     const float textureIndex = 0.0f; // White texture index.
+    const float normalMapIndex = 16.0f; // Normal map index.
     constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
     const float tilingFactor = 1.0f;
 
@@ -222,6 +231,7 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
         data.quadVertexBufferPtr->color = color;
         data.quadVertexBufferPtr->texCoord = textureCoords[i];
         data.quadVertexBufferPtr->texIndex = textureIndex;
+        data.quadVertexBufferPtr->normalIndex = normalMapIndex;
         data.quadVertexBufferPtr->tilingFactor = tilingFactor;
         data.quadVertexBufferPtr++;
     }
@@ -239,26 +249,50 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<Text
         FlushAndReset();
     }
 
-    float textureIndex = 0.0f;
+    // Calculate main texture index
+    float mainTextureIndex = 0.0f;
     for (uint32_t i = 1; i < data.textureSlotIndex; i++)
     {
         if (*data.textureSlots[i]->texture() == *texture)
         {
-            textureIndex = (float)i;
+            mainTextureIndex = (float)i;
             break;
         }
     }
 
-    if (textureIndex == 0.0f)
+    if (mainTextureIndex == 0.0f)
     {
-        if (data.textureSlotIndex >= Renderer2DData::maxTextureSlots)
+        if (data.textureSlotIndex >= Renderer2DData::maxMainTextureSlots)
         {
 			FlushAndReset();
 		}
 
-		textureIndex = (float)data.textureSlotIndex;
+		mainTextureIndex = (float)data.textureSlotIndex;
         data.textureSlots[data.textureSlotIndex] = SubTexture2D::Create(texture, { 0.0f, 0.0f }, { 1.0f, 1.0f });
 		data.textureSlotIndex++;
+    }
+
+    // Calculate normal map index
+    float normalMapIndex = 16.0f;
+    for (uint32_t i = 17; i < data.normalMapIndex; i++)
+    {
+        if (*data.textureSlots[i]->texture() == *texture)
+        {
+            normalMapIndex = (float)i;
+            break;
+        }
+    }
+
+    if (normalMapIndex == 16.0f)
+    {
+        if (data.normalMapIndex >= Renderer2DData::maxTextureSlots)
+        {
+            FlushAndReset();
+        }
+
+        normalMapIndex = (float)data.normalMapIndex;
+        data.textureSlots[data.normalMapIndex] = textureProperties.normalMap;
+        data.normalMapIndex++;
     }
 
     for (size_t i = 0; i < quadVertexCount; i++)
@@ -266,7 +300,8 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<Text
         data.quadVertexBufferPtr->position = transform * data.quadVertexPositions[i];
         data.quadVertexBufferPtr->color = textureProperties.tintColor;
         data.quadVertexBufferPtr->texCoord = textureCoords[i];
-        data.quadVertexBufferPtr->texIndex = textureIndex;
+        data.quadVertexBufferPtr->texIndex = mainTextureIndex;
+        data.quadVertexBufferPtr->normalIndex = normalMapIndex;
         data.quadVertexBufferPtr->tilingFactor = textureProperties.tilingFactor;
         data.quadVertexBufferPtr++;
     }
@@ -287,26 +322,50 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<SubT
         FlushAndReset();
     }
 
-    float textureIndex = 0.0f;
+    // Calculate main texture index
+    float mainTextureIndex = 0.0f;
     for (uint32_t i = 1; i < data.textureSlotIndex; i++)
     {
         if (*data.textureSlots[i]->texture() == *sub->texture())
         {
-            textureIndex = (float)i;
+            mainTextureIndex = (float)i;
             break;
         }
     }
 
-    if (textureIndex == 0.0f)
+    if (mainTextureIndex == 0.0f)
     {
-        if (data.textureSlotIndex >= Renderer2DData::maxTextureSlots)
+        if (data.textureSlotIndex >= Renderer2DData::maxMainTextureSlots)
         {
             FlushAndReset();
         }
 
-        textureIndex = (float)data.textureSlotIndex;
+        mainTextureIndex = (float)data.textureSlotIndex;
         data.textureSlots[data.textureSlotIndex] = sub;
         data.textureSlotIndex++;
+    }
+
+    // Calculate normal map index
+    float normalMapIndex = 16.0f;
+    for (uint32_t i = 17; i < data.normalMapIndex; i++)
+    {
+        if (*data.textureSlots[i]->texture() == *sub->texture())
+        {
+            normalMapIndex = (float)i;
+            break;
+        }
+    }
+
+    if (normalMapIndex == 16.0f)
+    {
+        if (data.normalMapIndex >= Renderer2DData::maxTextureSlots)
+        {
+            FlushAndReset();
+        }
+
+        normalMapIndex = (float)data.normalMapIndex;
+        data.textureSlots[data.normalMapIndex] = textureProperties.normalMap;
+        data.normalMapIndex++;
     }
 
     for (size_t i = 0; i < quadVertexCount; i++)
@@ -314,7 +373,8 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<SubT
         data.quadVertexBufferPtr->position = transform * data.quadVertexPositions[i];
         data.quadVertexBufferPtr->color = textureProperties.tintColor;
         data.quadVertexBufferPtr->texCoord = sub->texture_coords()[i];
-        data.quadVertexBufferPtr->texIndex = textureIndex;
+        data.quadVertexBufferPtr->texIndex = mainTextureIndex;
+        data.quadVertexBufferPtr->normalIndex = normalMapIndex;
         data.quadVertexBufferPtr->tilingFactor = textureProperties.tilingFactor;
         data.quadVertexBufferPtr++;
     }
@@ -373,4 +433,5 @@ void Renderer2D::FlushAndReset()
 	data.quadVertexBufferPtr = data.quadVertexBufferBase;
 
 	data.textureSlotIndex = 1;
+    data.normalMapIndex = 17;
 }

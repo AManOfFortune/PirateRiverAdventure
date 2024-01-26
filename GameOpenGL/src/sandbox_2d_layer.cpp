@@ -12,9 +12,13 @@ Sandbox2DLayer::Sandbox2DLayer()
 
 void Sandbox2DLayer::OnAttach()
 {
-    texture_ = Texture2D::Create("assets/textures/Checkerboard.png");
-    sprite_sheet_ = Texture2D::Create("assets/textures/Tilemap_Flat.png");
-    tile_texture_ = SubTexture2D::CreateFromCoords(sprite_sheet_, { 1, 3 }, { 64, 64 });
+    sprite_sheet_ = Texture2D::Create("assets/textures/brick_tiles.png");
+    sprite_sheet_normals_ = Texture2D::Create("assets/textures/brick_normals.png");
+
+    tile_texture_ = SubTexture2D::CreateFromCoords(sprite_sheet_normals_, { 0, 0 }, { 16, 16 });
+
+    auto normal = SubTexture2D::CreateFromCoords(sprite_sheet_normals_, { 0, 0 }, { 16, 16 });
+    auto props = Texture2DProperties(normal);
 
     // Create a framebuffer.
     FramebufferSpecification spec;
@@ -25,12 +29,13 @@ void Sandbox2DLayer::OnAttach()
 
     active_scene_ = std::make_shared<Scene>();
     square_entity_ = active_scene_->CreateEntity("Square");
-    square_entity_.AddComponent<SpriteRendererComponent>(tile_texture_);
-    //square_entity_.AddComponent<SpriteRendererComponent>(glm::vec4{ 0.3f, 0.2f, 0.8f, 1.0f });
+    square_entity_.AddComponent<SpriteRendererComponent>(tile_texture_, props);
 
     camera_entity_ = active_scene_->CreateEntity("Camera");
     camera_entity_.AddComponent<CameraComponent>();
 
+    light_entity_ = active_scene_->CreateEntity("Light");
+    light_entity_.AddComponent<LightComponent>(glm::vec3(0.8f, 0.2f, 0.3f), 0.5f);
     // Add a script to the camera entity and bind it to the ScriptableEntity subclass CameraController.
     camera_entity_.AddComponent<ScriptComponent>().Bind<CameraController>();
 }

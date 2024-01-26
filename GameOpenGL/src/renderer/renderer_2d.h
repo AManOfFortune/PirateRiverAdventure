@@ -1,6 +1,7 @@
 #pragma once
 
 #include "camera.h"
+#include "light.h"
 #include "orthographic_camera.h"
 #include "texture.h"
 
@@ -29,25 +30,25 @@ public:
 	static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color);
 	// Other methods that are possible in the future could take in both a texture and a color.
 	// Doing that would make it possible to give the textures a color tint or fade them in and out.
-	static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties = Texture2DProperties());
-	static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties = Texture2DProperties());
+	static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties = Texture2DProperties(), const LightProperties& lightProperties = LightProperties());
+	static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties = Texture2DProperties(), const LightProperties& lightProperties = LightProperties());
 
 	static void DrawQuad(const glm::mat4& transform, const glm::vec4& color);
-	static void DrawQuad(const glm::mat4& transform, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties = Texture2DProperties());
+	static void DrawQuad(const glm::mat4& transform, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties = Texture2DProperties(), const LightProperties& lightProperties = LightProperties());
 
-	static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties());
-	static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties());
-	static void DrawQuad(const glm::mat4& transform, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties());
+	static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties(), const LightProperties& lightProperties = LightProperties());
+	static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties(), const LightProperties& lightProperties = LightProperties());
+	static void DrawQuad(const glm::mat4& transform, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties(), const LightProperties& lightProperties = LightProperties());
 
 
 	// Rotation is in radians.
 	static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color);
 	static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color);
-	static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties = Texture2DProperties());
-	static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties = Texture2DProperties());
+	static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties = Texture2DProperties(), const LightProperties& lightProperties = LightProperties());
+	static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties = Texture2DProperties(), const LightProperties& lightProperties = LightProperties());
 
-	static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties());
-	static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties());
+	static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties(), const LightProperties& lightProperties = LightProperties());
+	static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties = Texture2DProperties(), const LightProperties& lightProperties = LightProperties());
 
 private:
 	static void FlushAndReset();

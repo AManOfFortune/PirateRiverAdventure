@@ -58,7 +58,7 @@ struct SpriteRendererComponent
 
 	SpriteRendererComponent() = default;
 	SpriteRendererComponent(const SpriteRendererComponent& spriteRenderer) = default;
-	SpriteRendererComponent(const glm::vec4& color) : props(Texture2DProperties(1.0f, color)) {}
+	SpriteRendererComponent(const glm::vec4& color) : props(Texture2DProperties(1.0f, color, nullptr)) {}
 	SpriteRendererComponent(const std::shared_ptr<SubTexture2D>& texture, const Texture2DProperties& props = Texture2DProperties()) 
 		:  texture(texture), props(props) {}
 };
@@ -109,4 +109,14 @@ struct ScriptComponent
 			scriptComponent->instance = nullptr;
 		};
 	}
+};
+
+struct LightComponent
+{
+	glm::vec3 color;
+	float ambientStrength;
+
+	LightComponent() = default;
+	LightComponent(const LightComponent& light) = default;
+	LightComponent(const glm::vec3& color, float ambientStrength) : color(color), ambientStrength(ambientStrength) {}
 };

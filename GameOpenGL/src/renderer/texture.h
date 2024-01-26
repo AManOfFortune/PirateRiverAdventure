@@ -1,24 +1,12 @@
 #pragma once
 
+
+
 #include <cstdint>
 #include <memory>
 #include <string>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
-
-struct Texture2DProperties
-{
-    Texture2DProperties()
-        : tilingFactor(1.0f), tintColor(1.0f, 1.0f, 1.0f, 1.0f)
-    { }
-
-    Texture2DProperties(float tilingFactor, const glm::vec4& tintColor)
-        : tilingFactor(tilingFactor), tintColor(tintColor)
-    { }
-
-    float tilingFactor;
-    glm::vec4 tintColor;
-};
 
 /// <summary>
 /// Abstract base texture class.
@@ -99,4 +87,23 @@ public:
 private:
     std::shared_ptr<Texture2D> texture_;
 	glm::vec2 texture_coords_[4];
+};
+
+struct Texture2DProperties
+{
+    Texture2DProperties()
+        : tilingFactor(1.0f), tintColor(1.0f, 1.0f, 1.0f, 1.0f), normalMap(nullptr)
+    { }
+
+    Texture2DProperties(const std::shared_ptr<SubTexture2D>& normalMap)
+		: tilingFactor(1.0f), tintColor(1.0f, 1.0f, 1.0f, 1.0f), normalMap(normalMap)
+	{ }
+
+    Texture2DProperties(float tilingFactor, const glm::vec4& tintColor, const std::shared_ptr<SubTexture2D>& normalMap)
+        : tilingFactor(tilingFactor), tintColor(tintColor), normalMap(normalMap)
+    { }
+
+    float tilingFactor;
+    glm::vec4 tintColor;
+    std::shared_ptr<SubTexture2D> normalMap;
 };

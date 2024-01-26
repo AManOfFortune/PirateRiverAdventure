@@ -24,12 +24,15 @@ struct Renderer2DData
     static const uint32_t maxQuads = 20000;
     static const uint32_t maxVertices = maxQuads * 4;
     static const uint32_t maxIndices = maxQuads * 6;
-    static const uint32_t maxTextureSlots = 32;
+    static const uint32_t maxMainTextureSlots = 16;
+    static const uint32_t maxNormalMapTextureSlots = 16;
+    static const uint32_t maxTextureSlots = maxMainTextureSlots + maxNormalMapTextureSlots;
 
     std::shared_ptr<VertexArray> quadVertexArray;
     std::shared_ptr<VertexBuffer> quadVertexBuffer;
     std::shared_ptr<Shader> textureShader;
     std::shared_ptr<Texture2D> whiteTexture;
+    std::shared_ptr<Texture2D> normalMapTexture;
 
     uint32_t quadIndexCount = 0;
     QuadVertex* quadVertexBufferBase = nullptr;
@@ -37,6 +40,7 @@ struct Renderer2DData
 
     std::array<std::shared_ptr<SubTexture2D>, maxTextureSlots> textureSlots;
     uint32_t textureSlotIndex = 1; // 0 = white texture.
+    uint32_t normalMapIndex = 17; // 16 = rgb 128 , 128, 255 normal map.
 
     glm::vec4 quadVertexPositions[4] = {
         { -0.5f, -0.5f, 0.0f, 1.0f },
@@ -58,6 +62,7 @@ void Renderer2D::Init()
         { VertexBufferAttributeType::Float4, "a_Color" },
         { VertexBufferAttributeType::Float2, "a_TexCoord" },
         { VertexBufferAttributeType::Float, "a_TexIndex" },
+        //{ VertexBufferAttributeType::Float, "a_NormalMapIndex" },
         { VertexBufferAttributeType::Float, "a_TilingFactor" },
         });
     data.quadVertexArray->add_vertex_buffer(data.quadVertexBuffer);
@@ -89,6 +94,11 @@ void Renderer2D::Init()
     uint32_t whiteTextureData = 0xffffffff;
     data.whiteTexture->SetData(&whiteTextureData, sizeof(uint32_t)); // 4 bytes.
 
+    data.normalMapTexture = Texture2D::Create(1, 1);
+    // RGBA (128, 128, 255, 255) = 0x8080ffff => normal map.
+    uint32_t normalMapTextureData = 0x8080ffff;
+    data.normalMapTexture->SetData(&normalMapTextureData, sizeof(uint32_t)); // 4 bytes.
+
     int32_t samplers[data.maxTextureSlots];
     for (uint32_t i = 0; i < data.maxTextureSlots; i++)
     {
@@ -98,7 +108,10 @@ void Renderer2D::Init()
     data.textureShader->Bind();
     data.textureShader->SetIntArray("u_Textures", samplers, data.maxTextureSlots);
 
+    // 0 - 15 are main textures, 16 - 31 are normal map textures.
     data.textureSlots[0] = SubTexture2D::Create(data.whiteTexture, { 0.0f, 0.0f }, { 1.0f, 1.0f });
+    // Offset of 16 for normal map textures.
+    data.textureSlots[16] = SubTexture2D::Create(data.normalMapTexture, { 0.0f, 0.0f }, { 1.0f, 1.0f });
 
     data.quadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
     data.quadVertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
@@ -169,26 +182,26 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, cons
     DrawQuad(transform, color);
 }
 
-void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties)
+void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties, const LightProperties& lightProperties)
 {
-    DrawQuad({ position.x, position.y, 0.0f }, size, texture, textureProperties);
+    DrawQuad({ position.x, position.y, 0.0f }, size, texture, textureProperties, lightProperties);
 }
 
-void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties)
+void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties, const LightProperties& lightProperties)
 {
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-    DrawQuad(transform, texture, textureProperties);
+    DrawQuad(transform, texture, textureProperties, lightProperties);
 }
 
-void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties)
+void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties, const LightProperties& lightProperties)
 {
-    DrawQuad({ position.x, position.y, 0.0f }, size, sub, textureProperties);
+    DrawQuad({ position.x, position.y, 0.0f }, size, sub, textureProperties, lightProperties);
 }
 
-void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties)
+void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties, const LightProperties& lightProperties)
 {
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
-    DrawQuad(transform, sub, textureProperties);
+    DrawQuad(transform, sub, textureProperties, lightProperties);
 }
 
 void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
@@ -216,7 +229,7 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const glm::vec4& color)
     data.quadIndexCount += 6;
 }
 
-void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties)
+void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties, const LightProperties& lightProperties)
 {
     constexpr size_t quadVertexCount = 4;
     constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
@@ -259,9 +272,13 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<Text
     }
 
     data.quadIndexCount += 6;
+
+    data.textureShader->SetFloat3("u_LightPos", lightProperties.position);
+    data.textureShader->SetFloat3("u_LightColor", lightProperties.color);
+    data.textureShader->SetFloat("u_AmbientStrength", lightProperties.ambientStrength);
 }
 
-void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties)
+void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties, const LightProperties& lightProperties)
 {
     constexpr size_t quadVertexCount = 4;
 
@@ -303,6 +320,10 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<SubT
     }
 
     data.quadIndexCount += 6;
+
+    data.textureShader->SetFloat3("u_LightPos", lightProperties.position);
+    data.textureShader->SetFloat3("u_LightColor", lightProperties.color);
+    data.textureShader->SetFloat("u_AmbientStrength", lightProperties.ambientStrength);
 }
 
 void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
@@ -318,25 +339,25 @@ void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& siz
     DrawQuad(transform, color);
 }
 
-void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties)
+void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties, const LightProperties& lightProperties)
 {
-    DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, texture, textureProperties);
+    DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, texture, textureProperties, lightProperties);
 }
 
-void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties)
+void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<Texture2D>& texture, const Texture2DProperties& textureProperties, const LightProperties& lightProperties)
 {
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
         * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
         * glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });    
-    DrawQuad(transform, texture, textureProperties);
+    DrawQuad(transform, texture, textureProperties, lightProperties);
 }
 
-void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties)
+void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties, const LightProperties& lightProperties)
 {
     DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, sub, textureProperties);
 }
 
-void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties)
+void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const std::shared_ptr<SubTexture2D>& sub, const Texture2DProperties& textureProperties, const LightProperties& lightProperties)
 {
     glm::mat4 transform = glm::translate(glm::mat4(1.0f), position)
         * glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })

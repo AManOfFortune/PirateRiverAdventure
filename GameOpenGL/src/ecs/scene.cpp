@@ -2,6 +2,7 @@
 
 #include "components.h"
 #include "entity.h"
+#include "renderer/light.h"
 #include "renderer/renderer.h"
 #include "renderer/renderer_2d.h"
 
@@ -58,6 +59,18 @@ void Scene::OnUpdate(DeltaTime deltaTime)
 	{
 		Renderer2D::BeginScene(*mainCamera, *transform);
 
+		LightProperties lightProps;
+		auto lights = registry_.view<TransformComponent, LightComponent>();
+		for (auto light : lights)
+		{
+			auto [transform, lightComponent] = lights.get<TransformComponent, LightComponent>(light);
+			lightProps.position = transform.GetPosition();
+			lightProps.color = lightComponent.color;
+			lightProps.ambientStrength = lightComponent.ambientStrength;
+			// For now only one light is supported. 
+			break;
+		}
+
 		// Here, we get all entities that have a transform and sprite renderer component and issue a draw call for them.
 		auto group = registry_.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 		for (auto entity : group)
@@ -65,10 +78,11 @@ void Scene::OnUpdate(DeltaTime deltaTime)
 			auto [transform, spriteRenderer] = group.get<TransformComponent, SpriteRendererComponent>(entity);
 			if (spriteRenderer.texture != nullptr)
 			{
-				Renderer2D::DrawQuad(transform.transform, spriteRenderer.texture, spriteRenderer.props);
+				Renderer2D::DrawQuad(transform.transform, spriteRenderer.texture, spriteRenderer.props, lightProps);
 			}
 			else
 			{
+				// TODO: Doesn't support lighting yet.
 				Renderer2D::DrawQuad(transform.transform, spriteRenderer.props.tintColor);
 			}
 		}

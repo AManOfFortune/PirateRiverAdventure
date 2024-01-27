@@ -291,7 +291,8 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<Text
         }
 
         normalMapIndex = (float)data.normalMapIndex;
-        data.textureSlots[data.normalMapIndex] = textureProperties.normalMap;
+        if(textureProperties.normalMap == nullptr) data.textureSlots[data.normalMapIndex] = SubTexture2D::Create(data.normalMapTexture, {0,0}, {1,1});
+        else data.textureSlots[data.normalMapIndex] = textureProperties.normalMap;
         data.normalMapIndex++;
     }
 
@@ -364,7 +365,8 @@ void Renderer2D::DrawQuad(const glm::mat4& transform, const std::shared_ptr<SubT
         }
 
         normalMapIndex = (float)data.normalMapIndex;
-        data.textureSlots[data.normalMapIndex] = textureProperties.normalMap;
+        if (textureProperties.normalMap == nullptr) data.textureSlots[data.normalMapIndex] = SubTexture2D::Create(data.normalMapTexture, { 0,0 }, { 1,1 });
+        else data.textureSlots[data.normalMapIndex] = textureProperties.normalMap;
         data.normalMapIndex++;
     }
 

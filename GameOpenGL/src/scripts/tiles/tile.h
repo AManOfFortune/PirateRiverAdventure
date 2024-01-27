@@ -32,11 +32,17 @@ protected:
     // Render properties
     glm::vec3 position_;
     glm::vec3 size_;
-    glm::vec4 color_;
+    std::shared_ptr<Texture2D> textureAtlas_;
+    std::shared_ptr<SubTexture2D> texture_;
 
     // Logic properties
     bool isWalkable_[4];
     std::shared_ptr<Tile> connections_[4];
     bool isExit_;
     std::shared_ptr<Item> item_;
+
+    void SetTexture(int xCoord, int yCoord);
+
+private:
+    glm::vec2 defaultAtlasSize_;
 };

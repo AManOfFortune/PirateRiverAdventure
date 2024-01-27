@@ -10,7 +10,7 @@ public:
 			"G G"
 			"GGG";
 
-		color_ = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+		SetTexture(0, 12);
 	}
 };
 REGISTER_TILE_TYPE(TileGrass);
@@ -25,7 +25,7 @@ public:
 			"D D"
 			"DDD";
 
-		color_ = glm::vec4(0.5f, 0.5f, 0.5f, 1.0f);
+		SetTexture(0, 6);
 	}
 };
 REGISTER_TILE_TYPE(TileDirt);
@@ -41,7 +41,6 @@ public:
 			"- G"
 			"GGG";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		isWalkable_[Left] = true;
 	}
 };
@@ -57,7 +56,6 @@ public:
 			"G -"
 			"GGG";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		isWalkable_[Right] = true;
 	}
 };
@@ -73,7 +71,6 @@ public:
 			"G G"
 			"GGG";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		isWalkable_[Top] = true;
 	}
 };
@@ -89,7 +86,6 @@ public:
 			"G G"
 			"G|G";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		isWalkable_[Bottom] = true;
 	}
 };
@@ -106,7 +102,6 @@ public:
 			"- -"
 			"GGG";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		isWalkable_[Left] = true;
 		isWalkable_[Right] = true;
 	}
@@ -123,7 +118,6 @@ public:
 			"G G"
 			"G|G";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		isWalkable_[Top] = true;
 		isWalkable_[Bottom] = true;
 	}
@@ -141,7 +135,6 @@ public:
 			"G -"
 			"GGG";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		isWalkable_[Top] = true;
 		isWalkable_[Right] = true;
 	}
@@ -158,7 +151,6 @@ public:
 			"- G"
 			"GGG";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		isWalkable_[Top] = true;
 		isWalkable_[Left] = true;
 	}
@@ -175,7 +167,6 @@ public:
 			"G -"
 			"G|G";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		isWalkable_[Bottom] = true;
 		isWalkable_[Right] = true;
 	}
@@ -192,7 +183,6 @@ public:
 			"- G"
 			"G|G";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 		isWalkable_[Bottom] = true;
 		isWalkable_[Left] = true;
 	}
@@ -210,7 +200,6 @@ public:
 			"- -"
 			"GGG";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 		isWalkable_[Top] = true;
 		isWalkable_[Left] = true;
@@ -229,7 +218,6 @@ public:
 			"- -"
 			"G|G";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 		isWalkable_[Bottom] = true;
 		isWalkable_[Left] = true;
@@ -248,7 +236,6 @@ public:
 			"G -"
 			"G|G";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 		isWalkable_[Top] = true;
 		isWalkable_[Bottom] = true;
@@ -267,7 +254,6 @@ public:
 			"- G"
 			"G|G";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 		isWalkable_[Top] = true;
 		isWalkable_[Bottom] = true;
@@ -287,7 +273,6 @@ public:
 			"- -"
 			"G|G";
 
-		color_ = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
 		isWalkable_[Top] = true;
 		isWalkable_[Bottom] = true;
@@ -308,7 +293,6 @@ public:
 			"E E"
 			"E|E";
 
-		color_ = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
 
 		isWalkable_[Bottom] = true;
 		isExit_ = true;
@@ -326,8 +310,6 @@ public:
 			"E E"
 			"EEE";
 
-		color_ = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
-
 		isWalkable_[Top] = true;
 		isExit_ = true;
 	}
@@ -344,8 +326,6 @@ public:
 			"- E"
 			"EEE";
 
-		color_ = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
-
 		isWalkable_[Left] = true;
 		isExit_ = true;
 	}
@@ -361,8 +341,6 @@ public:
 			"EEE"
 			"E -"
 			"EEE";
-
-		color_ = glm::vec4(1.0f, 1.0f, 0.0f, 1.0f);
 
 		isWalkable_[Right] = true;
 		isExit_ = true;

@@ -49,15 +49,24 @@ void Tile::AttachToScene(std::shared_ptr<Scene> scene)
     // Add sprite renderer component
     
     // TODO: Update to take in Subtexture2D -> SpriteSheets work! Raoul
-    entity.AddComponent<SpriteRendererComponent>(color_);
+    entity.AddComponent<SpriteRendererComponent>(texture_);
 }
 
 Tile::Tile() {
     size_ = glm::vec3(1.0f, 1.0f, 1.0f);
     position_ = glm::vec3(0.0f);
-    color_ = glm::vec4(1.0f);
     stringRepresentation_ = "";
     for (int i = 0; i < 4; i++) { isWalkable_[i] = false; };
     for(int i = 0; i < 4; i++) { connections_[i] = nullptr;	}
     isExit_ = false;
+
+    textureAtlas_ = Texture2D::Create("assets/textures/NinjaAdventure/Backgrounds/Tilesets/TilesetWater.png");
+    defaultAtlasSize_ = glm::vec2(28, 17);
+
+    SetTexture(1, 1);
+}
+
+void Tile::SetTexture(int xCoord, int yCoord)
+{
+	texture_ = SubTexture2D::CreateFromCoords(textureAtlas_, { xCoord, yCoord }, defaultAtlasSize_);
 }

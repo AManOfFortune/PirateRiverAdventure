@@ -47,6 +47,21 @@ struct TransformComponent
 		transform[3] = glm::vec4(position, 1.0f);
 	}
 
+    void SetRotation(const glm::vec3& rotation)
+    {
+        // Create a rotation matrix for the given rotation
+        glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(rotation.x), glm::vec3(1.0f, 0.0f, 0.0f))
+            * glm::rotate(glm::mat4(1.0f), glm::radians(rotation.y), glm::vec3(0.0f, 1.0f, 0.0f))
+            * glm::rotate(glm::mat4(1.0f), glm::radians(rotation.z), glm::vec3(0.0f, 0.0f, 1.0f));
+
+        // Extract the current scale and position from the transform matrix
+        glm::vec3 scale = glm::vec3(glm::length(transform[0]), glm::length(transform[1]), glm::length(transform[2]));
+        glm::vec3 position = glm::vec3(transform[3]);
+
+        // Create a new transform matrix with the given rotation, current scale, and position
+        transform = glm::translate(glm::mat4(1.0f), position) * rotationMatrix * glm::scale(glm::mat4(1.0f), scale);
+    }
+
 	void SetScale(const glm::vec3& scale)
 	{
 		glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
@@ -69,6 +84,11 @@ struct SpriteRendererComponent
 	SpriteRendererComponent(const glm::vec4& color) : props(Texture2DProperties(1.0f, color, nullptr)) {}
 	SpriteRendererComponent(const std::shared_ptr<SubTexture2D>& texture, const Texture2DProperties& props = Texture2DProperties()) 
 		:  texture(texture), props(props) {}
+
+	void SwapTexture(const std::shared_ptr<SubTexture2D>& texture)
+	{
+		this->texture = texture;
+	}
 };
 
 /// <summary>

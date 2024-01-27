@@ -30,15 +30,21 @@ void PlayerMoverScript::OnUpdate(DeltaTime ts)
 	}
 
 	std::shared_ptr<Tile> tileToMoveTo = nullptr;
+	Tile::Direction moveDirection = Tile::Direction::None;
 
 	if (Input::IsKeyPressed(CG_KEY_A))
-		tileToMoveTo = currentTile->GetConnection(Tile::Direction::Left);
+		moveDirection = Tile::Direction::Left;
 	if (Input::IsKeyPressed(CG_KEY_D))
-		tileToMoveTo = currentTile->GetConnection(Tile::Direction::Right);
+		moveDirection = Tile::Direction::Right;
 	if (Input::IsKeyPressed(CG_KEY_S))
-		tileToMoveTo = currentTile->GetConnection(Tile::Direction::Bottom);
+		moveDirection = Tile::Direction::Bottom;
 	if (Input::IsKeyPressed(CG_KEY_W))
-		tileToMoveTo = currentTile->GetConnection(Tile::Direction::Top);
+		moveDirection = Tile::Direction::Top;
+
+	if (moveDirection != Tile::Direction::None) {
+		GameManager::GetInstance().GetPlayer()->SetFacingDirection(moveDirection);
+		tileToMoveTo = currentTile->GetConnection(moveDirection);
+	}
 
 	// If move is possible set the new tile containing the player & notify the game manager
 	if (tileToMoveTo != nullptr) {

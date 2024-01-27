@@ -26,6 +26,7 @@ public:
     void SetTileContainingPlayer(std::shared_ptr<Tile> tile);
     void SetPlayer(std::shared_ptr<Player> player);
     std::shared_ptr<Tile> GetTileContainingPlayer() const;
+    std::shared_ptr<Player> GetPlayer() const;
 
     void StartGame(std::shared_ptr<Scene> activeScene);
     void ResetLevel();

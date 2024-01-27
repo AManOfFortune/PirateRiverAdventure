@@ -1,22 +1,58 @@
 #include "player.h"
 #include "scripts/units/player_mover_script.h"
 #include "scripts/game_manager.h"
+#include "renderer/texture.h"
 
-Player::Player()
+Player::Player(Tile::Direction initialFacingDirection)
 {
-	color_ = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
     inventory_ = std::vector<std::shared_ptr<Item>>();
+    facingDirection_ = initialFacingDirection;
 }
 
 void Player::AttachToScene(std::shared_ptr<Scene> scene)
 {
-    Entity player = scene->CreateEntity("Player", GetPosition());
-    // TODO: Update to take in Subtexture2D -> SpriteSheets work! Raoul
-    player.AddComponent<SpriteRendererComponent>(GetColor());
-    player.AddComponent<ScriptComponent>().Bind<PlayerMoverScript>();
-    player.AddComponent<LightComponent>(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
+    player_ = std::make_shared<Entity>(scene->CreateEntity("Player", GetPosition()));
+
+    // Add sprite renderer component with texture
+    auto textureAtlas = Texture2D::Create("assets/textures/NinjaAdventure/Backgrounds/Tilesets/TilesetWater.png");
+
+    auto textureSize = glm::vec2(27.8f, 16);
+    auto textureCoordinates = glm::vec2(15, 16);
+
+    texture_ = SubTexture2D::CreateFromCoords(textureAtlas, textureCoordinates, textureSize);
+    
+    player_->AddComponent<SpriteRendererComponent>(texture_);
+    player_->AddComponent<ScriptComponent>().Bind<PlayerMoverScript>();
+    player_->AddComponent<LightComponent>(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
+    player_->GetComponent<TransformComponent>().SetScale({0.7f, 0.35f, 0.35f});
+
+    SetFacingDirection(facingDirection_);
 
     GameManager::GetInstance().SetPlayer(std::make_shared<Player>(*this));
+}
+
+void Player::SetFacingDirection(Tile::Direction direction)
+{
+    facingDirection_ = direction;
+
+    if (player_ != nullptr) {
+
+        switch (direction) {
+        case Tile::Direction::Top:
+            player_->GetComponent<TransformComponent>().SetRotation({ 0.0f, 0.0f, -90.0f });
+            break;
+        case Tile::Direction::Bottom:
+            player_->GetComponent<TransformComponent>().SetRotation({ 0.0f, 0.0f, 90.0f });
+            break;
+        case Tile::Direction::Left:
+            player_->GetComponent<TransformComponent>().SetRotation({ 0.0f, 0.0f, 0.0f });
+            break;
+        case Tile::Direction::Right:
+            player_->GetComponent<TransformComponent>().SetRotation({ 0.0f, 180.0f, 0.0f });
+            break;
+        }
+    }
+
 }
 
 void Player::SetCurrentTile(std::shared_ptr<Tile> tile)

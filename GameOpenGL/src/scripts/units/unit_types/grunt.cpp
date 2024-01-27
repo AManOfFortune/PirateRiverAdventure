@@ -3,15 +3,24 @@
 
 Grunt::Grunt(Tile::Direction facingTowards)
 {
-	color_ = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 	attackDirection_ = facingTowards;
 }
 
 void Grunt::AttachToScene(std::shared_ptr<Scene> scene)
 {
-	Entity grunt = scene->CreateEntity("Grunt", GetPosition());
-	// TODO: Update to take in Subtexture2D -> SpriteSheets work! Raoul
-	grunt.AddComponent<SpriteRendererComponent>(GetColor());
+	grunt_ = std::make_shared<Entity>(scene->CreateEntity("Grunt", GetPosition()));
+	
+	// Add sprite renderer component with texture
+	auto textureAtlas = Texture2D::Create("assets/textures/NinjaAdventure/Actor/Monsters/Mollusc/Mollusc.png");
+	auto textureSize = glm::vec2(16, 16);
+	auto textureCoordinates = glm::vec2(0, 0);
+
+	texture_ = SubTexture2D::CreateFromCoords(textureAtlas, textureCoordinates, textureSize);
+
+	grunt_->AddComponent<SpriteRendererComponent>(texture_);
+	grunt_->GetComponent<TransformComponent>().SetScale({ 0.5f, 0.5f, 0.5f });
+
+	SetFacingDirection(attackDirection_);
 }
 
 void Grunt::OnPlayerMovement(std::shared_ptr<Tile> playerMovedTo, bool playerMovementEnded)
@@ -35,5 +44,35 @@ void Grunt::OnPlayerMovement(std::shared_ptr<Tile> playerMovedTo, bool playerMov
 				
 			}
 		}
+	}
+}
+
+void Grunt::SetFacingDirection(Tile::Direction direction)
+{
+	attackDirection_ = direction;
+
+	if (grunt_ != nullptr)
+	{
+		auto newTextureCoordinates = glm::vec2(0, 0);
+
+		switch (direction) {
+		case Tile::Direction::Top:
+			newTextureCoordinates = { 1, 3 };
+			break;
+		case Tile::Direction::Bottom:
+			newTextureCoordinates = { 0, 3 };
+			break;
+		case Tile::Direction::Left:
+			newTextureCoordinates = { 2, 3 };
+			break;
+		case Tile::Direction::Right:
+			newTextureCoordinates = { 3, 3 };
+			break;
+		}
+
+		auto textureAtlas = Texture2D::Create("assets/textures/NinjaAdventure/Actor/Monsters/Mollusc/Mollusc.png");
+		auto textureSize = glm::vec2(16, 16);
+
+		grunt_->GetComponent<SpriteRendererComponent>().SwapTexture(SubTexture2D::CreateFromCoords(textureAtlas, newTextureCoordinates, textureSize));
 	}
 }

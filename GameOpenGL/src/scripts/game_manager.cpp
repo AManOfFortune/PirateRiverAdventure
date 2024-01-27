@@ -46,6 +46,11 @@ std::shared_ptr<Tile> GameManager::GetTileContainingPlayer() const
 	return tileContainingPlayer_;
 }
 
+std::shared_ptr<Player> GameManager::GetPlayer() const
+{
+	return player_;
+}
+
 void GameManager::StartGame(std::shared_ptr<Scene> activeScene)
 {
 	activeScene_ = activeScene;

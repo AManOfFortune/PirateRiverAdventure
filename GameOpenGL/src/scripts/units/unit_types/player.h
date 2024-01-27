@@ -4,10 +4,11 @@
 class Player : public Unit
 {
 public:
-	Player();
+	Player(Tile::Direction initialFacingDirection);
 
 	void AttachToScene(std::shared_ptr<Scene> scene) override;
 	void OnPlayerMovement(std::shared_ptr<Tile> tile, bool playerMoveEnded) override {};
+	void SetFacingDirection(Tile::Direction direction) override;
 
 	void SetCurrentTile(std::shared_ptr<Tile> tile) override;
 
@@ -29,4 +30,7 @@ public:
 
 private:
 	std::vector<std::shared_ptr<Item>> inventory_;
+	Tile::Direction facingDirection_;
+
+	std::shared_ptr<Entity> player_;
 };

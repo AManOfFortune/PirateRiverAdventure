@@ -9,7 +9,8 @@ public:
 		Top,
 		Bottom,
 		Left,
-		Right
+		Right,
+        None
 	};
 
     glm::vec3 GetPosition();

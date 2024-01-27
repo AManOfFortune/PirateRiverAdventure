@@ -27,7 +27,7 @@ public:
 		levelWidth_ = 7;
 		keysRequiredToExit_ = 2;
 
-		AddUnit('P', std::make_shared<Player>());
+		AddUnit('P', std::make_shared<Player>(Tile::Direction::Top));
 		AddUnit('1', std::make_shared<Grunt>(Tile::Direction::Right));
 		AddUnit('2', std::make_shared<Grunt>(Tile::Direction::Left));
 

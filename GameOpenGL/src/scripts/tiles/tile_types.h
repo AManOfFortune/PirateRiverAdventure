@@ -1,5 +1,7 @@
 #pragma once
 
+// ------------------ Environment tiles ------------------
+// Base tiles
 class TileGrass : public Tile
 {
 public:
@@ -10,26 +12,211 @@ public:
 			"G G"
 			"GGG";
 
-		SetTexture(0, 12);
+		SetTexture(0, 5);
 	}
 };
 REGISTER_TILE_TYPE(TileGrass);
 
-class TileDirt : public Tile
+class TileWater : public Tile
 {
 public:
-	TileDirt()
+	TileWater()
 	{
 		stringRepresentation_ =
-			"DDD"
-			"D D"
-			"DDD";
+			"WWW"
+			"W W"
+			"WWW";
 
-		SetTexture(0, 6);
+		SetTexture(1, 9);
 	}
 };
-REGISTER_TILE_TYPE(TileDirt);
+REGISTER_TILE_TYPE(TileWater);
 
+// Straight shore tiles
+class TileShoreTop : public Tile
+{
+public:
+	TileShoreTop()
+	{
+		stringRepresentation_ =
+			"GGG"
+			"W W"
+			"WWW";
+
+		SetTexture(1, 10);
+	}
+};
+REGISTER_TILE_TYPE(TileShoreTop);
+
+class TileShoreBottom : public Tile
+{
+public:
+	TileShoreBottom()
+	{
+		stringRepresentation_ =
+			"WWW"
+			"W W"
+			"GGG";
+
+		SetTexture(1, 8);
+	}
+};
+REGISTER_TILE_TYPE(TileShoreBottom);
+
+class TileShoreLeft : public Tile
+{
+public:
+	TileShoreLeft()
+	{
+		stringRepresentation_ =
+			"GWW"
+			"G W"
+			"GWW";
+
+		SetTexture(0, 9);
+	}
+};
+REGISTER_TILE_TYPE(TileShoreLeft);
+
+class TileShoreRight : public Tile
+{
+public:
+	TileShoreRight()
+	{
+		stringRepresentation_ =
+			"WWG"
+			"W G"
+			"WWG";
+
+		SetTexture(2, 9);
+	}
+};
+REGISTER_TILE_TYPE(TileShoreRight);
+
+// Outer shore corners
+class TileShoreTopLeft : public Tile
+{
+public:
+	TileShoreTopLeft()
+	{
+		stringRepresentation_ =
+			"GWW"
+			"W W"
+			"WWW";
+
+		SetTexture(6, 8);
+	}
+};
+REGISTER_TILE_TYPE(TileShoreTopLeft);
+
+class TileShoreTopRight : public Tile
+{
+public:
+	TileShoreTopRight()
+	{
+		stringRepresentation_ =
+			"WWG"
+			"W W"
+			"WWW";
+
+		SetTexture(5, 8);
+	}
+};
+REGISTER_TILE_TYPE(TileShoreTopRight);
+
+class TileShoreBottomLeft : public Tile
+{
+public:
+	TileShoreBottomLeft()
+	{
+		stringRepresentation_ =
+			"WWW"
+			"W W"
+			"GWW";
+
+		SetTexture(6, 9);
+	}
+};
+REGISTER_TILE_TYPE(TileShoreBottomLeft);
+
+class TileShoreBottomRight : public Tile
+{
+public:
+	TileShoreBottomRight()
+	{
+		stringRepresentation_ =
+			"WWW"
+			"W W"
+			"WWG";
+
+		SetTexture(5, 9);
+	}
+};
+REGISTER_TILE_TYPE(TileShoreBottomRight);
+
+// Inner shore corners
+class TileWaterTopLeft : public Tile
+{
+public:
+	TileWaterTopLeft()
+	{
+		stringRepresentation_ =
+			"WGG"
+			"G G"
+			"GGG";
+
+		SetTexture(2, 8);
+	}
+};
+REGISTER_TILE_TYPE(TileWaterTopLeft);
+
+class TileWaterTopRight : public Tile
+{
+public:
+	TileWaterTopRight()
+	{
+		stringRepresentation_ =
+			"GGW"
+			"G G"
+			"GGG";
+
+		SetTexture(0, 8);
+	}
+};
+REGISTER_TILE_TYPE(TileWaterTopRight);
+
+class TileWaterBottomLeft : public Tile
+{
+public:
+	TileWaterBottomLeft()
+	{
+		stringRepresentation_ =
+			"GGG"
+			"G G"
+			"WGG";
+
+		SetTexture(2, 10);
+	}
+};
+REGISTER_TILE_TYPE(TileWaterBottomLeft);
+
+class TileWaterBottomRight : public Tile
+{
+public:
+	TileWaterBottomRight()
+	{
+		stringRepresentation_ =
+			"GGG"
+			"G G"
+			"GGW";
+
+		SetTexture(0, 10);
+	}
+};
+REGISTER_TILE_TYPE(TileWaterBottomRight);
+
+
+// ------------------ Path tiles ------------------
 // Dead ends
 class TilePathLeft : public Tile
 {
@@ -42,6 +229,8 @@ public:
 			"GGG";
 
 		isWalkable_[Left] = true;
+
+		SetTexture(2, 7);
 	}
 };
 REGISTER_TILE_TYPE(TilePathLeft);
@@ -57,6 +246,8 @@ public:
 			"GGG";
 
 		isWalkable_[Right] = true;
+
+		SetTexture(0, 7);
 	}
 };
 REGISTER_TILE_TYPE(TilePathRight);
@@ -72,6 +263,8 @@ public:
 			"GGG";
 
 		isWalkable_[Top] = true;
+
+		SetTexture(3, 8);
 	}
 };
 REGISTER_TILE_TYPE(TilePathTop);
@@ -87,6 +280,8 @@ public:
 			"G|G";
 
 		isWalkable_[Bottom] = true;
+
+		SetTexture(3, 10);
 	}
 };
 REGISTER_TILE_TYPE(TilePathBottom);
@@ -104,6 +299,8 @@ public:
 
 		isWalkable_[Left] = true;
 		isWalkable_[Right] = true;
+
+		SetTexture(1, 7);
 	}
 };
 REGISTER_TILE_TYPE(TilePathLeftRight);
@@ -120,6 +317,8 @@ public:
 
 		isWalkable_[Top] = true;
 		isWalkable_[Bottom] = true;
+
+		SetTexture(3, 9);
 	}
 };
 REGISTER_TILE_TYPE(TilePathTopBottom);
@@ -137,6 +336,8 @@ public:
 
 		isWalkable_[Top] = true;
 		isWalkable_[Right] = true;
+
+		SetTexture(4, 7);
 	}
 };
 REGISTER_TILE_TYPE(TilePathTopRight);
@@ -153,6 +354,8 @@ public:
 
 		isWalkable_[Top] = true;
 		isWalkable_[Left] = true;
+
+		SetTexture(7, 7);
 	}
 };
 REGISTER_TILE_TYPE(TilePathTopLeft);
@@ -169,6 +372,8 @@ public:
 
 		isWalkable_[Bottom] = true;
 		isWalkable_[Right] = true;
+
+		SetTexture(4, 10);
 	}
 };
 REGISTER_TILE_TYPE(TilePathBottomRight);
@@ -185,6 +390,8 @@ public:
 
 		isWalkable_[Bottom] = true;
 		isWalkable_[Left] = true;
+
+		SetTexture(7, 10);
 	}
 };
 REGISTER_TILE_TYPE(TilePathBottomLeft);
@@ -204,6 +411,8 @@ public:
 		isWalkable_[Top] = true;
 		isWalkable_[Left] = true;
 		isWalkable_[Right] = true;
+
+		SetTexture(8, 7);
 	}
 };
 REGISTER_TILE_TYPE(TilePathTopLeftRight);
@@ -222,6 +431,8 @@ public:
 		isWalkable_[Bottom] = true;
 		isWalkable_[Left] = true;
 		isWalkable_[Right] = true;
+
+		SetTexture(8, 10);
 	}
 };
 REGISTER_TILE_TYPE(TilePathBottomLeftRight);
@@ -240,6 +451,8 @@ public:
 		isWalkable_[Top] = true;
 		isWalkable_[Bottom] = true;
 		isWalkable_[Right] = true;
+
+		SetTexture(4, 6);
 	}
 };
 REGISTER_TILE_TYPE(TilePathTopBottomRight);
@@ -258,6 +471,8 @@ public:
 		isWalkable_[Top] = true;
 		isWalkable_[Bottom] = true;
 		isWalkable_[Left] = true;
+
+		SetTexture(7, 6);
 	}
 };
 REGISTER_TILE_TYPE(TilePathTopBottomLeft);
@@ -278,6 +493,8 @@ public:
 		isWalkable_[Bottom] = true;
 		isWalkable_[Left] = true;
 		isWalkable_[Right] = true;
+
+		SetTexture(8, 6);
 	}
 };
 REGISTER_TILE_TYPE(TilePathCross);
@@ -296,6 +513,8 @@ public:
 
 		isWalkable_[Bottom] = true;
 		isExit_ = true;
+
+		SetTexture(8, 9);
 	}
 };
 REGISTER_TILE_TYPE(TileExitBottom);
@@ -312,6 +531,8 @@ public:
 
 		isWalkable_[Top] = true;
 		isExit_ = true;
+
+		SetTexture(8, 8);
 	}
 };
 REGISTER_TILE_TYPE(TileExitTop);
@@ -328,6 +549,8 @@ public:
 
 		isWalkable_[Left] = true;
 		isExit_ = true;
+
+		SetTexture(6, 6);
 	}
 };
 REGISTER_TILE_TYPE(TileExitLeft);
@@ -344,6 +567,8 @@ public:
 
 		isWalkable_[Right] = true;
 		isExit_ = true;
+
+		SetTexture(5, 6);
 	}
 };
 REGISTER_TILE_TYPE(TileExitRight);

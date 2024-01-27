@@ -44,5 +44,6 @@ protected:
     void SetTexture(int xCoord, int yCoord);
 
 private:
-    glm::vec2 defaultAtlasSize_;
+    glm::vec2 defaultTextureSize_;
+    glm::vec2 textureCoordinates_;
 };

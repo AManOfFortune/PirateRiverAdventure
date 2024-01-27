@@ -46,9 +46,14 @@ void Tile::AttachToScene(std::shared_ptr<Scene> scene)
 {
     // Create tile at position
     Entity entity = scene->CreateEntity("Tile", position_);
-    // Add sprite renderer component
+
+    // Add sprite renderer component with texture
+    if (textureAtlas_ == nullptr) {
+        textureAtlas_ = Texture2D::Create("assets/textures/NinjaAdventure/Backgrounds/Tilesets/TilesetWater.png");
+        defaultTextureSize_ = glm::vec2(16, 16);
+    }
+    texture_ = SubTexture2D::CreateFromCoords(textureAtlas_, textureCoordinates_, defaultTextureSize_);
     
-    // TODO: Update to take in Subtexture2D -> SpriteSheets work! Raoul
     entity.AddComponent<SpriteRendererComponent>(texture_);
 }
 
@@ -60,13 +65,10 @@ Tile::Tile() {
     for(int i = 0; i < 4; i++) { connections_[i] = nullptr;	}
     isExit_ = false;
 
-    textureAtlas_ = Texture2D::Create("assets/textures/NinjaAdventure/Backgrounds/Tilesets/TilesetWater.png");
-    defaultAtlasSize_ = glm::vec2(28, 17);
-
-    SetTexture(1, 1);
+    SetTexture(1, 9);
 }
 
 void Tile::SetTexture(int xCoord, int yCoord)
 {
-	texture_ = SubTexture2D::CreateFromCoords(textureAtlas_, { xCoord, yCoord }, defaultAtlasSize_);
+	textureCoordinates_ = glm::vec2(xCoord, yCoord);
 }

@@ -14,7 +14,7 @@ void Player::AttachToScene(std::shared_ptr<Scene> scene)
     // TODO: Update to take in Subtexture2D -> SpriteSheets work! Raoul
     player.AddComponent<SpriteRendererComponent>(GetColor());
     player.AddComponent<ScriptComponent>().Bind<PlayerMoverScript>();
-    player.AddComponent<LightComponent>(glm::vec3(0.8f, 0.2f, 0.3f), 10.0f);
+    player.AddComponent<LightComponent>(glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
 
     GameManager::GetInstance().SetPlayer(std::make_shared<Player>(*this));
 }

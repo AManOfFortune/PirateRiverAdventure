@@ -15,8 +15,10 @@ protected:
 	Item();
 
 	glm::vec3 position_;
-	glm::vec4 color_;
 	glm::vec3 scale_;
+	std::string textureAtlasPath_;
+	glm::vec2 textureAtlasTileSize_;
+	glm::vec2 textureCoords_;
 
 	Entity entity_;
 

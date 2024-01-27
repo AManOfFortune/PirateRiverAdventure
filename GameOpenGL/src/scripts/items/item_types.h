@@ -5,6 +5,8 @@ class Key : public Item
 {
 public:
 	Key() {
-		color_ = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
+		textureAtlasPath_ = "assets/textures/NinjaAdventure/Items/Treasure/Coin2.png";
+		textureAtlasTileSize_ = glm::vec2(10, 10);
+		textureCoords_ = glm::vec2(1, 0);
 	}
 };

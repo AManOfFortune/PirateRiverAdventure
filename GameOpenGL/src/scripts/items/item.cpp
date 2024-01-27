@@ -4,8 +4,12 @@ void Item::AttachToScene(std::shared_ptr<Scene> scene)
 {
     // Create item at position
     entity_ = scene->CreateEntity("Item", GetPosition());
-    // Add sprite renderer component
-    entity_.AddComponent<SpriteRendererComponent>(color_);
+
+	// Add sprite renderer component with texture
+	auto textureAtlas = Texture2D::Create(textureAtlasPath_);
+	auto texture = SubTexture2D::CreateFromCoords(textureAtlas, textureCoords_, textureAtlasTileSize_);
+	entity_.AddComponent<SpriteRendererComponent>(texture);
+
     // Set scale
     entity_.GetComponent<TransformComponent>().SetScale(scale_);
 }
@@ -30,8 +34,10 @@ glm::vec3 Item::GetPosition() const
 
 Item::Item()
 {
+	textureAtlasPath_ = "";
+	textureCoords_ = glm::vec2(0.0f);
+	textureAtlasTileSize_ = glm::vec2(16, 16);
 	position_ = glm::vec3(0.0f);
-	color_ = glm::vec4(1.0f);
 	scale_ = glm::vec3(0.5f);
     zOffset_ = 0.5f; // Infront of tiles z0, behind player z1
 }

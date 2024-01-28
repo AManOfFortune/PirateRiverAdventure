@@ -9,7 +9,7 @@ public:
 	LevelIntroduction() {
 		tileString_ =
 			"WWWWWWWWWWWWWWWWWWEEE"
-			"W WW WW WW WW WW WE E"
+			"W WW WW WW WW WW WE5E"
 			"WWWWWWWWGGGGGGGGGGE|E"
 			"WWWWWWWWGGGGGGGGGGG|G"
 			"W WW WW GG GG --4-- G"
@@ -33,6 +33,7 @@ public:
 
 		AddItem('3', std::make_shared<Key>());
 		AddItem('4', std::make_shared<Key>());
+		AddItem('5', std::make_shared<Exit>());
 	}
 };
 REGISTER_LEVEL(LevelIntroduction);

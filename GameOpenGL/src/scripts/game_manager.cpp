@@ -16,7 +16,7 @@ void GameManager::NotifyUnitsListeningToPlayerMovement(bool playerMoveEnded)
 
 	// Pick up item
 	std::shared_ptr<Item> itemOnTile = tileContainingPlayer_->GetItemOnTile();
-	if(playerMoveEnded && itemOnTile != nullptr)
+	if(playerMoveEnded && itemOnTile != nullptr && !itemOnTile->IsDecorative())
 	{
 		player_->AddItemToInventory(itemOnTile);
 		itemOnTile->DetachFromScene();

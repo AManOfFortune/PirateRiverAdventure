@@ -11,6 +11,8 @@ public:
 	void SetPosition(glm::vec3 position);
 	glm::vec3 GetPosition() const;
 
+	bool IsDecorative() const;
+
 protected:
 	Item();
 
@@ -23,4 +25,6 @@ protected:
 	Entity entity_;
 
 	float zOffset_;
+
+	bool isDecorative_;
 };

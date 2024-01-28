@@ -16,13 +16,13 @@ public:
 	{
 		auto& transform = GetComponent<TransformComponent>().transform;
 
-		if (Input::IsKeyPressed(CG_KEY_A))
+		if (Input::IsKeyPressed(CG_KEY_LEFT))
 			transform[3][0] -= speed_ * ts;
-		if (Input::IsKeyPressed(CG_KEY_D))
+		if (Input::IsKeyPressed(CG_KEY_RIGHT))
 			transform[3][0] += speed_ * ts;
-		if (Input::IsKeyPressed(CG_KEY_S))
+		if (Input::IsKeyPressed(CG_KEY_DOWN))
 			transform[3][1] -= speed_ * ts;
-		if (Input::IsKeyPressed(CG_KEY_W))
+		if (Input::IsKeyPressed(CG_KEY_UP))
 			transform[3][1] += speed_ * ts;
 	}
 

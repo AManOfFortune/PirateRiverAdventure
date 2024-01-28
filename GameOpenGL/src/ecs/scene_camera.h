@@ -19,7 +19,7 @@ public:
 private:
 	void RecalculateProjection();
 
-	float orthographic_size_ = 10.0f;
+	float orthographic_size_ = 5.0f;
 	float orthographic_near_ = -1.0f, orthographic_far_ = 1.0f;
 	float aspect_ratio_ = 16.0f / 9.0f;
 };

@@ -1,6 +1,7 @@
 #include "level.h"
 #include "scripts/tiles/tile_factory.h"
 #include "scripts/game_manager.h"
+#include "scripts/camera_controller.h"
 
 void Level::AttachToScene(std::shared_ptr<Scene> scene)
 {
@@ -32,9 +33,14 @@ void Level::Reset()
 	}
 
 	// ------ 4. Add camera to scene ------
-	// TODO: Make each level have a fixed camera position
 	Entity camera = scene_->CreateEntity("Camera");
 	camera.AddComponent<CameraComponent>();
+	camera.AddComponent<ScriptComponent>().Bind<CameraController>();
+
+	// ------ 5. Set camera position ------
+	int levelHeight = (int) (tiles.size() / levelWidth_);
+	glm::vec2 cameraPosition = { levelWidth_ / 2, -levelHeight / 2 };
+	camera.GetComponent<TransformComponent>().SetPosition(glm::vec3(cameraPosition, 0.0f));
 }
 
 Level::Level()

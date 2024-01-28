@@ -203,6 +203,8 @@
     <ClCompile Include="src\core\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\scripts\items\decoration.h" />
+    <ClInclude Include="src\scripts\items\decoration_types.h" />
     <ClInclude Include="src\scripts\items\item.h" />
     <ClInclude Include="src\scripts\items\item_types.h" />
     <ClInclude Include="src\renderer\light.h" />

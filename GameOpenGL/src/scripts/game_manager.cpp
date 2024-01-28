@@ -72,5 +72,6 @@ void GameManager::NextLevel()
 {
 	unitsListeningToPlayerMovement_.clear();
 	currentLevel_ = LevelFactory::GetNextLevel();
+	activeScene_->ClearScene();
 	currentLevel_->AttachToScene(activeScene_);
 }

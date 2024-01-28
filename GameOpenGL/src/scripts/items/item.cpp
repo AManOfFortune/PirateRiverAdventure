@@ -45,5 +45,5 @@ Item::Item()
 	position_ = glm::vec3(0.0f);
 	scale_ = glm::vec3(0.5f);
     zOffset_ = 0.5f; // Infront of tiles z0, behind player z1
-	isDecorative_ = true;
+	isDecorative_ = false;
 }

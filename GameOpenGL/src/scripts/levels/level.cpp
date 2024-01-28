@@ -13,6 +13,8 @@ void Level::Reset()
 	// ------ 1. Parse level string ------
 	std::vector<std::shared_ptr<Tile>> tiles = ParseLevel(tileString_, levelWidth_, tileWidth_);
 
+	scene_->ClearScene();
+
 	// ------ 2. Add tiles to scene ------
 	for (std::shared_ptr<Tile> tile : tiles) {
 		tile->AttachToScene(scene_);

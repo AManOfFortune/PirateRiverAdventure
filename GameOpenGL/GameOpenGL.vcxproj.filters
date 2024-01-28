@@ -100,6 +100,8 @@
     <ClInclude Include="src\scripts\items\item.h" />
     <ClInclude Include="src\scripts\items\item_types.h" />
     <ClInclude Include="src\renderer\light.h" />
+    <ClInclude Include="src\scripts\items\decoration.h" />
+    <ClInclude Include="src\scripts\items\decoration_types.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\shaders\flat_color.glsl" />

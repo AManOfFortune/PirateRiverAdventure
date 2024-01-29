@@ -11,6 +11,11 @@ void Level::AttachToScene(std::shared_ptr<Scene> scene)
 
 void Level::Reset()
 {
+	// ------ 0. Reset units ------
+	for (auto const& unit : unitAtlas_) {
+		unit.second->Reset();
+	}
+
 	// ------ 1. Parse level string ------
 	std::vector<std::shared_ptr<Tile>> tiles = ParseLevel(tileString_, levelWidth_, tileWidth_);
 
@@ -22,7 +27,7 @@ void Level::Reset()
 	}
 
 	// ------ 3. Add units to scene ------
-	for (auto const& unit : units_) {
+	for (auto const& unit : unitAtlas_) {
 		unit.second->AttachToScene(scene_);
 		GameManager::GetInstance().AddUnitToListeningToPlayerMovement(unit.second);
 	}
@@ -46,7 +51,7 @@ void Level::Reset()
 Level::Level()
 {
 	tileString_ = "";
-	units_ = std::unordered_map<char, std::shared_ptr<Unit>>();
+	unitAtlas_ = std::unordered_map<char, std::shared_ptr<Unit>>();
 	tileWidth_ = 3;
 	levelWidth_ = 0;
 	keysRequiredToExit_ = 0;
@@ -54,7 +59,7 @@ Level::Level()
 
 void Level::AddUnit(char key, std::shared_ptr<Unit> unit)
 {
-	units_.insert(std::make_pair(key, unit));
+	unitAtlas_.insert(std::make_pair(key, unit));
 }
 
 void Level::AddItem(char key, std::shared_ptr<Item> item)
@@ -86,8 +91,8 @@ std::vector<std::shared_ptr<Tile>> Level::ParseLevel(std::string levelString, in
 		tile->SetPosition(tilePosition);
 
 		// ------ 3. Set unit positions ------
-		if (units_.find(unitOnTile) != units_.end()) {
-			units_.at(unitOnTile)->SetCurrentTile(tile);
+		if (unitAtlas_.find(unitOnTile) != unitAtlas_.end()) {
+			unitAtlas_.at(unitOnTile)->SetCurrentTile(tile);
 		}
 
 		// ------ 4. Set item positions ------

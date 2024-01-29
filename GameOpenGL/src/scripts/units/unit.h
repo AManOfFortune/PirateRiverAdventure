@@ -9,6 +9,7 @@ public:
 	virtual void AttachToScene(std::shared_ptr<Scene> scene) = 0;
 	virtual void OnPlayerMovement(std::shared_ptr<Tile> playerMovedTo, bool playerMovementEnded) = 0;
 	virtual void SetFacingDirection(Tile::Direction direction) = 0;
+	virtual void Reset() = 0;
 
 	virtual void SetCurrentTile(std::shared_ptr<Tile> tile);
 

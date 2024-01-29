@@ -9,7 +9,7 @@ public:
 	void AttachToScene(std::shared_ptr<Scene> scene) override;
 	void OnPlayerMovement(std::shared_ptr<Tile> tile, bool playerMoveEnded) override {};
 	void SetFacingDirection(Tile::Direction direction) override;
-
+	void Reset() override;
 	void SetCurrentTile(std::shared_ptr<Tile> tile) override;
 
 	void AddItemToInventory(std::shared_ptr<Item> item);

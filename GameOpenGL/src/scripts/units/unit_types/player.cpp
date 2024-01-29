@@ -55,6 +55,10 @@ void Player::SetFacingDirection(Tile::Direction direction)
 
 }
 
+void Player::Reset()
+{
+}
+
 void Player::SetCurrentTile(std::shared_ptr<Tile> tile)
 {
     Unit::SetCurrentTile(tile);

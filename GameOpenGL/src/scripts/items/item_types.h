@@ -11,3 +11,13 @@ public:
 		textureCoords_ = glm::vec2(1, 0);
 	}
 };
+
+class FishingRod : public Item
+{
+public:
+FishingRod() {
+		textureAtlasPath_ = "assets/textures/NinjaAdventure/Items/Weapons/FishingRod/Sprite.png";
+		textureAtlasTileSize_ = glm::vec2(10, 14);
+		textureCoords_ = glm::vec2(0, 0);
+	}
+};

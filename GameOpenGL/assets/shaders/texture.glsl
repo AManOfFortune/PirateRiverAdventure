@@ -100,5 +100,10 @@ void main()
 	// Calculate ambient light
 	vec4 ambientLight = vec4(u_AmbientStrength * u_LightColor, 1.0f);
 
+	if (texColor.a < 0.1f) 
+	{
+		discard;
+	}
+
 	color = texColor * (ambientLight + diffuseLight);
 }

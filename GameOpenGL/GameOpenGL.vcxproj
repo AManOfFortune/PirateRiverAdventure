@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -100,6 +100,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)GLFW_INCLUDE_NONE;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -115,6 +116,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)GLFW_INCLUDE_NONE;</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,9 +130,10 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);ENABLE_ASSERTGLFW_INCLUDE_NONE;;ENABLE_ASSERT</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions);GLFW_INCLUDE_NONE;ENABLE_ASSERT</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameOpenGL\vendor\stb_image\;$(SolutionDir)GameOpenGL\vendor\spdlog\include\;src\;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameOpenGL\vendor\stb_image\;$(SolutionDir)GameOpenGL\vendor\spdlog\include\;$(SolutionDir)GameOpenGL\src\;$(SolutionDir)GameOpenGL\vendor\entt\include\</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -144,9 +147,10 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)GLFW_INCLUDE_NONE;;ENABLE_ASSERT</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GLFW_INCLUDE_NONE;ENABLE_ASSERT</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)GameOpenGL\vendor\stb_image\;$(SolutionDir)GameOpenGL\vendor\spdlog\include\;$(SolutionDir)GameOpenGL\src\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GameOpenGL\vendor\stb_image\;$(SolutionDir)GameOpenGL\vendor\spdlog\include\;$(SolutionDir)GameOpenGL\src\;$(SolutionDir)GameOpenGL\vendor\entt\include\</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,6 +161,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\scripts\items\item.cpp" />
+    <ClCompile Include="src\renderer\light.cpp" />
+    <ClCompile Include="src\scripts\units\unit_types\grunt.cpp" />
+    <ClCompile Include="src\scripts\levels\level_factory.cpp" />
+    <ClCompile Include="src\scripts\levels\level.cpp" />
+    <ClCompile Include="src\scripts\units\unit_types\player.cpp" />
+    <ClCompile Include="src\scripts\game_manager.cpp" />
+    <ClCompile Include="src\scripts\units\player_mover_script.cpp" />
+    <ClCompile Include="src\game_layer.cpp" />
+    <ClCompile Include="src\ecs\entity.cpp" />
+    <ClCompile Include="src\ecs\scene.cpp" />
+    <ClCompile Include="src\ecs\scene_camera.cpp" />
+    <ClCompile Include="src\renderer\camera.cpp" />
+    <ClCompile Include="src\renderer\frame_buffer.cpp" />
     <ClCompile Include="src\renderer\renderer_2d.cpp" />
     <ClCompile Include="src\core\application.cpp" />
     <ClCompile Include="src\example_layer.cpp" />
@@ -165,6 +183,9 @@
     <ClCompile Include="src\renderer\context.cpp" />
     <ClCompile Include="src\renderer\texture.cpp" />
     <ClCompile Include="src\sandbox_2d_layer.cpp" />
+    <ClCompile Include="src\scripts\tiles\tile.cpp" />
+    <ClCompile Include="src\scripts\tiles\tile_factory.cpp" />
+    <ClCompile Include="src\scripts\units\unit.cpp" />
     <ClCompile Include="vendor\glad\glad.c" />
     <ClCompile Include="src\core\input\input.cpp" />
     <ClCompile Include="src\core\layers\layer.cpp" />
@@ -182,6 +203,27 @@
     <ClCompile Include="src\core\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\scripts\items\decoration.h" />
+    <ClInclude Include="src\scripts\items\decoration_types.h" />
+    <ClInclude Include="src\scripts\items\item.h" />
+    <ClInclude Include="src\scripts\items\item_types.h" />
+    <ClInclude Include="src\renderer\light.h" />
+    <ClInclude Include="src\scripts\units\unit_types\grunt.h" />
+    <ClInclude Include="src\scripts\levels\level_factory.h" />
+    <ClInclude Include="src\scripts\levels\level.h" />
+    <ClInclude Include="src\scripts\levels\level_types.h" />
+    <ClInclude Include="src\scripts\units\unit_types\player.h" />
+    <ClInclude Include="src\scripts\game_manager.h" />
+    <ClInclude Include="src\scripts\units\player_mover_script.h" />
+    <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\game_layer.h" />
+    <ClInclude Include="src\ecs\components.h" />
+    <ClInclude Include="src\ecs\entity.h" />
+    <ClInclude Include="src\ecs\scene.h" />
+    <ClInclude Include="src\ecs\scene_camera.h" />
+    <ClInclude Include="src\ecs\scriptable_entity.h" />
+    <ClInclude Include="src\renderer\camera.h" />
+    <ClInclude Include="src\renderer\frame_buffer.h" />
     <ClInclude Include="src\renderer\renderer_2d.h" />
     <ClInclude Include="src\core\application.h" />
     <ClInclude Include="src\core\core.h" />
@@ -212,6 +254,12 @@
     <ClInclude Include="src\renderer\vertex_buffer.h" />
     <ClInclude Include="src\sandbox.h" />
     <ClInclude Include="src\sandbox_2d_layer.h" />
+    <ClInclude Include="src\scripts\tiles\tile.h" />
+    <ClInclude Include="src\scripts\tiles\tile_types.h" />
+    <ClInclude Include="src\scripts\tiles\tile_factory.h" />
+    <ClInclude Include="src\scripts\camera_controller.h" />
+    <ClInclude Include="src\scripts\units\unit.h" />
+    <ClInclude Include="vendor\entt\include\entt.hpp" />
     <ClInclude Include="vendor\stb_image\stb_image.h" />
     <ClInclude Include="src\core\window.h" />
   </ItemGroup>

@@ -11,9 +11,13 @@ class VertexBuffer
 {
 public:
     VertexBuffer(float* vertices, uint32_t size);
+    VertexBuffer(uint32_t size);
     ~VertexBuffer();
 
     static std::shared_ptr<VertexBuffer> Create(float* vertices, uint32_t size);
+    static std::shared_ptr<VertexBuffer> Create(uint32_t size);
+
+    void SetData(const void* data, uint32_t size);
 
     void Bind() const;
     void Unbind() const;

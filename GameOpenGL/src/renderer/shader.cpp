@@ -74,6 +74,11 @@ void Shader::SetInt(const std::string& name, int value)
     UploadUniformInt(name, value);
 }
 
+void Shader::SetIntArray(const std::string& name, int* values, uint32_t count)
+{
+    UploadUniformIntArray(name, values, count);
+}
+
 void Shader::SetFloat(const std::string& name, float value)
 {
     UploadUniformFloat(name, value);
@@ -100,6 +105,12 @@ void Shader::UploadUniformInt(const std::string& name, int value)
 
     GLint location = glGetUniformLocation(renderer_id_, name.c_str());
     glUniform1i(location, value);
+}
+
+void Shader::UploadUniformIntArray(const std::string& name, int* values, uint32_t count)
+{
+    GLint location = glGetUniformLocation(renderer_id_, name.c_str());
+    glUniform1iv(location, count, values);
 }
 
 void Shader::UploadUniformFloat(const std::string& name, float value)

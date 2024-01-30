@@ -1,4 +1,4 @@
-# Pirate River Adventure
+# 🏴‍☠️ Pirate River Adventure 🏴‍☠️
 
 This is a simple OpenGL puzzle adventure game developed using parts of the [Game-Engine series of The Cherno](https://youtube.com/playlist?list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&si=Z61h1MRwqmiLKk_n). It was developed as a university assignment for the "Computergraphics & Mixed Reality" course at the FH Technikum Vienna.
 

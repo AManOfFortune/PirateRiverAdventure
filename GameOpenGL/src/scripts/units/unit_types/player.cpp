@@ -14,10 +14,10 @@ void Player::AttachToScene(std::shared_ptr<Scene> scene)
     player_ = std::make_shared<Entity>(scene->CreateEntity("Player", GetPosition()));
 
     // Add sprite renderer component with texture
-    auto textureAtlas = Texture2D::Create("assets/textures/NinjaAdventure/Backgrounds/Tilesets/TilesetWater.png");
+    auto textureAtlas = Texture2D::Create("assets/textures/Boat.png");
 
-    auto textureSize = glm::vec2(27.8f, 16);
-    auto textureCoordinates = glm::vec2(15, 16);
+    auto textureSize = glm::vec2(32, 16);
+    auto textureCoordinates = glm::vec2(0, 0);
 
     texture_ = SubTexture2D::CreateFromCoords(textureAtlas, textureCoordinates, textureSize);
     
